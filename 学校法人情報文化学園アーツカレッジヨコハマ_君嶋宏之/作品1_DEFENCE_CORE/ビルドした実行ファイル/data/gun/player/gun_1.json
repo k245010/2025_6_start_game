@@ -1,0 +1,46 @@
+{
+    "Ammo": 10,
+    "BulletData": {
+        "Friction": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+        },
+        "HitPosEffectKind": -1,
+        "HitPosSoundIDList": [],
+        "HitPosSummonStageObjectList": [],
+        "IsGravity": false,
+        "LifeTime": 8.0,
+        "Range": 1000.0,
+        "Size": 20.0,
+        "Speed": 6076.0,
+        "TargetDataList": [
+            [
+                1,
+                0.0
+            ],
+            [
+                4,
+                0.0
+            ],
+            [
+                3,
+                0.0
+            ],
+            [
+                13,
+                8.0
+            ]
+        ]
+    },
+    "FireEffectKind": -1,
+    "FireRate": 0.30000001192092896,
+    "HoldBullet": 999,
+    "MagazineSize": 10,
+    "Palette": 1,
+    "ReloadTime": 3.0,
+    "ShotSoundIDList": [
+        3013
+    ],
+    "Spread": 0.0
+}

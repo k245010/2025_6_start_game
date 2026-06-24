@@ -1,0 +1,70 @@
+{
+    "AttackData": {
+        "AttackInterval": 2.0,
+        "AttackReach": 190.0
+    },
+    "CollisionData": {
+        "AttackCollTargetKindList": [
+            [
+                3,
+                1.0
+            ]
+        ],
+        "BodyCollTargetKindList": [
+            [
+                15,
+                5.0
+            ],
+            [
+                2,
+                1.0
+            ],
+            [
+                10,
+                0.0
+            ],
+            [
+                8,
+                0.0
+            ],
+            [
+                12,
+                0.0
+            ],
+            [
+                4,
+                1.0
+            ],
+            [
+                5,
+                10.0
+            ]
+        ]
+    },
+    "DropCoinData": {
+        "DropNum": 1,
+        "Probability": 100
+    },
+    "HPMax": 60.0,
+    "ModelSizeData": {
+        "ModelScale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+        },
+        "ModelSize": {
+            "X": 100.0,
+            "Y": 100.0,
+            "Z": 100.0
+        }
+    },
+    "MoveData": {
+        "ClimbSpeed": 0.0,
+        "WalkSpeed": 150.0
+    },
+    "NavigationData": {
+        "NavigationMode": 1,
+        "NavigationTargetKind": 0,
+        "NodeUseKind": 0
+    }
+}

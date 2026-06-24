@@ -1,0 +1,39 @@
+{
+    "AmbColor": {
+        "Blue": 255,
+        "FloatColor4Alpha": 1.0,
+        "FloatColor4Blue": 1.0,
+        "FloatColor4Green": 1.0,
+        "FloatColor4Red": 1.0,
+        "Green": 255,
+        "Red": 255
+    },
+    "DifColor": {
+        "Blue": 255,
+        "FloatColor4Alpha": 1.0,
+        "FloatColor4Blue": 1.0,
+        "FloatColor4Green": 1.0,
+        "FloatColor4Red": 1.0,
+        "Green": 255,
+        "Red": 255
+    },
+    "Direction": {
+        "X": 0.05000000074505806,
+        "Y": -0.07000000029802322,
+        "Z": -0.05999999865889549
+    },
+    "Position": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+    },
+    "SpcColor": {
+        "Blue": 255,
+        "FloatColor4Alpha": 1.0,
+        "FloatColor4Blue": 1.0,
+        "FloatColor4Green": 1.0,
+        "FloatColor4Red": 1.0,
+        "Green": 255,
+        "Red": 255
+    }
+}

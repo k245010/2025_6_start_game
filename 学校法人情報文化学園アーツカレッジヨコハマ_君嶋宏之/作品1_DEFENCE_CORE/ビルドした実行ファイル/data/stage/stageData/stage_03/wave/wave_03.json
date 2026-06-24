@@ -1,0 +1,516 @@
+{
+    "WaveDataList": [
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -100,
+                "posY": 0,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -100,
+                "posY": 0,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -100,
+                "posY": 0,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2200,
+                "posY": 0,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": 2000,
+                "posY": 0,
+                "posZ": 2000
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": 2300,
+                "posY": 0,
+                "posZ": -700
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": 1100,
+                "posY": 0,
+                "posZ": -2200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 0,
+                "posZ": -1000
+            }
+        }
+    ]
+}
