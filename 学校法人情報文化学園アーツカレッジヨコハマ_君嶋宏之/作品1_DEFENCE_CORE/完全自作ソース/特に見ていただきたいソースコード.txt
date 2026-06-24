@@ -1,0 +1,37 @@
+私は、今回の制作でナビゲーションに対して力を入れました。
+ソースを閲覧する際は、ぜひ以下のソースを中心的に見ていただけますと、私の力を入れた部分が理解しやすいと思いますので、ご参考にしていただけますと幸いです。
+
+
+project/
+└── Source/
+    ├── MeshInfo/
+    │	├── MeshInfo.h
+    │	├── MeshInfoFactory.cpp
+    │	└── MeshInfoFactory.h
+    └── Navigation/
+        ├── CostInfo.h
+        ├── NavPointUpdater/
+        │   ├── NavPointUpdater.cpp
+        │   └── NavPointUpdater.h
+        ├── NavigationManager/
+        │   ├── NavigationManager.cpp
+        │   └── NavigationManager.h
+        └── Node/
+            ├── NavMesh/
+            │   ├── NavMeshController.cpp
+            │   ├── NavMeshController.h
+            │   ├── PortalPoint.cpp
+            │   └── PortalPoint.h
+            ├── NavPointBase.cpp
+            ├── NavPointBase.h
+            ├── NodeData.h
+            └── WayPoint/
+                ├── VoxelWayPoint.cpp
+                ├── VoxelWayPoint.h
+                ├── WayPoint.cpp
+                ├── WayPoint.h
+                ├── WayPointController.cpp
+                └── WayPointController.h
+
+
+    
