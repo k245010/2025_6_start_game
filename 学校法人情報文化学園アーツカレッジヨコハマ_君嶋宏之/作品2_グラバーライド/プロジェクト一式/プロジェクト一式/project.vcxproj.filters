@@ -1,0 +1,758 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\sceneFactory.cpp" />
+    <ClCompile Include="Library\app.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\sceneManager.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\main.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\bootScene.cpp">
+      <Filter>BootScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\titleScene.cpp">
+      <Filter>TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\playScene.cpp">
+      <Filter>PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\debugScreen.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\sceneBase.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\commonFind.cpp">
+      <Filter>common\commonFind</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\playerUi.cpp">
+      <Filter>PlayScene\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\anime.cpp">
+      <Filter>PlayScene\player\anime</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\player.cpp">
+      <Filter>PlayScene\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\enemyBase.cpp">
+      <Filter>PlayScene\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\camera.cpp">
+      <Filter>PlayScene\system</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\light.cpp">
+      <Filter>PlayScene\system</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\function.cpp">
+      <Filter>common\function</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\effectManager.cpp">
+      <Filter>PlayScene\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\effectBase.cpp">
+      <Filter>PlayScene\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\slowMostionManager.cpp">
+      <Filter>common\slowMostion</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gravityManager.cpp">
+      <Filter>PlayScene\object\gravity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\inputManager.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stage.cpp">
+      <Filter>PlayScene\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stageObjectManager.cpp">
+      <Filter>PlayScene\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stageObject.cpp">
+      <Filter>PlayScene\stage\stageObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\rgb.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\collisionManager.cpp">
+      <Filter>PlayScene\Collision\CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\collisionBase.cpp">
+      <Filter>PlayScene\Collision\CollisionObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\obbCollision.cpp">
+      <Filter>PlayScene\Collision\CollisionObject\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\sphereCollision.cpp">
+      <Filter>PlayScene\Collision\CollisionObject\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\itemObject.cpp">
+      <Filter>PlayScene\stage\stageObject\itemObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gameManager.cpp">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\charaBase.cpp">
+      <Filter>PlayScene\charaBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>PlayScene\object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\loadManager.cpp">
+      <Filter>common\load\loadManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\point.cpp">
+      <Filter>PlayScene\stage\stageObject\point</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\selectScene.cpp">
+      <Filter>SelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\cameraBase.cpp">
+      <Filter>common\cameraBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\commonData.cpp" />
+    <ClCompile Include="Source\selectCamera.cpp">
+      <Filter>SelectScene\SelectCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\soundManager.cpp">
+      <Filter>common\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stageData.cpp">
+      <Filter>csvData\stageData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\walkEnemy.cpp">
+      <Filter>PlayScene\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\flyEnemy.cpp">
+      <Filter>PlayScene\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\noGravityEnemyBase.cpp">
+      <Filter>PlayScene\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\uiManager.cpp">
+      <Filter>common\uiManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\uiBase.cpp">
+      <Filter>PlayScene\uiBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\switchObject.cpp">
+      <Filter>PlayScene\stage\stageObject\switchObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\switch.cpp">
+      <Filter>PlayScene\stage\stageObject\switchObject\switch</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\irondoor.cpp">
+      <Filter>PlayScene\stage\stageObject\switchObject\irondoor</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\time.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\pauseUi.cpp">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\goal.cpp">
+      <Filter>PlayScene\stage\stageObject\goal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\selectUi.cpp">
+      <Filter>SelectScene\SelectUi</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\coin.cpp">
+      <Filter>PlayScene\stage\stageObject\itemObject\coin</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gravityArea.cpp">
+      <Filter>PlayScene\stage\stageObject\area\gravity_area</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\breakableBlock.cpp">
+      <Filter>PlayScene\stage\stageObject\BrakableBrock</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\clearUi.cpp">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\uiSelectBase.cpp">
+      <Filter>PlayScene\uiBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\font.cpp">
+      <Filter>common\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stageScore.cpp">
+      <Filter>PlayScene\score</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\backGroundAloow.cpp">
+      <Filter>PlayScene\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\titleUi.cpp">
+      <Filter>TitleScene\titleUi</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\bumper.cpp">
+      <Filter>PlayScene\stage\stageObject\bumper</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\rayCollision.cpp">
+      <Filter>PlayScene\Collision\CollisionObject\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\cameraArea.cpp">
+      <Filter>PlayScene\stage\stageObject\area\camera_area</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CsvReader.cpp">
+      <Filter>csvData\csvReader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\playUi.cpp">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shadow.cpp">
+      <Filter>PlayScene\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\backGroundManager.cpp">
+      <Filter>PlayScene\stage\backGround\backGroundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\2dBackGround.cpp">
+      <Filter>PlayScene\stage\backGround\2dBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\3dBackGround.cpp">
+      <Filter>PlayScene\stage\backGround\3dBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\fader.cpp">
+      <Filter>common\fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\productionh.cpp">
+      <Filter>common\load\loadManager\prodaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\pathReader.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\configData.cpp">
+      <Filter>csvData\config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\switchMoveObject.cpp">
+      <Filter>PlayScene\stage\stageObject\switchObject\switch\switchiMoveObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\movie.cpp">
+      <Filter>TitleScene\Movie</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\potion.cpp">
+      <Filter>PlayScene\stage\stageObject\itemObject\potion</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gravityBrock.cpp">
+      <Filter>PlayScene\stage\stageObject\gravityBrock</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\config.h" />
+    <ClInclude Include="Source\sceneFactory.h" />
+    <ClInclude Include="Library\app.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\sceneManager.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\sceneBase.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\gameObject.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\bootScene.h">
+      <Filter>BootScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\titleScene.h">
+      <Filter>TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\playScene.h">
+      <Filter>PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\debugScreen.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadData.h">
+      <Filter>common\load</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\commonFind.h">
+      <Filter>common\commonFind</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\player.h">
+      <Filter>PlayScene\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\playerUi.h">
+      <Filter>PlayScene\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\anime.h">
+      <Filter>PlayScene\player\anime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\enemyBase.h">
+      <Filter>PlayScene\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\camera.h">
+      <Filter>PlayScene\system</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\light.h">
+      <Filter>PlayScene\system</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\opereter.h">
+      <Filter>common\opereter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\function.h">
+      <Filter>common\function</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\effectManager.h">
+      <Filter>PlayScene\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\effectBase.h">
+      <Filter>PlayScene\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\slowMostionManager.h">
+      <Filter>common\slowMostion</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gravityManager.h">
+      <Filter>PlayScene\object\gravity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\inputManager.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stage.h">
+      <Filter>PlayScene\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stageObjectManager.h">
+      <Filter>PlayScene\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\struct.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rgb.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\collisionManager.h">
+      <Filter>PlayScene\Collision\CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\collisionFunction.h">
+      <Filter>PlayScene\Collision\CollisionObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\collisionBase.h">
+      <Filter>PlayScene\Collision\CollisionObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\obbCollision.h">
+      <Filter>PlayScene\Collision\CollisionObject\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\sphereCollision.h">
+      <Filter>PlayScene\Collision\CollisionObject\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\itemObject.h">
+      <Filter>PlayScene\stage\stageObject\itemObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gameManager.h">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object.h">
+      <Filter>PlayScene\object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\charaBase.h">
+      <Filter>PlayScene\charaBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\point.h">
+      <Filter>PlayScene\stage\stageObject\point</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\selectScene.h">
+      <Filter>SelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\cameraBase.h">
+      <Filter>common\cameraBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\commonData.h" />
+    <ClInclude Include="Library\myDxLib.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\selectCamera.h">
+      <Filter>SelectScene\SelectCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\soundManager.h">
+      <Filter>common\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stageData.h">
+      <Filter>csvData\stageData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\walkEnemy.h">
+      <Filter>PlayScene\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\time.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\flyEnemy.h">
+      <Filter>PlayScene\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\noGravityEnemyBase.h">
+      <Filter>PlayScene\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\uiManager.h">
+      <Filter>common\uiManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\uiBase.h">
+      <Filter>PlayScene\uiBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\switch.h">
+      <Filter>PlayScene\stage\stageObject\switchObject\switch</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\irondoor.h">
+      <Filter>PlayScene\stage\stageObject\switchObject\irondoor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\switchObject.h">
+      <Filter>PlayScene\stage\stageObject\switchObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\pauseUi.h">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\goal.h">
+      <Filter>PlayScene\stage\stageObject\goal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stageObject.h">
+      <Filter>PlayScene\stage\stageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\selectUi.h">
+      <Filter>SelectScene\SelectUi</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx9.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx11.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dxlib.hpp">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\coin.h">
+      <Filter>PlayScene\stage\stageObject\itemObject\coin</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gravityArea.h">
+      <Filter>PlayScene\stage\stageObject\area\gravity_area</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\breakableBlock.h">
+      <Filter>PlayScene\stage\stageObject\BrakableBrock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\clearUi.h">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\uiSelectBase.h">
+      <Filter>PlayScene\uiBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\font.h">
+      <Filter>common\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stageScore.h">
+      <Filter>PlayScene\score</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\backGroundAloow.h">
+      <Filter>PlayScene\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\starData.h">
+      <Filter>PlayScene\score</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\titleUi.h">
+      <Filter>TitleScene\titleUi</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\bumper.h">
+      <Filter>PlayScene\stage\stageObject\bumper</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rayCollision.h">
+      <Filter>PlayScene\Collision\CollisionObject\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\cameraArea.h">
+      <Filter>PlayScene\stage\stageObject\area\camera_area</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\playUi.h">
+      <Filter>PlayScene\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shadow.h">
+      <Filter>PlayScene\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\backGroundManager.h">
+      <Filter>PlayScene\stage\backGround\backGroundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3dBackGround.h">
+      <Filter>PlayScene\stage\backGround\3dBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\2dBackGround.h">
+      <Filter>PlayScene\stage\backGround\2dBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\fader.h">
+      <Filter>common\fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\productionh.h">
+      <Filter>common\load\loadManager\prodaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\loadManager.h">
+      <Filter>common\load\loadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\pathReader.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\configData.h">
+      <Filter>csvData\config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\switchMoveObject.h">
+      <Filter>PlayScene\stage\stageObject\switchObject\switch\switchiMoveObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\movie.h">
+      <Filter>TitleScene\Movie</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Screen.h">
+      <Filter>TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\potion.h">
+      <Filter>PlayScene\stage\stageObject\itemObject\potion</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gravityBrock.h">
+      <Filter>PlayScene\stage\stageObject\gravityBrock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CsvReader.h">
+      <Filter>csvData\csvReader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="BootScene">
+      <UniqueIdentifier>{4e7a122b-01b5-4a1f-bdd8-381c4cb2403d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TitleScene">
+      <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene">
+      <UniqueIdentifier>{8123ada4-16d1-40da-a8f3-3f9e93aafb30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{826397a3-7051-44be-b23c-f5dda703c9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{208c2106-181f-415c-a2e8-fa160c7f8651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\object">
+      <UniqueIdentifier>{6e6adcab-cd65-4344-8c15-b4f7f89adecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\enemy">
+      <UniqueIdentifier>{10b600d1-cab8-4d9d-aa9b-d1a085cebae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\system">
+      <UniqueIdentifier>{cb80cdf4-fce5-44d0-9528-fa5abd027d6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\opereter">
+      <UniqueIdentifier>{92686d63-ba03-4c3e-af14-c7e4960574cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\function">
+      <UniqueIdentifier>{3d0cc936-0212-4fe6-8f96-6055cb73eb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\effect">
+      <UniqueIdentifier>{53ed42e7-997f-44dd-8a04-9436165d3642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\slowMostion">
+      <UniqueIdentifier>{4ebc2837-eacc-4e0c-a9b3-a7c2506f729a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage">
+      <UniqueIdentifier>{c8c2bc43-bdb1-489d-b76c-d798913e61a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject">
+      <UniqueIdentifier>{a93e28be-9ca7-4b42-b728-6484276a5b21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Collision">
+      <UniqueIdentifier>{25e63907-9aad-4ae1-aa96-9cecc824a71a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Collision\CollisionManager">
+      <UniqueIdentifier>{0a1707a4-3821-43b9-91af-12b9d47b5961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Collision\CollisionObject">
+      <UniqueIdentifier>{79a60e81-9bc2-4e68-a87f-e59993b036c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Collision\CollisionObject\Base">
+      <UniqueIdentifier>{82e0d536-809b-4043-9733-fe5c97ef010c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Collision\CollisionObject\OBB">
+      <UniqueIdentifier>{35b1aecf-ce5d-44d5-b402-99e2c4a6069a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Collision\CollisionObject\Sphere">
+      <UniqueIdentifier>{325b574b-a86d-4fd5-80c8-769f920579b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\backGround">
+      <UniqueIdentifier>{0cf5432c-095b-47fc-b022-f4b83a4b1b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\GameManager">
+      <UniqueIdentifier>{095aacc2-274c-450b-b578-bfcd172fe325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\charaBase">
+      <UniqueIdentifier>{924abfd7-5704-4944-b1a1-1d4be2c7c845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\load">
+      <UniqueIdentifier>{bf14f82d-00f2-479b-9c78-f472a0421c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\load\loadManager">
+      <UniqueIdentifier>{5251176c-f474-4491-8045-8a677c8e0331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\point">
+      <UniqueIdentifier>{c7b96793-1103-4c22-9bf8-72886dd425f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SelectScene">
+      <UniqueIdentifier>{0c001de0-c609-46da-9e15-d1592dbaa55b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\cameraBase">
+      <UniqueIdentifier>{061c7f5e-9455-4427-b11c-6e876c362c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SelectScene\SelectCamera">
+      <UniqueIdentifier>{d806e48e-222f-4dc8-a39f-df50b745388b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\sound">
+      <UniqueIdentifier>{46ab5d4f-2ad0-4d02-9ba2-7948dfb731e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\fade">
+      <UniqueIdentifier>{14f65ed1-f72d-42c2-b1b8-86d185a6be70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\player">
+      <UniqueIdentifier>{bf272b2a-4659-41d4-88af-2ab84bdd47ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\player\anime">
+      <UniqueIdentifier>{69600b0d-100c-4206-bff4-5ca5b787ec71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\object\gravity">
+      <UniqueIdentifier>{96e62ad6-3b5c-4690-894b-0ee8492fc560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\uiManager">
+      <UniqueIdentifier>{f74973c8-3a84-4ef6-ac68-586722a2b127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\uiBase">
+      <UniqueIdentifier>{efc2bcef-5a37-4ad9-ad3d-3a837561909a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\switchObject">
+      <UniqueIdentifier>{96ada595-e667-477b-bd23-c7e18438cfb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\switchObject\switch">
+      <UniqueIdentifier>{809fe575-d793-4ac3-9fbe-e7f0de73eed4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\switchObject\irondoor">
+      <UniqueIdentifier>{b805c096-a40d-4142-9bba-021ab713d8bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\goal">
+      <UniqueIdentifier>{0bd7ead4-4df0-4b9f-94b5-084c98da20b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SelectScene\SelectUi">
+      <UniqueIdentifier>{34d5ca3f-75fe-494c-bf78-49e9d3116798}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{52a1b625-4ccb-4295-8889-d9c2c161f27b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\itemObject">
+      <UniqueIdentifier>{abc44f4b-c991-4845-89d3-9b58f71870f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\itemObject\coin">
+      <UniqueIdentifier>{77be3f75-7e96-4097-8f64-21c7cbce1844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\itemObject\potion">
+      <UniqueIdentifier>{203f2ba2-2a44-456c-9b02-14f92b4b5a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\area">
+      <UniqueIdentifier>{af3ee95c-b324-4b26-a284-16d271cc40a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\area\gravity_area">
+      <UniqueIdentifier>{22654a72-a660-4183-872d-72c26b2755a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\BrakableBrock">
+      <UniqueIdentifier>{d2febb1c-bfe1-48c5-a34a-9cbb7c7d9802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\Font">
+      <UniqueIdentifier>{5b28071a-917b-4bd8-be83-9ff97ef8bab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\score">
+      <UniqueIdentifier>{f3ef460c-ed47-4e84-aa01-a9f8cc8944ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TitleScene\titleUi">
+      <UniqueIdentifier>{75178071-1ea4-4334-bc36-be1ab995b459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\bumper">
+      <UniqueIdentifier>{c1f465b6-d05a-43c4-81fb-6c4bd3963c6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Collision\CollisionObject\Ray">
+      <UniqueIdentifier>{5841e4e8-0fdb-4e36-9d94-2f693f9068df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\area\camera_area">
+      <UniqueIdentifier>{1f812bf7-7a43-4bce-86a1-38dd3b0446cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\commonFind">
+      <UniqueIdentifier>{c5dc02d7-25f7-4fc2-af44-cb12efbddb34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\shadow">
+      <UniqueIdentifier>{ef76d36c-8d82-4241-a088-a39585ef95c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\backGround\backGroundManager">
+      <UniqueIdentifier>{d6e9c6bc-76df-4e65-8e13-bdc75c0a1c9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\backGround\2dBackGround">
+      <UniqueIdentifier>{834afbf9-a882-41cf-9b22-b7acfb7d81b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\backGround\3dBackGround">
+      <UniqueIdentifier>{a4cc4c87-8d1c-476d-9399-1a34a23745c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\load\loadManager\prodaction">
+      <UniqueIdentifier>{b90504ad-2941-427d-80ef-af0e928041b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\switchObject\switch\switchiMoveObject">
+      <UniqueIdentifier>{465f6452-ea84-446d-84e1-902a8d0dc819}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TitleScene\Movie">
+      <UniqueIdentifier>{a739e8f3-ea3b-4081-bc09-978876b75efe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\stage\stageObject\gravityBrock">
+      <UniqueIdentifier>{1fd5d53d-fe30-4352-a0c0-1a57436dd462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="csvData">
+      <UniqueIdentifier>{4f959a0c-8c62-442f-b86e-2c201bb8051c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="csvData\config">
+      <UniqueIdentifier>{1821f002-7c14-43be-9534-723008b7c99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="csvData\stageData">
+      <UniqueIdentifier>{0110b0a2-66c8-4f96-864c-c053ab69e86d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="csvData\csvReader">
+      <UniqueIdentifier>{2ad1fa50-2dc3-43ad-a3f0-08f1c2821ca3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
