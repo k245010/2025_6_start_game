@@ -1,0 +1,92 @@
+{
+    "WaveDataList": [
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 48,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 15,
+                "posZ": 1200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 15,
+                "posZ": 1200
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 15,
+                "posZ": 1200
+            }
+        }
+    ]
+}

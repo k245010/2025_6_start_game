@@ -1,0 +1,28 @@
+{
+    "WaveDataList": [
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 72,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 72,
+                "posZ": 1000
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -1100,
+                "posY": 72,
+                "posZ": 1000
+            }
+        }
+    ]
+}

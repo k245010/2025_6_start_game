@@ -1,0 +1,84 @@
+{
+    "WaveDataList": [
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 26,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 62,
+                "posZ": 2100
+            }
+        }
+    ]
+}

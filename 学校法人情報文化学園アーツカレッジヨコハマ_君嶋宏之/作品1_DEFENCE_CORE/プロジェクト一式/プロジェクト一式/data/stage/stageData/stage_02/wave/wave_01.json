@@ -1,0 +1,44 @@
+{
+    "WaveDataList": [
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 124,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 124,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 124,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 124,
+                "posZ": 2100
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -700,
+                "posY": 124,
+                "posZ": 2100
+            }
+        }
+    ]
+}

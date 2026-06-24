@@ -1,0 +1,116 @@
+{
+    "WaveDataList": [
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 1,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        },
+        {
+            "EnemyKind": 2,
+            "SummonPosition": {
+                "posX": -2000,
+                "posY": 40,
+                "posZ": 2400
+            }
+        }
+    ]
+}

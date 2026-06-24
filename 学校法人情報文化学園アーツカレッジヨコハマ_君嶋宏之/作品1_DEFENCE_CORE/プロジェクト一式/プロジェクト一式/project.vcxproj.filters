@@ -1,0 +1,1025 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Library\App.cpp">
+      <Filter>00.Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\main.cpp">
+      <Filter>00.Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>01.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ObjectManager.cpp">
+      <Filter>00.Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\SceneManager.cpp">
+      <Filter>00.Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Time.cpp">
+      <Filter>00.Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Wave\WaveDataSerializer\WaveDataSerializer.cpp">
+      <Filter>07.PlayScene\Enemy\Wave\WaveDataSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gun\GunDataSerializer\GunDataSerializer.cpp">
+      <Filter>07.PlayScene\Gun\GunDataSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gun\GunManager\GunManager.cpp">
+      <Filter>07.PlayScene\Gun\GunManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Debug\Debug.cpp">
+      <Filter>05.Common\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Effekseer\EffekseerObject.cpp">
+      <Filter>05.Common\Effekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Effekseer\EffekseerObjectManager.cpp">
+      <Filter>05.Common\Effekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\FileSystemUtils\FileSystemUtils.cpp">
+      <Filter>05.Common\FileSystemUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Input\ControllerInput.cpp">
+      <Filter>05.Common\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Input\Input.cpp">
+      <Filter>05.Common\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Input\KeyboardInput.cpp">
+      <Filter>05.Common\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Input\MouseInput.cpp">
+      <Filter>05.Common\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\JsonSerializer\JsonSerializer.cpp">
+      <Filter>05.Common\JsonSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\PostEffect\PostEffect.cpp">
+      <Filter>05.Common\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Sound\Sound.cpp">
+      <Filter>05.Common\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Sound\SoundID.cpp">
+      <Filter>05.Common\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Sound\SoundManager.cpp">
+      <Filter>05.Common\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Animator\Animator.cpp">
+      <Filter>05.Common\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\CsvReader\CsvReader.cpp">
+      <Filter>05.Common\CsvReader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BootScene\BootScene.cpp">
+      <Filter>04.BootScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Enemies\Walker.cpp">
+      <Filter>07.PlayScene\Enemy\Enemies\Walker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Enemies\Climber.cpp">
+      <Filter>07.PlayScene\Enemy\Enemies\Climber</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Enemies\Rusher.cpp">
+      <Filter>07.PlayScene\Enemy\Enemies\Rusher</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Enemies\EnemyBase.cpp">
+      <Filter>07.PlayScene\Enemy\Enemies\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\EnemyManager\EnemyManager.cpp">
+      <Filter>07.PlayScene\Enemy\EnemyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\EnemyDataSerializer\EnemyDataSerializer.cpp">
+      <Filter>07.PlayScene\Enemy\EnemyDataSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Wave\WaveController\WaveController.cpp">
+      <Filter>07.PlayScene\Enemy\Wave\WaveController</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera\Camera.cpp">
+      <Filter>07.PlayScene\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gun\Gun\Gun.cpp">
+      <Filter>07.PlayScene\Gun\Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collisions\CollisionBase.cpp">
+      <Filter>07.PlayScene\Collision\Collisions\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collisions\ModelCollision.cpp">
+      <Filter>07.PlayScene\Collision\Collisions\ModelCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collisions\OBBCollision.cpp">
+      <Filter>07.PlayScene\Collision\Collisions\OBBCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collisions\RayCollision.cpp">
+      <Filter>07.PlayScene\Collision\Collisions\RayCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collisions\SphereCollision.cpp">
+      <Filter>07.PlayScene\Collision\Collisions\SphereCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\CollisionManager\CollisionManager.cpp">
+      <Filter>07.PlayScene\Collision\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GameController.cpp">
+      <Filter>07.PlayScene\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HoldCoin\HoldCoin.cpp">
+      <Filter>07.PlayScene\Game\HoldCoin</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\NavigationManager\NavigationManager.cpp">
+      <Filter>07.PlayScene\Navigation\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\Node\NavPointBase.cpp">
+      <Filter>07.PlayScene\Navigation\Node\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\Node\NavMesh\NavMeshController.cpp">
+      <Filter>07.PlayScene\Navigation\Node\NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\Node\NavMesh\PortalPoint.cpp">
+      <Filter>07.PlayScene\Navigation\Node\NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\Node\WayPoint\VoxelWayPoint.cpp">
+      <Filter>07.PlayScene\Navigation\Node\WayPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\Node\WayPoint\WayPoint.cpp">
+      <Filter>07.PlayScene\Navigation\Node\WayPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\Node\WayPoint\WayPointController.cpp">
+      <Filter>07.PlayScene\Navigation\Node\WayPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Navigation\NavPointUpdater\NavPointUpdater.cpp">
+      <Filter>07.PlayScene\Navigation\NavPointUpdater</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CharaBase\CharaBase.cpp">
+      <Filter>07.PlayScene\CharaBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object3D\Object3D.cpp">
+      <Filter>03.Object3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Transform\Transform.cpp">
+      <Filter>03.Object3D\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\Physics.cpp">
+      <Filter>07.PlayScene\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\Player.cpp">
+      <Filter>07.PlayScene\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shot\Bullet\BulletManager\BulletManager.cpp">
+      <Filter>07.PlayScene\Shot\Bullet\BulletManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\BlockController\BlockController.cpp">
+      <Filter>07.PlayScene\Stage\Controller\BlockController</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\EntityController\EntityController.cpp">
+      <Filter>07.PlayScene\Stage\Controller\EntityController</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageManager\StageManager.cpp">
+      <Filter>07.PlayScene\Stage\StageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Block\BlockBase.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Block\CoreBlock.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Block\GroundBlock.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\GroundBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Block\SpikeBlock.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\SpikeBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Block\WallBlock.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\WallBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\EntityBase.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\Coin.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Coin</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\JumpPad.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\JumpPad</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\SlimePatch.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\SlimePatch</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\Bomb\BombBase.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Bomb\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\Bomb\RemoteBomb.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Bomb\RemoteBomb</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\Turret\ActiveTurret.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\01_Active</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\Turret\AutoTurret.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\00_Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\Turret\ReloadTurret.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\02_Reload</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Entity\Turret\TurretBase.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shot\ShotManager\ShotManager.cpp">
+      <Filter>07.PlayScene\Shot\ShotManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\StageObjectBase.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Scenes\PlayScene.cpp">
+      <Filter>07.PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Scenes\TitleScene.cpp">
+      <Filter>06.TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneFactory.cpp">
+      <Filter>02.SceneFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Sky\Sky.cpp">
+      <Filter>05.Common\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Enemies\Crusher.cpp">
+      <Filter>07.PlayScene\Enemy\Enemies\Crusher</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\UI\UIDrawManager\UIDrawManager.cpp">
+      <Filter>05.Common\UI\UIDrawManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gauge\Gauge.cpp">
+      <Filter>07.PlayScene\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Fade\Fade.cpp">
+      <Filter>05.Common\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\MeshInfo\MeshInfoFactory.cpp">
+      <Filter>05.Common\MeshInfoFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shot\Bullet\Bullet\Bullet.cpp">
+      <Filter>07.PlayScene\Shot\Bullet\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\ShadowMap\ShadowMap.cpp">
+      <Filter>05.Common\ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Light\Light.cpp">
+      <Filter>05.Common\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Fog\FogSerializer\FogDataSerializer.cpp">
+      <Filter>05.Common\Fog\FogDataSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Color\Color.cpp">
+      <Filter>05.Common\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Fog\Fog\Fog.cpp">
+      <Filter>05.Common\Fog\Fog</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\Light\LightDataSerializer\LightDataSerializer.cpp">
+      <Filter>05.Common\Light\LightDataSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageEditor\StageEditor.cpp">
+      <Filter>07.PlayScene\Stage\StageManager\StageEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Block\SpawnerBlock.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\SpawnerBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage\StageObjects\Block\BackBlockBase.cpp">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\BackBlockBase</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Screen.h" />
+    <ClInclude Include="Library\App.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\SceneBase.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\GameObject.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx9.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx11.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dxlib.hpp">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>01.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ObjectManager.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\SceneManager.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Time.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\myDxLib.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Struct.h" />
+    <ClInclude Include="Library\DebugNew.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Wave\WaveDataSerializer\WaveDataSerializer.h">
+      <Filter>07.PlayScene\Enemy\Wave\WaveDataSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gun\GunDataSerializer\GunDataSerializer.h">
+      <Filter>07.PlayScene\Gun\GunDataSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gun\GunManager\GunManager.h">
+      <Filter>07.PlayScene\Gun\GunManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\VectorJsonConverter.h">
+      <Filter>00.Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gun\GunInfo.h">
+      <Filter>07.PlayScene\Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Debug\Debug.h">
+      <Filter>05.Common\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Easing\Easing.h">
+      <Filter>05.Common\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Effekseer\EffekseerObject.h">
+      <Filter>05.Common\Effekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Effekseer\EffekseerObjectManager.h">
+      <Filter>05.Common\Effekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\FileSystemUtils\FileSystemUtils.h">
+      <Filter>05.Common\FileSystemUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Function\Function.h">
+      <Filter>05.Common\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Input\ControllerInput.h">
+      <Filter>05.Common\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Input\Input.h">
+      <Filter>05.Common\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Input\KeyboardInput.h">
+      <Filter>05.Common\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\JsonSerializer\JsonDefine.h">
+      <Filter>05.Common\JsonSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\JsonSerializer\JsonSerializer.h">
+      <Filter>05.Common\JsonSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\PostEffect\PostEffect.h">
+      <Filter>05.Common\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Sound\Sound.h">
+      <Filter>05.Common\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Sound\SoundID.h">
+      <Filter>05.Common\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Sound\SoundManager.h">
+      <Filter>05.Common\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Animator\Animator.h">
+      <Filter>05.Common\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\CsvReader\CsvReader.h">
+      <Filter>05.Common\CsvReader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BootScene\BootScene.h">
+      <Filter>04.BootScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemies\Walker.h">
+      <Filter>07.PlayScene\Enemy\Enemies\Walker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemies\Climber.h">
+      <Filter>07.PlayScene\Enemy\Enemies\Climber</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemies\Rusher.h">
+      <Filter>07.PlayScene\Enemy\Enemies\Rusher</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemies\EnemyBase.h">
+      <Filter>07.PlayScene\Enemy\Enemies\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\EnemyInfo.h">
+      <Filter>07.PlayScene\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\EnemyKind.h">
+      <Filter>07.PlayScene\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\EnemyManager\EnemyManager.h">
+      <Filter>07.PlayScene\Enemy\EnemyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\EnemyDataSerializer\EnemyDataSerializer.h">
+      <Filter>07.PlayScene\Enemy\EnemyDataSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Wave\WaveController\WaveController.h">
+      <Filter>07.PlayScene\Enemy\Wave\WaveController</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Wave\WaveInfo.h">
+      <Filter>07.PlayScene\Enemy\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\Camera.h">
+      <Filter>07.PlayScene\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gun\Gun\Gun.h">
+      <Filter>07.PlayScene\Gun\Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collisions\CollisionBase.h">
+      <Filter>07.PlayScene\Collision\Collisions\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collisions\ModelCollision.h">
+      <Filter>07.PlayScene\Collision\Collisions\ModelCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collisions\OBBCollision.h">
+      <Filter>07.PlayScene\Collision\Collisions\OBBCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collisions\RayCollision.h">
+      <Filter>07.PlayScene\Collision\Collisions\RayCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collisions\SphereCollision.h">
+      <Filter>07.PlayScene\Collision\Collisions\SphereCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionObjectKind.h">
+      <Filter>07.PlayScene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionManager\CollisionManager.h">
+      <Filter>07.PlayScene\Collision\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameController.h">
+      <Filter>07.PlayScene\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HoldCoin\HoldCoin.h">
+      <Filter>07.PlayScene\Game\HoldCoin</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\NavigationManager\NavigationManager.h">
+      <Filter>07.PlayScene\Navigation\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\Node\NavPointBase.h">
+      <Filter>07.PlayScene\Navigation\Node\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\Node\NodeData.h">
+      <Filter>07.PlayScene\Navigation\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\CostInfo.h">
+      <Filter>07.PlayScene\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\Node\NavMesh\NavMeshController.h">
+      <Filter>07.PlayScene\Navigation\Node\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\Node\NavMesh\PortalPoint.h">
+      <Filter>07.PlayScene\Navigation\Node\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\Node\WayPoint\VoxelWayPoint.h">
+      <Filter>07.PlayScene\Navigation\Node\WayPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\Node\WayPoint\WayPoint.h">
+      <Filter>07.PlayScene\Navigation\Node\WayPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\Node\WayPoint\WayPointController.h">
+      <Filter>07.PlayScene\Navigation\Node\WayPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Navigation\NavPointUpdater\NavPointUpdater.h">
+      <Filter>07.PlayScene\Navigation\NavPointUpdater</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CharaBase\CharaBase.h">
+      <Filter>07.PlayScene\CharaBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object3D\Object3D.h">
+      <Filter>03.Object3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transform\Transform.h">
+      <Filter>03.Object3D\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transform\TransformFunction.h">
+      <Filter>03.Object3D\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\Physics.h">
+      <Filter>07.PlayScene\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player\Player.h">
+      <Filter>07.PlayScene\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shot\Bullet\BulletManager\BulletManager.h">
+      <Filter>07.PlayScene\Shot\Bullet\BulletManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shot\Bullet\BulletInfo.h">
+      <Filter>07.PlayScene\Shot\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\BlockController\BlockController.h">
+      <Filter>07.PlayScene\Stage\Controller\BlockController</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\EntityController\EntityController.h">
+      <Filter>07.PlayScene\Stage\Controller\EntityController</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageManager\StageManager.h">
+      <Filter>07.PlayScene\Stage\StageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\BlockBase.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\CoreBlock.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\GroundBlock.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\GroundBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\SpikeBlock.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\SpikeBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\SwampBlock.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\SwampBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\WallBlock.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\WallBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\EntityBase.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\Coin.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Coin</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\JumpPad.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\JumpPad</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\SlimePatch.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\SlimePatch</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\Bomb\BombBase.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Bomb\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\Bomb\RemoteBomb.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Bomb\RemoteBomb</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\Turret\ActiveTurret.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\01_Active</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\Turret\AutoTurret.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\00_Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\Turret\ReloadTurret.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\02_Reload</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Entity\Turret\TurretBase.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Entity\Turret\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\Trap\TrapInterface\ITrap.h">
+      <Filter>07.PlayScene\Stage\Trap\TrapInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\Trap\TrapDataSerializer\TrapDataSerializer.h">
+      <Filter>07.PlayScene\Stage\Trap\TrapDataSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\Trap\TrapInfo.h">
+      <Filter>07.PlayScene\Stage\Trap</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shot\ShotManager\ShotManager.h">
+      <Filter>07.PlayScene\Shot\ShotManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\StageObjectBase.h">
+      <Filter>07.PlayScene\Stage\StageObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Scenes\PlayScene.h">
+      <Filter>07.PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Scenes\TitleScene.h">
+      <Filter>06.TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneFactory.h">
+      <Filter>02.SceneFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Sky\Sky.h">
+      <Filter>05.Common\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemies\Crusher.h">
+      <Filter>07.PlayScene\Enemy\Enemies\Crusher</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\UI\UIDrawManager\UIDrawManager.h">
+      <Filter>05.Common\UI\UIDrawManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gauge\Gauge.h">
+      <Filter>07.PlayScene\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionFunction.h">
+      <Filter>07.PlayScene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Fade\Fade.h">
+      <Filter>05.Common\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\MeshInfo\MeshInfo.h">
+      <Filter>05.Common\MeshInfoFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\MeshInfo\MeshInfoFactory.h">
+      <Filter>05.Common\MeshInfoFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transform\TransformJsonConverter.h">
+      <Filter>03.Object3D\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shot\Bullet\Bullet\Bullet.h">
+      <Filter>07.PlayScene\Shot\Bullet\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Input\MouseInput.h">
+      <Filter>05.Common\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageInfo.h">
+      <Filter>07.PlayScene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjectData.h">
+      <Filter>07.PlayScene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\ShadowMap\ShadowMap.h">
+      <Filter>05.Common\ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Light\Light.h">
+      <Filter>05.Common\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Fog\FogSerializer\FogDataSerializer.h">
+      <Filter>05.Common\Fog\FogDataSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Fog\FogInfo.h">
+      <Filter>05.Common\Fog</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Color\Color.h">
+      <Filter>05.Common\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Fog\Fog\Fog.h">
+      <Filter>05.Common\Fog\Fog</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Light\LightInfo.h">
+      <Filter>05.Common\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\Light\LightDataSerializer\LightDataSerializer.h">
+      <Filter>05.Common\Light\LightDataSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageEditor\StageEditor.h">
+      <Filter>07.PlayScene\Stage\StageManager\StageEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\SpawnerBlock.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\SpawnerBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage\StageObjects\Block\BackBlockBase.h">
+      <Filter>07.PlayScene\Stage\StageObjects\Block\BackBlockBase</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="00.Library">
+      <UniqueIdentifier>{208c2106-181f-415c-a2e8-fa160c7f8651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.ImGui">
+      <UniqueIdentifier>{a717257b-67b3-4bfa-834c-1e34032b33b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.SceneFactory">
+      <UniqueIdentifier>{aaf3749a-aea6-47a6-9104-38b8bb49d3e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object3D">
+      <UniqueIdentifier>{df62247c-7485-41df-80f7-ce457bd89807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object3D\Transform">
+      <UniqueIdentifier>{080e0691-d4f1-46fc-a759-7fd35c411164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.BootScene">
+      <UniqueIdentifier>{4e7a122b-01b5-4a1f-bdd8-381c4cb2403d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common">
+      <UniqueIdentifier>{e786119e-c1fd-4d0d-992c-c250fd0fdb96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Input">
+      <UniqueIdentifier>{c615f089-d95e-487a-b0f3-63bd33b56981}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Debug">
+      <UniqueIdentifier>{88a30269-cbde-448e-81c1-58e9e7b88638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Sound">
+      <UniqueIdentifier>{810c5fc9-4a00-4554-b74d-c71c6525d6d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Easing">
+      <UniqueIdentifier>{bc3f81f9-1aa9-40a3-a7f3-bb2ebec9ddec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Function">
+      <UniqueIdentifier>{9b3f7c0c-b2c5-4bf2-9928-44cdc560d7e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Effekseer">
+      <UniqueIdentifier>{07aa1fcf-af88-4682-892a-6f8d2bafad0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\PostEffect">
+      <UniqueIdentifier>{60354594-3c5d-4554-a73f-6bc197a6f5e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\FileSystemUtils">
+      <UniqueIdentifier>{060d70f2-d698-4f9a-889b-0162cc5bc5d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\JsonSerializer">
+      <UniqueIdentifier>{b3c8ccd1-8331-42b6-84eb-dc50463cfde0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\CsvReader">
+      <UniqueIdentifier>{1c8bfe6a-7c65-4d32-ba10-0a50bee67809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Animator">
+      <UniqueIdentifier>{53a8c0a6-4062-438a-911f-5cf21750143b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Sky">
+      <UniqueIdentifier>{2d017e6f-cc4a-4d32-89ff-56c405c0a25c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.TitleScene">
+      <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene">
+      <UniqueIdentifier>{8123ada4-16d1-40da-a8f3-3f9e93aafb30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Camera">
+      <UniqueIdentifier>{006f77ee-ed80-4f79-93ab-9b880a1c87db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision">
+      <UniqueIdentifier>{810d3fd4-8e12-4854-a0ba-bf8c5d0ef5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision\Collisions">
+      <UniqueIdentifier>{a858f744-f7df-4569-a620-58c845df86ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision\Collisions\RayCollision">
+      <UniqueIdentifier>{0c4da8be-ebb0-4c73-a519-e4412e53d3fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision\Collisions\Base">
+      <UniqueIdentifier>{2c435ec8-285b-43f8-a501-c2a791001e79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision\Collisions\SphereCollision">
+      <UniqueIdentifier>{830732c0-35b1-4e4c-b96c-5746dafca418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision\Collisions\OBBCollision">
+      <UniqueIdentifier>{2b9c2b5a-55df-4407-9f83-1d20a0a393a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision\Collisions\ModelCollision">
+      <UniqueIdentifier>{b0c757b8-d89d-4024-88af-ead867195ea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Collision\Manager">
+      <UniqueIdentifier>{eec7f54e-b3e8-4ca2-aa28-bd7c78c763de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Navigation">
+      <UniqueIdentifier>{4c027997-5992-4b5d-b4ad-56f84c3edd78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Navigation\Manager">
+      <UniqueIdentifier>{be160e16-71a4-4b09-ad42-44d1389c25c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Navigation\Node">
+      <UniqueIdentifier>{f636b155-6fcd-456e-8b4c-f880fbff02fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Navigation\Node\Base">
+      <UniqueIdentifier>{97424b28-e4f3-4535-b3b8-cb946648b85a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Navigation\Node\NavMesh">
+      <UniqueIdentifier>{7668c84e-5d71-4437-8bf3-a4a5307b6fb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Navigation\Node\WayPoint">
+      <UniqueIdentifier>{ab64f563-e4f6-4b67-b820-db14b047d43a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Navigation\NavPointUpdater">
+      <UniqueIdentifier>{ae57947c-dbd8-438d-9bdd-0a1111456666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage">
+      <UniqueIdentifier>{aff82626-76c0-4198-8670-8592e18d13b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageManager">
+      <UniqueIdentifier>{c617209c-4677-44ce-bc06-9e0ab3fb00b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects">
+      <UniqueIdentifier>{002465f4-c0b0-4e8b-8d67-496cee5faf27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block">
+      <UniqueIdentifier>{89c2d67e-849c-49c5-95d9-345979b245c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block\Core">
+      <UniqueIdentifier>{d114cb02-0278-4f95-8dfd-b0c0e0efb66f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block\GroundBlock">
+      <UniqueIdentifier>{7d75ebae-f878-4abe-bd9d-c69ec874e891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block\SpikeBlock">
+      <UniqueIdentifier>{35322342-397d-4363-a21b-8e926da65d29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block\SwampBlock">
+      <UniqueIdentifier>{02e70c26-e88e-4866-bf28-84649842e262}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block\WallBlock">
+      <UniqueIdentifier>{611e7388-fbb0-41f1-9362-1e7a30ba3ea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity">
+      <UniqueIdentifier>{2ac8046d-a60e-4940-8431-9ec0dd2cf61d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Bomb">
+      <UniqueIdentifier>{eeb17faa-2f11-4712-82cd-ca84bf8cd99f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Bomb\Base">
+      <UniqueIdentifier>{e212c48c-ae8d-47ae-a9c7-e43cb7c34f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Bomb\RemoteBomb">
+      <UniqueIdentifier>{f78e6d8a-d2ce-42be-9f24-dd3d8e4166ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Turret">
+      <UniqueIdentifier>{279c1361-7627-4d26-9aee-d7c7d0fb8725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Turret\00_Auto">
+      <UniqueIdentifier>{ad8355a3-f5c7-429c-85e1-191e8cb8ffc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Turret\01_Active">
+      <UniqueIdentifier>{7bd9ef4a-93f5-4045-aa32-13ab27b15a33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Turret\02_Reload">
+      <UniqueIdentifier>{3fc5c725-5d9c-45ce-a50c-474e6c9ba809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Turret\Base">
+      <UniqueIdentifier>{ffa66492-676d-46bb-af9a-87b4964d58e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\Coin">
+      <UniqueIdentifier>{0b812fcd-4d29-4901-8642-41816d21df94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\JumpPad">
+      <UniqueIdentifier>{a9b2febd-5e23-4887-b67b-a5ad9fba9fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Entity\SlimePatch">
+      <UniqueIdentifier>{3b50253e-ccde-4cef-82d0-8eb7ad0d60ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\Trap">
+      <UniqueIdentifier>{b0759061-7c63-4080-9e13-dd38bf925a47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\Trap\TrapInterface">
+      <UniqueIdentifier>{3ef628a8-5b86-4af4-aaa1-79404f86cafe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\Trap\TrapDataSerializer">
+      <UniqueIdentifier>{84356176-74d7-4dfa-ac7a-6c108af0ba03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\Controller">
+      <UniqueIdentifier>{406688b6-71c8-419a-a767-5624a3cfd5df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\Controller\BlockController">
+      <UniqueIdentifier>{d7ee8433-cb52-4605-8252-6b2d4beb670c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\Controller\EntityController">
+      <UniqueIdentifier>{29bcbc45-699e-4f38-bfce-5a94722f419f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy">
+      <UniqueIdentifier>{be228a08-b022-456f-a8e0-441131a6442d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\EnemyManager">
+      <UniqueIdentifier>{6606cbc9-e72e-4474-a216-70addcc28595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Enemies">
+      <UniqueIdentifier>{d2a9cf55-2c2f-472d-ac88-402e1747d235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Enemies\Climber">
+      <UniqueIdentifier>{40262f82-f7f0-4b79-8701-c9683b244003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Enemies\Base">
+      <UniqueIdentifier>{3d823633-2ce9-486d-b67f-7856602f79b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Enemies\Walker">
+      <UniqueIdentifier>{04960153-fd8c-4b73-9cbf-e2c4154ec991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Enemies\Rusher">
+      <UniqueIdentifier>{f4b24ffb-63d6-4256-a9a6-95758f68bb25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\EnemyDataSerializer">
+      <UniqueIdentifier>{1afc92fa-cef0-4fba-a9f7-e517e20248cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Wave">
+      <UniqueIdentifier>{79a97b49-7065-455c-8947-fcaab04e5146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Wave\WaveDataSerializer">
+      <UniqueIdentifier>{b9af5c47-09f7-4310-b68e-56fd1be5b568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Wave\WaveController">
+      <UniqueIdentifier>{fa521ae1-cd04-4f7e-9797-7bcd3f15c767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Player">
+      <UniqueIdentifier>{54f7ba1e-a5fd-4862-8a24-70efc62ce4e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Game">
+      <UniqueIdentifier>{23249e68-c84f-4603-943e-ac5382f256e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Game\HoldCoin">
+      <UniqueIdentifier>{e286928c-0ad8-4d68-9bf3-3d543a56ddce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Gun">
+      <UniqueIdentifier>{7ab08367-5bf3-48df-8307-1357596ee36d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Gun\GunDataSerializer">
+      <UniqueIdentifier>{f5dd8c2a-8d7f-4e81-b99d-0de5e8262985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Gun\GunManager">
+      <UniqueIdentifier>{6bf25597-99a3-497a-9c70-00ad2db4c2c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Gun\Gun">
+      <UniqueIdentifier>{86a29aa2-edd7-405e-9ea8-f689263328ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Shot">
+      <UniqueIdentifier>{e56102de-016b-4df9-8d7f-816151d73e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Shot\ShotManager">
+      <UniqueIdentifier>{fe399c4b-94b7-4318-933d-9d8be8df54e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Shot\Bullet">
+      <UniqueIdentifier>{93218ccb-ccc9-4df1-8d99-a6ff73829dd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Shot\Bullet\BulletManager">
+      <UniqueIdentifier>{e7a0be78-fb66-4902-8c0b-2d56a73538fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Physics">
+      <UniqueIdentifier>{731e2c9d-6688-4a3b-8174-04ec571263d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\CharaBase">
+      <UniqueIdentifier>{9f1fcccc-31cf-4313-8849-65ea41433c93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Enemy\Enemies\Crusher">
+      <UniqueIdentifier>{52d73f34-98f3-4305-837b-5afd613da9cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Gauge">
+      <UniqueIdentifier>{854d8d4d-d8d8-4ce1-b424-e7cfdfdca0c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\UI">
+      <UniqueIdentifier>{a05a1236-9466-40a3-aa16-6a1e6d96b507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\UI\UIDrawManager">
+      <UniqueIdentifier>{9717f973-b1c0-4255-96bc-058ecd0a8146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Fade">
+      <UniqueIdentifier>{703aa770-ef6f-4864-8f3f-46af08bd8f9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\MeshInfoFactory">
+      <UniqueIdentifier>{52c46b8d-45f0-4f9a-b8ad-56fea5faefe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Shot\Bullet\Bullet">
+      <UniqueIdentifier>{ab297533-0159-4f48-a3a8-44b6a45aa09b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\ShadowMap">
+      <UniqueIdentifier>{45031853-1159-458e-b406-9a99bce6de52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Light">
+      <UniqueIdentifier>{45413ea0-d6ea-4a20-b5a0-feb5a2e469c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Fog">
+      <UniqueIdentifier>{4aa6c641-adc6-4f8b-a0ab-59118b48e99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Fog\FogDataSerializer">
+      <UniqueIdentifier>{67187974-2f1d-4742-91b1-a9339dfd7a71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Color">
+      <UniqueIdentifier>{068fa39a-8a54-4f05-9d8f-76fa196750a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Fog\Fog">
+      <UniqueIdentifier>{fc894e08-6d81-476a-b4cc-f5229979e370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Common\Light\LightDataSerializer">
+      <UniqueIdentifier>{08de1e83-378f-4f8b-abec-29e5fd82c6e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageManager\StageEditor">
+      <UniqueIdentifier>{6a67795e-32eb-4549-a01b-5427d8ccd90a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block\SpawnerBlock">
+      <UniqueIdentifier>{b2f53553-73bf-4359-8618-cb5e0b81f759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.PlayScene\Stage\StageObjects\Block\BackBlockBase">
+      <UniqueIdentifier>{811c4330-4929-45ce-9d9f-09dea3d76dca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
