@@ -15,7 +15,7 @@ namespace
     constexpr float BIGGER_TIME         = 0.25f;    // 拡大しきるまでの時間(秒)
 }
 
-Coin::Coin(const Transform& _trans, const int& _hModel, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _hModel, StageObjectData::STAGE_OBJECT_KIND::COIN, _hp, _putPlaceKind)
+Coin::Coin(const Transform& _trans, const ModelData& _modelData, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _modelData, StageObjectData::STAGE_OBJECT_KIND::COIN, _hp, _putPlaceKind)
 {
     angle = 1.0f / (GetRand(49) + 1);	// 0～1の範囲で回転値をランダムで設定
     upCount = 1.0f / (GetRand(49) + 1); // 0～1の範囲で上昇カウントをランダムで設定
@@ -55,25 +55,33 @@ Coin::~Coin()
 void Coin::Update()
 {
     EntityBase::Update();
+
     /* 
     ImGui::Begin("Coin");
     ImGui::SliderFloat("rotSpeed", &ROTATION_SPEED, 0.0f, 5.0f);
     ImGui::SliderFloat("upSpeed", &UP_SPEED, 0.0f, 5.0f);
     ImGui::SliderFloat("upMax", &MAX_UP_LEN, 0.0f, 60.0f);
 
-    ImGui::End();*/
+    ImGui::End();
+    */
 
     //_ BIGGER_TIMEの時間をかけて拡大 _//
 
     if (time <= BIGGER_TIME)
     {
-        time            += Time::GameDeltaTime();
+        time += Time::GameDeltaTime();
+
+        // BIGGER_TIMEを超えていたら
+        if (time > BIGGER_TIME)
+            time = BIGGER_TIME;
+
+        // スケールの設定
         transform.scale = finishScale * (time / BIGGER_TIME);
     }
 
     //_ 回転 _//
 
-    angle   += Time::GameDeltaTime() * ROTATION_SPEED;
+    angle += Time::GameDeltaTime() * ROTATION_SPEED;
 
     // 角度値が一周していたら
     if (angle >= DegToRad * 360.0f)
@@ -106,6 +114,7 @@ bool Coin::HitEntity(const CollisionHitInfoData& _targetData)
 
         //// 押し出し
         //transform.position += vec.Normalize() * (moveLen / 5);
+        //return true;
     }
     return false;
 }

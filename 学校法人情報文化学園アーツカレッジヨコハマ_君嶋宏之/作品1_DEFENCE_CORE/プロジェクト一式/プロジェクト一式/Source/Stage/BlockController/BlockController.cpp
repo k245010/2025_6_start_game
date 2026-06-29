@@ -66,6 +66,10 @@ BlockController::~BlockController()
 
 	StageManagerForDeleteBlock();
 
+	assert(spawnerList.empty());
+
+	spawnerList.clear();
+
 	BlockController::isActiveInstance = false;
 }
 
@@ -154,6 +158,8 @@ BlockBase* BlockController::CreateBlock(const Transform& _trans, const StageObje
 	case StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK:
 
 		blockObject = new SpawnerBlock(_trans, modelData, StageObjectData::GetStageObjectHPConfig(_kind));
+		// スポナーをspawnerListにpsuh
+		PushSpawnerToList(blockObject);
 		break;
 	case StageObjectData::STAGE_OBJECT_KIND::BACK_MOUNTAIN:
 	case StageObjectData::STAGE_OBJECT_KIND::BACK_ROCK:
@@ -186,6 +192,9 @@ void BlockController::StageManagerForDeleteBlock()
 
 		if (obj != nullptr)
 		{
+			// スポナーオブジェクトだったらspawnerListから削除
+			DeleteRequestSpawnerFormList(obj);
+
 			obj->DestroyMe();
 			obj = nullptr;
 		}
@@ -203,9 +212,13 @@ void BlockController::StageManagerForDeleteBlock(const STAGE_OBJECT_CREATE_WAY& 
 
 			if (obj != nullptr)
 			{
+				// スポナーオブジェクトだったらspawnerListから削除
+				DeleteRequestSpawnerFormList(obj);
+
 				obj->DestroyMe();
 				obj = nullptr;
 			}
+			
 			itr = blocks.erase(itr);
 		}
 		else
@@ -252,21 +265,27 @@ bool BlockController::DeleteBlock(BlockBase* _obj)
 		return false;
 	}
 
-	BlockBase& block = *itr->first;
+	BlockBase* block = itr->first;
 
 	if (itr->first != nullptr)
 	{
-		block.DestroyMe();
+		// スポナーオブジェクトだったらspawnerListから削除
+		DeleteRequestSpawnerFormList(itr->first);
+
+		// putPointに置かれたオブジェクトだったら
+		if (block->GetPutPlaceKind() == StageObjectBase::PUT_PLACE_KIND::PUT_POINT)
+		{
+			stageManager->SendDeletePutPointStageObject(block->GetTransform());
+		}
+
+		block->DestroyMe();
+		block = nullptr;
 	}
+
 	itr = blocks.erase(itr);
 
 	//stageManager->ChangedStageObject();
 
-	// putPointに置かれたオブジェクトだったら
-	if (block.GetPutPlaceKind() == StageObjectBase::PUT_PLACE_KIND::PUT_POINT)
-	{
-		stageManager->SendDeletePutPointStageObject(block.GetTransform());
-	}
 	return true;
 }
 
@@ -283,10 +302,14 @@ bool BlockController::DeleteBlock(const StageObjectData::STAGE_OBJECT_KIND& _kin
 			// 削除したいステージオブジェクトの種類と一致したら
 			if (blockObj->GetStageObjectKind() == _kind)
 			{
+				// スポナーオブジェクトだったらspawnerListから削除
+				DeleteRequestSpawnerFormList(blockObj);
+
 				// オブジェクトの削除
 				blockObj->DestroyMe();
 				blockObj = nullptr;
 
+				// blocksから削除
 				blockItr = blocks.erase(blockItr);
 				continue;	// コンテナから要素を削除したので continue
 			}
@@ -299,6 +322,38 @@ bool BlockController::DeleteBlock(const StageObjectData::STAGE_OBJECT_KIND& _kin
 VECTOR3 BlockController::GetPutGridPosition(const Transform& _trans)
 {
 	return _trans.position / StageInfo::PUT_GRID_SIZE;
+}
+
+bool BlockController::PushSpawnerToList(const StageObjectBase* _spawner)
+{
+	if (_spawner->GetStageObjectKind() != StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK)
+		return false;	// スポナーでなかったら return
+
+	// スポナーのポインタをpush
+	spawnerList.emplace_back(_spawner);
+
+	return true;
+}
+
+bool BlockController::DeleteRequestSpawnerFormList(const StageObjectBase* _spawner)
+{
+	assert(_spawner != nullptr);
+
+	if (_spawner->GetStageObjectKind() != StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK)
+		return false;	// スポナーでなかったら return
+
+	for (auto spawnerItr = spawnerList.begin();spawnerItr != spawnerList.end();)
+	{
+		if (*spawnerItr == _spawner)
+		{
+			// コンテナからスポナーのポインタを削除
+			spawnerItr = spawnerList.erase(spawnerItr);
+
+			return true;	// 削除できたので return true
+		}
+		spawnerItr++;
+	}
+	return false;
 }
 
 const VECTOR3* BlockController::GetCorePosition() const

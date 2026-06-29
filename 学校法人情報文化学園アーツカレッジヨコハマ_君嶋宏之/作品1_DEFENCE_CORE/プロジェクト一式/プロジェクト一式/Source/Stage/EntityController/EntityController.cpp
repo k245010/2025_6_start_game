@@ -142,6 +142,11 @@ void EntityController::Update()
 {
 }
 
+void EntityController::Draw()
+{
+
+}
+
 void EntityController::TurretInfoUIDraw()
 {
 	if (!isDrawTurretInfoUI)
@@ -335,7 +340,7 @@ EntityBase* EntityController::CreateEntity(const Transform& _trans, const StageO
 	}
 
 	// この関数内で罠に分類された場合はステージマネージャーで、objのITrap(罠のインタフェース)を管理される
-	stageManager->PushInterfaceTrapList(obj);
+	stageManager->PushRequestInterfaceTrapList(obj);
 
 	//stageManager->ChangedStageObject();
 

@@ -6,6 +6,7 @@
 #include "../Collisions/CollisionBase.h"
 #include "../CollisionFunction.h"
 
+#define USE_NEAREST_PAIR_CONTAINER (0)
 
 class CollisionBase;
 /// <summary>
@@ -58,6 +59,42 @@ private:
 	CollisionManager();
 	~CollisionManager();
 
+#if USE_NEAREST_PAIR_CONTAINER
+	/// <summary>
+	///							CollisionBase*同士のペアを作成し、返す
+	/// </summary>
+	/// <param name="_coll1">	CollisionBase*１	</param>
+	/// <param name="_coll2">	CollisionBase*２	</param>
+	/// <returns>				coll1とcoll2のペア	</returns>
+	std::pair<CollisionBase*, CollisionBase*> GetMakeKey(CollisionBase* _coll1, CollisionBase* _coll2);
+#else
+	struct PairData
+	{
+		CollisionBase* me;		// 自身の当たり判定オブジェクト
+		CollisionBase* target;	// 相手の当たり判定オブジェクト
+
+		PairData(CollisionBase* _me, CollisionBase* _target) : me(_me), target(_target) {}
+	};
+
+	/// <summary>
+	///							CollisionBase*同士のペアを作成し、返す
+	/// </summary>
+	/// <param name="_coll1">	CollisionBase*１			</param>
+	/// <param name="_coll2">	CollisionBase*２			</param>
+	/// <returns>				coll1とcoll2のペア PairData	</returns>
+	PairData GetPair(CollisionBase* _coll1, CollisionBase* _coll2);
+#endif
+	/// <summary>
+	///									当たり判定イベント
+	/// </summary>
+	/// <param name="hitObjList">		当たったオブジェクトコンテナ			</param>
+	/// <param name="coll1">			当たり判定オブジェクト1					</param>
+	/// <param name="coll2">			当たり判定オブジェクト2					</param>
+	/// <param name="deleteCheckList">	削除されたかチェックするコンテナ		</param>
+	/// <param name="itr1">				当たり判定オブジェクト1のイテレーター	</param>
+	/// <param name="itr2">				当たり判定オブジェクト1のイテレーター	</param>
+	void HitEvent(std::unordered_map<CollisionBase*, std::unordered_set<COLLISION_OBJECT_KIND>>& hitObjList, CollisionBase*& coll1, CollisionBase*& coll2, std::unordered_set<CollisionBase*>& deleteCheckList, std::list<CollisionBase*>::iterator& itr1, std::list<CollisionBase*>::iterator& itr2);
+	
 	/// <summary>
 	///								deleteCollisionに登録されたiteratorをつかって引数のコンテナの要素をerase
 	/// </summary>

@@ -4,7 +4,7 @@
 #include <assert.h>
 
 // 誤差
-const float EPSILON_NUM = 0.0001f;
+constexpr float EPSILON_NUM = 0.0001f;
 
 /// <summary>
 /// VECTORとVECTORの掛け算を行う
@@ -488,6 +488,7 @@ inline bool VAllSame(const VECTOR3& v1, const VECTOR3& v2,const float _epsilon =
 }
 
 /// <summary>
+/// かわいいだけじゃだめですか？
 /// VECTORメンバとfloat値がすべて同じか判定する
 /// </summary>
 /// <param name="v1"> VECTOR </param>
@@ -506,14 +507,14 @@ inline bool VAllSameF(const VECTOR3& v1, const float& f)
 }
 
 /// <summary>
-/// レイと球の当たり判定 始点a1から方向ベクトルv1のレイが、中心点v2、半径radiusの球と衝突しているか
+///							レイと球の当たり判定 始点a1から方向ベクトルv1のレイが、中心点v2、半径radiusの球と衝突しているか
 /// </summary>
-/// <param name="a1"> レイの始点 </param>
-/// <param name="v1"> レイの方向ベクトル </param>
-/// <param name="p"> 球の座標 </param>
-/// <param name="radius"> 球の半径 </param>
-/// <param name="deadDis"> 判定する距離(二乗の値をいれる) </param>
-/// <returns> 当たっている：あたっていない </returns>
+/// <param name="a1">		レイの始点						</param>
+/// <param name="v1">		レイの方向ベクトル				</param>
+/// <param name="p">		球の座標						</param>
+/// <param name="radius">	球の半径						</param>
+/// <param name="deadDis">	判定する距離(二乗の値をいれる)	</param>
+/// <returns>				当たっている：あたっていない	</returns>
 inline bool RayToSphere(const VECTOR3& a1, const VECTOR3 v1, const VECTOR3 p, const float radius,const float deadDis = -1)
 {
 	// 半径が0

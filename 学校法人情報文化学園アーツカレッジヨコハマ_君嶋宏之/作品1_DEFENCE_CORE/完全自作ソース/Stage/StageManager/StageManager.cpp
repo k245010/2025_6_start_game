@@ -1,8 +1,11 @@
 #include "StageManager.h"
 #include "../StageObjects/StageObjectBase.h"
+#include "../StageObjects/Block/BlockBase.h"
+#include "../StageObjects/Entity/EntityBase.h"
 #include "../BlockController/BlockController.h"
 #include "../EntityController/EntityController.h"
 #include "../StageInfo.h"
+#include "../StageEditor/StageEditor.h"
 #include "../Trap/TrapInterface/ITrap.h"
 #include "../Trap/TrapInfo.h"
 #include "../../Common/CsvReader/CsvReader.h"
@@ -21,41 +24,15 @@
 #include "../../../ImGui/imgui.h"
 #include <algorithm>
 #include <fstream>
+#include <filesystem>
 #include <vector>
 #include "../../../Library/DebugNew.h"
 
-
-#if _DEBUG
-#define CREATE_DEBUG_STAGE (0)	// デバッグステージの生成
-#endif
-
 #define STAGE_ALL_AREA_PUT (1)	// ステージ全体でのステージオブジェクト配置
-
-//// VECTOR3Iをmapでハッシュを使うため定義  キー検索できる
-//namespace std
-//{
-//	// templateの特殊化　（VECTOR3Iにだけ対応したテンプレート）
-//	template<>
-//	// ハッシュにVECTOR3Iを定義して、size_tでreturnするようにする
-//	struct hash<VECTOR3I>
-//	{
-//		// 関数呼び出し演算子 operator()  // noexcept その関数が例外を投げないの明示化
-//		size_t operator()(const VECTOR3I& v) const noexcept
-//		{
-//			size_t h1 = std::hash<int>()(v.x);
-//			size_t h2 = std::hash<int>()(v.y);
-//			size_t h3 = std::hash<int>()(v.z);
-//			// メンバをビット演算子で左にずらし、唯一無二のパターンとして保存
-//			return h1 ^ (h2 << 1) ^ (h3 << 2);
-//		}
-//	};
-//}
 
 namespace
 {
-	
-	
-	std::vector<std::vector<int>> gridChip =
+	std::vector<std::vector<int>> gridChip =	// 設置ポイントの配置コンテナ
 	{
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -80,54 +57,23 @@ namespace
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	};
-
-#if CREATE_DEBUG_STAGE
-	// ブロックの配置範囲
-	std::vector<std::vector<int>> gridChip =
-	{
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-
-	
-	};
-
-	std::unordered_map<VECTOR3I, bool> gridData;
-#endif
-
-	//const std::vector<std::vector<int>> BOX_DRAW_TABLE_LIST =	// 3×3のBOX描画のテーブル
-	//{
-	//	{0,0,0},
-	//	{0,0,0},
-	//	{0,0,0}
-	//};
 
 	enum MEMBER
 	{
-		P_X = 0,
-		P_Y,
-		P_Z,
-		R_X,
-		R_Y,
-		R_Z,
-		S_X,
-		S_Y,
-		S_Z,
+		POSITION_X = 0,
+		POSITION_Y,
+		POSITION_Z,
+		ROTATION_X,
+		ROTATION_Y,
+		ROTATION_Z,
+		SCALE_X,
+		SCALE_Y,
+		SCALE_Z,
 
 		MAX,
 	};
 
 	constexpr int STAGE_PUT_POINT_MAX					= 3;		// ステージポイントの最大値　今後csvのファイル数に応じた変数に変更
-
 	constexpr float STAGE_OBJECT_PUT_COLLISION_RAY_LEN	= 1000.0f;	// ステージオブジェクトを配置する際の置かれる場所のモデルとのレイの当たり判定でのレイの長さ
 }
 
@@ -136,11 +82,13 @@ bool StageManager::isActiveInstance = true;
 StageManager::StageManager()
 {
 	StageManager::isActiveInstance = true;
+
+	stageEditor = new StageEditor();
 	
-	Transform tr;
-	tr.position = GetStageCenterPosition();
-	tr.scale	= VOne * 40.0f;
-	new Sky(tr, MV1LoadModel("data/models/sky/sky_2.mv1"));
+	Transform transform;
+	transform.position	= GetStageCenterPosition();
+	transform.scale		= VOne * 40.0f;
+	new Sky(transform, MV1LoadModel("data/models/sky/sky_2.mv1"));
 
 	circleModel = MV1LoadModel("data/models/circle/impactCircle.mv1");
 	assert(circleModel > 0 && "ハンドルの初期化がされていません");
@@ -157,7 +105,9 @@ void StageManager::Init(int _loadStageNum)
 	enemyManager		= FindGameObject<EnemyManager>();
 	navigationManager	= FindGameObject<NavigationManager>();
 
-	deleteStageObjectCollision			= nullptr;
+	deleteStageObjectCollision = nullptr;
+
+	stageEditor->Init(this);
 
 	BlockController::GetBlockController()->Init(this);
 	EntityController::GetEntityController()->Init(this);
@@ -187,6 +137,12 @@ StageManager::~StageManager()
 		deleteStageObjectCollision = nullptr;	
 	}
 
+	if (stageEditor != nullptr)
+	{
+		delete stageEditor;
+		stageEditor = nullptr;
+	}
+
 	MV1DeleteModel(circleModel);
 
 	StageManager::isActiveInstance = false;
@@ -195,6 +151,14 @@ StageManager::~StageManager()
 void StageManager::Update()
 {
 	EntityController::GetEntityController()->Update();
+	
+#ifdef _DEBUG
+
+	if (canStageEditor)
+	{
+		stageEditor->Update();
+	}
+#endif // _DEBUG
 
 	for (auto& trap : interfaceTrapList)
 	{
@@ -209,6 +173,13 @@ void StageManager::Update()
 
 void StageManager::Draw()
 {
+#ifdef _DEBUG
+	if (canStageEditor)
+	{
+		stageEditor->Draw();
+	}
+#endif // _DEBUG
+
 	// 罠の影響範囲を描画するとき
 	if (isDrawTrapImpactRadius)
 	{
@@ -262,6 +233,7 @@ void StageManager::DrawTrapImpactRadius(const VECTOR3& _pos, const float& _radiu
 	// 補助線
 	//DrawLine3D(_pos, _pos + VECTOR3(0.0f, _radius, 0.0f), 0xff0000);
 
+	// ライトの影響をオフ
 	SetUseLighting(false);
 
 	//_ 罠の影響範囲描画 _//
@@ -274,57 +246,154 @@ void StageManager::DrawTrapImpactRadius(const VECTOR3& _pos, const float& _radiu
 	// 円形モデルの描画
 	MV1DrawModel(circleModel);
 
+	// ライトの影響をオン
 	SetUseLighting(true);
 }
 
 
-bool StageManager::CreateStage(const int& _file)
+bool StageManager::CreateStage(const int& _stageNum)
 {
 	char set[CHAR_MAX];
 	std::string file;
 
 	//_ パスの初期化 _//
 
-	sprintfDx(set, "data/stage/stageData/stage_%.2d/stage.csv", _file);
+	sprintfDx(set, "data/stage/stageData/stage_%.2d/stage.csv", _stageNum);
 	file			= set;
 
 	// csvの読み込み
 	CsvReader* csv	= new CsvReader(file);
-	Transform tr;
-	StageObjectData::STAGE_OBJECT_KIND kind;
+
+	Transform transform;						// ステージオブジェクトのトランスフォーム
+	StageObjectData::STAGE_OBJECT_KIND kind;	// ステージオブジェクトの種類
+	int useModelIndex = 0;						// ステージオブジェクトの使用するモデルハンドルのインデクス
 
 	for (int n = 0;n < csv->GetLines();n++)
 	{
 		for (int c = 0;c < csv->GetColumns(n);c++)
 		{
 			// csvからの値を変数に代入
-			if (c < MEMBER::MAX)	// transformを初期化する行の値だったら
+			if (c < MEMBER::MAX)		// transformを初期化する行の値だったら
 			{
-				SetTransformFromCsvColumn(tr, csv->GetFloat(n, c), c);
+				SetTransformToCsvColumn(transform, csv->GetFloat(n, c), c);
 			}
-			else					// kindを初期化する行の値だったら
+			else if(c == MEMBER::MAX)	// kindを初期化する行の値だったら
 			{
 				kind = (StageObjectData::STAGE_OBJECT_KIND)csv->GetInt(n, c);
+			}
+			else						// 使用するモデルインデクスを初期化する行の値だったら
+			{
+				useModelIndex = csv->GetInt(n, c);
 			}
 		}
 
 		if (StageObjectData::GetStageObjectType(kind) == StageObjectData::TYPE::BLOCK)
 		{
-			BlockController::GetBlockController()->CreateBlock(tr, kind);
+			BlockController::GetBlockController()->CreateBlock(transform, kind, useModelIndex);
 
 			if (kind == StageObjectData::STAGE_OBJECT_KIND::GROUND_BLOCK)
 			{
 				// 設置ポイントの初期化
-				LoadStageObjectPutPointData(_file);
+				LoadStageObjectPutPointData(_stageNum);
 			}
 		}
 		else
 		{
-			CreatePutPointStageObject(tr.position, kind);
+			CreatePutPointStageObject(transform.position, kind);
 		}
 	}
 	delete csv;
 	return true;
+}
+
+void StageManager::SaveStage(const int& _stageNum, bool _override)
+{
+	char set[CHAR_MAX];
+	std::string filePath;
+
+	std::list<std::string> data;	// ファイルに書き出す情報を行ごとにまとめる string出ないと出力できない
+
+	std::ofstream file;
+	bool isFirstOpenFile = true;	// ファイルを初めてオープンしたかどうか
+
+	assert(_stageNum > 0 && "不正なウェーブナンバーです");
+	
+	sprintfDx(set, "data/stage/stageData/stage_%.2d/stage.csv", _stageNum);
+	filePath = set;
+
+	// 上書き保存の時
+	if (_override)
+	{
+		// これでパスの通りにファイルを作成 or 開く // std::ios::truncは完全にデータを一から構築	※file.open()のデフォルトはstd::ios::trunc
+		file.open(filePath, std::ios::trunc);
+	}
+	// 通常保存のとき
+	else
+	{
+		// これでパスの通りにファイルを作成 or 開く // std::ios::appはデータの末尾に追加データを追加していくことを指定
+		file.open(filePath, std::ios::app);
+	}
+
+	assert(file && "ファイルを開けませんでした");
+
+	for (const auto& stageObject : GetAllStageObject())
+	{
+		if (stageObject->GetStageObjectKind() == StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK)
+			continue;	// スポナーは動的にWaveControllerが設置をStageManagerに要請するので、ステージ情報として書き出さない
+
+		// 座標
+		data.emplace_back(std::to_string(stageObject->GetTransform().position.x));
+		data.emplace_back(std::to_string(stageObject->GetTransform().position.y));
+		data.emplace_back(std::to_string(stageObject->GetTransform().position.z));
+		// 回転
+		data.emplace_back(std::to_string(stageObject->GetTransform().rotation.x));
+		data.emplace_back(std::to_string(stageObject->GetTransform().rotation.y));
+		data.emplace_back(std::to_string(stageObject->GetTransform().rotation.z));
+		// スケール
+		data.emplace_back(std::to_string(stageObject->GetTransform().scale.x));
+		data.emplace_back(std::to_string(stageObject->GetTransform().scale.y));
+		data.emplace_back(std::to_string(stageObject->GetTransform().scale.z));
+
+		// ステージオブジェクトの種類
+		data.emplace_back(std::to_string((int)stageObject->GetStageObjectKind()));
+
+		// 使用するモデルのインデクス
+		data.emplace_back(std::to_string(stageObject->GetModelData().useModelIndex));
+
+		// データをすべて回す
+		for (auto dItr = data.begin();dItr != data.end();)
+		{
+			// データの書き出し
+			file << *dItr;
+
+			// 列の最後でなかったら
+			if (++dItr != data.end())
+			{
+				// 切り分け（列）
+				file << ',';
+			}
+		}
+		// 改行（行）
+		file << "\n";
+		// データリセット
+		data.clear();
+	}
+	// ファイルを閉じる
+	file.close();
+}
+
+bool StageManager::DeleteStage(const int& _stageNum)
+{
+	char set[CHAR_MAX];
+	std::string filePath;
+
+	assert(_stageNum > 0 && "不正なウェーブナンバーです");
+
+	sprintfDx(set, "data/stage/stageData/stage_%.2d/stage.csv", _stageNum);
+	filePath = set;
+
+	// ファイルの削除　削除できなかった場合は、falseを返す
+	return std::filesystem::remove_all(filePath);
 }
 
 VECTOR3 StageManager::LoadPlayerStartPosition()
@@ -355,30 +424,13 @@ VECTOR3 StageManager::LoadPlayerStartPosition()
 	return playerPos;
 }
 
-bool StageManager::LoadStageObjectPutPointData(const int& _file)
+bool StageManager::LoadStageObjectPutPointData(const int& _stageNum)
 {
 #if STAGE_ALL_AREA_PUT
-
-	//char set[CHAR_MAX];
-	//std::string file;
-	//CsvReader* csv = nullptr;
-
-	//sprintfDx(set, "data/stage/objectPutPoints/stage_%d_putPoints/putPointCenterPos_%d.csv", _file,_file);
-	//file = set;
-
-	//csv = new CsvReader(file);
 
 	int indexPosCreateNumber	= 0;	// stageObjectPutPointIndexPosListの生成ナンバー
 	int centerPosFirstNum		= 1;	// stageObjectPutPointCenterPositionListの初めのナンバー
 	VECTOR3 centerPos			= VZero;// stageObjectPutPointCenterPositionListの中心座標
-
-	/*for (int line = 0;line < csv->GetLines();line++)
-	{
-		for (int column = 0;column < csv->GetColumns(0);column++)
-		{
-			SetVMem(centerPos, column, csv->GetFloat(line, column));
-		}
-	}*/
 
 	stageObjectPutPointCenterPositionList.insert(std::make_pair(centerPosFirstNum, centerPos));
 
@@ -491,23 +543,8 @@ bool StageManager::LoadStageObjectPutPointData(const int& _file)
 #endif
 }
 
-//void StageManager::InitStageObjectPointIndexToIndexPosition(const int& _num, const int& _line, const int& _columns, const VECTOR3& _cenPos)
-//{
-//	stageObjectPutPointIndexPosList[_num];
-//
-//	// 列の数が奇数だったら
-//	if (_line % 2 != 0)
-//	{
-//		int centerIndexX = _line / 2 + 1;	// 現在選択されているステージオブジェクトを設置するポイントの真ん中のインデックスのナンバー
-//
-//	}
-//}
-
 VECTOR3 StageManager::GetStageCenterPosition() const
 {
-#if CREATE_DEBUG_STAGE
-	return VECTOR3(PUT_GRID_SIZE * ((int)gridChip.size() / 2), 0.0f, -PUT_GRID_SIZE * ((int)gridChip[(int)gridChip.size() / 2].size() / 2));
-#endif
 	return VZero;
 }
 
@@ -536,16 +573,30 @@ bool StageManager::CreatePutPointStageObject(const VECTOR3& _cm, const StageObje
 		if (putPointIndexPtr == nullptr)
 			return false;	// 当たった座標から一番近い、配置ポイントのデータが見つからなかったので、return
 
-		const Transform& playerTransfrom	= GetPlayerTransform();
-		float minDistance					= playerTransfrom.GetLenX() / 2 + (StageInfo::BLOCK_SIZE / 2);			// プレイヤーとステージオブジェクトが当たらない、最小距離
-		float squareDistance				= VSquareSize(playerTransfrom.position - putPointIndexPtr->position);	// プレイヤー座標と、当たった座標の二乗距離
+		const Transform& playerTransform = GetPlayerTransform();
 
-		if (squareDistance < (minDistance * minDistance))
-			return false;	// プレイヤーの半径よりも、当たった座標近かったら、設置を行わず、return
+		if (!CanPutStageObject(playerTransform, putPointIndexPtr->position))
+			return false;	// プレイヤーと重なり、配置ができないとき　return
+
+		const std::list<const StageObjectBase*>& spawnerList = BlockController::GetBlockController()->GetSpawnerList();	// スポナーリスト
+
+		for (const auto& spawner : spawnerList)
+		{
+			if (!CanPutStageObject(spawner->GetTransform(), putPointIndexPtr->position))
+				return false;	// スポナーと重なり、配置ができないとき  return
+		}
 
 		return CreatePutPointStageObject(putPointIndexPtr, _kind);
 	}
 	return false;
+}
+
+bool StageManager::CanPutStageObject(const Transform& _targetTransform,const VECTOR3& _putPointIndexPos)
+{
+	float minDistance		= _targetTransform.GetLenX() / 2 + (StageInfo::BLOCK_SIZE / 2);	// 対象とステージオブジェクトが当たらない、最小距離
+	float squareDistance	= VSquareSize(_targetTransform.position - _putPointIndexPos);	// 対象座標と、当たった座標の二乗距離
+
+	return squareDistance > (minDistance * minDistance);
 }
 
 bool StageManager::CreatePutPointStageObject(PutPointIndexData* _putPointIndexDataPtr, const StageObjectData::STAGE_OBJECT_KIND& _kind)
@@ -553,16 +604,8 @@ bool StageManager::CreatePutPointStageObject(PutPointIndexData* _putPointIndexDa
 	if (_putPointIndexDataPtr == nullptr)
 		return false;	// 置ける範囲外だったら return
 
-	/*if (_kind != StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK)
-	{
-		Transform tr;
-		StageObjectData::SetScaleAndSize(tr, _kind);
-		pos.y += (tr.scale.y * tr.size.y) / 2;
-	}*/
-	//pos += putPointIndexPtr->position;	// 座標の設定
-
 	// 配置することができたら
-	if (CreateStageObject(_putPointIndexDataPtr->position, _kind))
+	if (CreateStageObject(_putPointIndexDataPtr->position, _kind) != nullptr)
 	{
 		// 設置したステージオブジェクトの種類を記録
 		_putPointIndexDataPtr->putStageObjectKind = (int)_kind;
@@ -722,7 +765,37 @@ void StageManager::DrawTrapPutPreview(const VECTOR2I& _mouse, const StageObjectD
 	}
 }
 
-bool StageManager::CreateStageObject(const VECTOR3& _pos, const StageObjectData::STAGE_OBJECT_KIND& _kind)
+bool StageManager::PutStageObject(const VECTOR3& _pos, const StageObjectData::STAGE_OBJECT_KIND& _kind)
+{
+	return CreateStageObject(_pos, _kind) != nullptr;
+}
+
+bool StageManager::PutStageObject(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
+{
+	return CreateStageObject(_trans, _kind) != nullptr;
+}
+
+const StageObjectBase* StageManager::PutSpawner(const VECTOR3& _pos)
+{
+	// スポナーの生成
+	return CreateStageObject(_pos, StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK, false);
+}
+
+bool StageManager::DeleteSpawner(StageObjectBase* _spawner)
+{
+	assert(_spawner->GetStageObjectKind() == StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK);
+
+	// スポナーの削除
+	return DeleteStageObject(_spawner);
+}
+
+void StageManager::DeleteAllSpawner()
+{
+	// 全てのスポナーの削除
+	BlockController::GetBlockController()->DeleteBlock(StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK);
+}
+
+StageObjectBase* StageManager::CreateStageObject(const VECTOR3& _pos, const StageObjectData::STAGE_OBJECT_KIND& _kind, bool _isYPosAdjustment)
 {
 	Transform transStageObjTransform;	// ステージオブジェクトのトランスフォーム
 	// トランスフォームのサイズとスケールの設定
@@ -731,46 +804,71 @@ bool StageManager::CreateStageObject(const VECTOR3& _pos, const StageObjectData:
 	transStageObjTransform.position	= _pos;
 	
 	// ステージオブジェクトの生成
-	return CreateStageObject(transStageObjTransform, _kind);
+	return CreateStageObject(transStageObjTransform, _kind, _isYPosAdjustment);
 }
 
-bool StageManager::CreateStageObject(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
+StageObjectBase* StageManager::CreateStageObject(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, bool _isYPosAdjustment)
 {
 	Transform stageObjTransform = _trans;	// ステージオブジェクトのトランスフォーム
-	// 地面にモデルの底面がつくように補正
-	stageObjTransform.position.y -= (StageInfo::PUT_GRID_SIZE / 2) - (stageObjTransform.GetLenY() / 2);
+
+	// Y座標の調整をするとき
+	if (_isYPosAdjustment)
+	{
+		// 地面にモデルの底面がつくように補正
+		stageObjTransform.position.y -= (StageInfo::PUT_GRID_SIZE / 2) - (stageObjTransform.GetLenY() / 2);
+	}
 
 	// 配置するオブジェクトがブロックだったら
 	if (StageObjectData::IsBlockStageObjectKind(_kind))
 	{
-		const Transform* putTransform = BlockController::GetBlockController()->PutBlock(stageObjTransform, _kind);	// 設置したブロックのトランスフォームポインタ
+		StageObjectBase* putStageObject = BlockController::GetBlockController()->CreateBlock(stageObjTransform, _kind, 0);	// 設置したブロックのトランスフォームポインタ
 
-		if (putTransform == nullptr)
-			return false;	// ブロックが設置されなかったとき　
+		if (putStageObject == nullptr)
+			return nullptr;	// ブロックが設置されなかったとき　
 
 		// ナビゲーションに変化を及ぼすオブジェクトなら
 		if (IsStageObjectToNavigationNodeChange(_kind))
 		{
 			// ステージのナビゲーションをトランスフォーム範囲で更新する
-			NavigationPutAreaBox(putTransform, StageObjectData::GetStageObjectHPConfig(_kind));
+			NavigationPutAreaBox(putStageObject->GetTransfromPtr(), StageObjectData::GetStageObjectHPConfig(_kind));
 		}
-		return true;
+		return putStageObject;	// 全ての処理が終わったのでStageObjectBaseポインタを返す
 	}
 	// 配置するオブジェクトがエンティティだったら
 	else if (StageObjectData::IsEntityStageObjectKind(_kind))
 	{
-		const Transform* putTransform = EntityController::GetEntityController()->SummonEntity(stageObjTransform, _kind);	// 設置したエンティティのトランスフォームポインタ
+		StageObjectBase* putStageObject = EntityController::GetEntityController()->SummonEntity(stageObjTransform, _kind);	// 設置したエンティティのトランスフォームポインタ
 
-		if (putTransform == nullptr)
-			return false;	// エンティティが設置されなかったとき falseを返す
+		if (putStageObject == nullptr)
+			return nullptr;	// エンティティが設置されなかったとき falseを返す
 
 		// ナビゲーションに変化を及ぼすオブジェクトなら
 		if (IsStageObjectToNavigationNodeChange(_kind))
 		{
 			// ステージのナビゲーションをトランスフォーム範囲で更新する
-			NavigationClearAreaBox(*putTransform);
+			NavigationClearAreaBox(putStageObject->GetTransform());
 		}
-		return true;	// 全ての処理が終わったので trueを返す
+		return putStageObject;	// 全ての処理が終わったのでStageObjectBaseポインタを返す
+	}
+	else
+	{
+		assert(false);
+	}
+	return nullptr;
+}
+
+bool StageManager::DeleteStageObject(StageObjectBase* _deleteStageObject)
+{
+	// ステージオブジェクトのTYPEがBlockのとき
+	if (StageObjectData::IsBlockStageObjectKind(_deleteStageObject->GetStageObjectKind()))
+	{
+		// BlockControllerのコンテナ内から削除
+		return BlockController::GetBlockController()->DeleteBlock(static_cast<BlockBase*>(_deleteStageObject));
+	}
+	else if (StageObjectData::IsEntityStageObjectKind(_deleteStageObject->GetStageObjectKind()))
+	{
+		// EntityControllerのコンテナ内から削除
+		return EntityController::GetEntityController()->DeleteEntity(static_cast<EntityBase*>(_deleteStageObject));
 	}
 	else
 	{
@@ -829,36 +927,6 @@ StageManager::PutPointIndexData* StageManager::GetNearPutPointDataPtr(const VECT
 	return nearPutPointIndexData;
 }
 
-//void StageManager::NavigationRevisionAreaBox(const Transform* _trans, const TRAP_CONTROL_KIND& _kind, const int& _hp)
-//{
-//	Transform trans = *_trans;
-//
-//	VECTOR3	halfLen		= VDivI(VMult(trans.size, trans.scale), 2);	// ブロックの半径
-//	VECTOR3 startPos	= trans.position - halfLen;					// 始めの座標
-//	VECTOR3 endPos		= trans.position + halfLen;					// 終わりの座標
-//
-//	switch (_kind)
-//	{
-//	case StageManager::TRAP_CONTROL_KIND::PUT:
-//
-//		//_ 罠を設置するオブジェクトの範囲のナビゲーションのNavPointを非アクティブ化する _//
-//
-//		// ナビゲーションマネージャーにブロックを設置した範囲を渡す
-//		navigationManager->StageObjectPutAreaBox(startPos, endPos,_hp);
-//		break;
-//	case StageManager::TRAP_CONTROL_KIND::CLAER:
-//
-//		//_ 罠を削除するオブジェクトの範囲のナビゲーションのNavPointをアクティブ化する _//
-//
-//		// ナビゲーションマネージャーにオブジェクトを削除する範囲を渡す
-//		navigationManager->StageObjectClearAreaBox(startPos, endPos);
-//		break;
-//	default:
-//		assert(false);
-//		break;
-//	}
-//}
-
 void StageManager::NavigationPutAreaBox(const Transform* _trans, const int& _hp)
 {
 	Transform trans		= *_trans;
@@ -907,10 +975,10 @@ void StageManager::DeleteNavigationAreaBoxTransformPtr(const Transform* _trans)
 	itr = navigationAreaBoxNumberList.erase(itr);
 }
 
-const std::unordered_map<int, int> StageManager::GetRawModelHandle()
+const std::unordered_map<int, int> StageManager::GetRawModelHandles()
 {
 	std::unordered_map<int, int> re;
-	const std::unordered_map<int, std::vector<int>>& rawModels = BlockController::GetBlockController()->GetRawModelHandle();
+	const std::unordered_map<int, std::vector<int>>& rawModels = BlockController::GetBlockController()->GetRawModelHandles();
 
 	//_ 罠のモデルはレベル１のモデルハンドルを返す _//
 
@@ -922,7 +990,7 @@ const std::unordered_map<int, int> StageManager::GetRawModelHandle()
 	return re;
 }
 
-bool StageManager::PushInterfaceTrapList(StageObjectBase* _stageObj)
+bool StageManager::PushRequestInterfaceTrapList(StageObjectBase* _stageObj)
 {
 	// 引数のステージオブジェクトが罠に分類されなかったら
 	if (!TrapInfo::IsTrapStageObjectKind(_stageObj->GetStageObjectKind()))
@@ -940,7 +1008,7 @@ void StageManager::DeleteInterfaceTrapList(StageObjectBase* _stageObj)
 	std::unordered_map<const StageObjectBase*, ITrap*>::iterator trapItr = interfaceTrapList.find(_stageObj);
 
 	if (trapItr == interfaceTrapList.end())
-		return;
+		return;	// キーが見つからなかったら return
 
 	// コンテナから削除
 	trapItr = interfaceTrapList.erase(trapItr);
@@ -969,24 +1037,7 @@ const ITrap* StageManager::GetNearTrap(const VECTOR3& _pos,const float& _max)
 	return nearTrap;
 }
 
-/*
-void StageManager::DeleteStageObjectInTransfrom(const Transform& _trans)
-{
-	// 当たり判定の生成
-	deleteStageObjectCollision = new SphereCollision(new Transform(_trans), COLLISION_OBJECT_KIND::ERASER, "",nullptr, true);
-
-	//_ 当たり判定を行うオブジェクトの設定 _//
-
-	deleteStageObjectCollision->SetTargetTag(COLLISION_OBJECT_KIND::WALL_BLOCK);
-	deleteStageObjectCollision->SetTargetTag(COLLISION_OBJECT_KIND::SPIKE_BLOCK);
-	deleteStageObjectCollision->SetTargetTag(COLLISION_OBJECT_KIND::GROUND_BLOCK);
-	deleteStageObjectCollision->SetTargetTag(COLLISION_OBJECT_KIND::TURRET);
-
-	NavigationClearAreaBox(_trans, 0);
-}
-*/
-
-void StageManager::SetTransformFromCsvColumn(Transform& _trans, const float& _num, const int& _col)
+void StageManager::SetTransformToCsvColumn(Transform& _trans, const float& _num, const int& _col)
 {
 	MEMBER m = (MEMBER)_col;
 
@@ -1009,81 +1060,18 @@ void StageManager::SetPositionFromCsvColumn(VECTOR3& _pos, const float& _num, co
 	SetVMem(_pos, _col % 3, _num);
 }
 
-#if CREATE_DEBUG_STAGE
-void StageManager::RandomPutCreateBlockObject()
-{
-	constexpr int GRID_SUB_SIZE = 0;
-	for (int z = GRID_SUB_SIZE;z < gridChip.size() - GRID_SUB_SIZE;z++)
-	{
-		for (int x = GRID_SUB_SIZE;x < gridChip[z].size() - GRID_SUB_SIZE;x++)
-		{
-			int randNum = GetRand(1);
-
-			if (randNum == 1 && z % 2 == 0 || z == 0 || x == 0 || gridChip.size() - 1 == z || gridChip[z].size() - 1 == x)
-			{
-				bool created[] =
-				{
-					true,
-					true,
-				};
-
-				for (int seartZ = GRID_SUB_SIZE;seartZ < gridChip.size() - GRID_SUB_SIZE;seartZ++)
-				{
-					created[0] = gridData[VECTOR3I(x, 0, seartZ)];
-				}
-
-				for (int seartX = GRID_SUB_SIZE;seartX < gridChip[z].size() - GRID_SUB_SIZE;seartX++)
-				{
-					created[1] = gridData[VECTOR3I(seartX, 0, z)];
-				}
-
-				if (!created[0] && !created[1])
-				{
-					Transform t;
-					t.position = VECTOR3(x * PUT_GRID_SIZE, 0.0f, -z * PUT_GRID_SIZE);
-					t.scale = VOne * 2.5f; // csvのscale値
-					BlockController::GetBlockController()->CreateBlock(t, StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK); // 一旦壁ブロック置く
-					gridData.insert(std::make_pair(VECTOR3I(x, (int)BLOCK_PUT_Y, z), true));
-				}
-			}
-			else
-			{
-				gridData.insert(std::make_pair(VECTOR3I(x, (int)BLOCK_PUT_Y, z), false));
-			}
-		}
-	}
-}
-
-void StageManager::GridPutCreateBlockObject()
-{
-	for (int z = 0;z < gridChip.size();z++)
-	{
-		for (int x = 0;x < gridChip[z].size();x++)
-		{
-			if (z + x % 2 == 0)
-			{
-				Transform t;
-				t.position = VECTOR3(x * PUT_GRID_SIZE, BLOCK_PUT_Y, -z * PUT_GRID_SIZE);
-				t.scale = VOne * 2.5f; // csvのscale値
-				BlockController::GetBlockController()->CreateBlock(t, StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK); // 一旦壁ブロック置く
-			}
-		}
-	}
-}
-#endif
-
 const std::list<BlockBase*> StageManager::GetAllBlockObject()
 {
 	return BlockController::GetBlockController()->GetAllBlockObject();
 }
 
-const StageObjectBase* StageManager::RaycastGetTrap(const VECTOR3& _pos1, const VECTOR3& _pos2)
+const StageObjectBase* StageManager::RaycastGetTrap(const VECTOR3& _startPos, const VECTOR3& _endPos)
 {
 	// 罠のステージオブジェクトが存在しなかったら
 	if (interfaceTrapList.empty())
 		return nullptr;
 
-	return RaycastStageObject(_pos1, _pos2, TrapInfo::GetTrapStageObjectKindContainer(), nullptr);;
+	return RaycastStageObject(_startPos, _endPos, TrapInfo::GetTrapStageObjectKindContainer(), nullptr);;
 }
 
 std::list<StageObjectBase*> StageManager::GetStageObjectContainer()
@@ -1092,7 +1080,9 @@ std::list<StageObjectBase*> StageManager::GetStageObjectContainer()
 	std::list<StageObjectBase*> enStageObj		= EntityController::GetEntityController()->GetAllStageObject();
 
 	for (auto itr = enStageObj.begin();itr != enStageObj.end();itr++)
+	{
 		stageObjList.emplace_back(*itr);
+	}
 	return stageObjList;
 }
 
@@ -1101,76 +1091,72 @@ const std::list<StageObjectBase*> StageManager::GetAllStageObject()
 	return GetStageObjectContainer();
 }
 
-StageObjectBase* StageManager::RaycastStageObject(const VECTOR3& _pos1, const VECTOR3& _pos2, const std::set<int>& _kindList, VECTOR3* _hitPos)
+StageObjectBase* StageManager::RaycastStageObject(const VECTOR3& _startPos, const VECTOR3& _endPos, const std::set<int>& _kindList, VECTOR3* _hitPos)
 {
-	StageObjectBase* hitStageObject			= nullptr;				// 当たったステージオブジェクトポインタ										
+	StageObjectBase* hitStageObject			= nullptr;		// 当たったステージオブジェクトポインタ										
 	std::list<StageObjectBase*> stageObjCon = GetAllStageObject();
 	
-	if (_hitPos != nullptr)
-		*_hitPos = VECTOR3(FLT_MAX, FLT_MAX, FLT_MAX);	// 当たった座標で一番_pos1（レイの始点）に近かった値を設定するために、一度大きな値を代入
+	VECTOR3 hitPos = VECTOR3(FLT_MAX, FLT_MAX, FLT_MAX);	// 当たった座標で一番_pos1（レイの始点）に近かった値を設定するために、一度大きな値を代入
+
 
 	for (const auto& stageObj : stageObjCon)
 	{
 		if (!_kindList.empty())
 		{
 			if (_kindList.find((int)stageObj->GetStageObjectKind()) == _kindList.end())
-				continue;
+				continue;	// 当たり判定するステージオブジェクトの種類がコンテナ内に、存在しなかったら continue
 		}
 
 		int bModel = stageObj->GetHmodel();
 
-		if (bModel < 0)
-			assert(false);
-
+		assert(bModel > 0);
 
 		// モデルに座標を反映	ToDo:毎回ここで当たり判定情報を更新するのをやめる
 		MV1SetMatrix(bModel, stageObj->GetTransform().GetMatrix());
 		MV1RefreshCollInfo(bModel);
 
-		// 当たり判定
-		MV1_COLL_RESULT_POLY ret = MV1CollCheck_Line(bModel, -1, _pos1, _pos2);
+		// 当たり判定結果を取得
+		MV1_COLL_RESULT_POLY ret = MV1CollCheck_Line(bModel, -1, _startPos, _endPos);
 
-		//debugRayList.emplace_back(std::make_pair(_pos1, _pos2));
+		//debugRayList.emplace_back(std::make_pair(_startPos, _endPos));
 
 		// 当たったかどうか
 		if (ret.HitFlag != 0)
 		{
-			// 当たったステージオブジェクトを記録
-			hitStageObject = stageObj;
-
-			if (_hitPos != nullptr)
+			// より近い座標での当たった座標だったら
+			if (VSquareSize(hitPos - _startPos) > VSquareSize(ret.HitPosition - _startPos))
 			{
-				// より近い座標での当たった座標だったら
-				if (VSquareSize(*_hitPos - _pos1) > VSquareSize(ret.HitPosition - _pos1))
+				// 当たった座標の代入 //
+				hitPos = ret.HitPosition;
+
+				if (_hitPos != nullptr)
 				{
-					// 当たった座標の代入
-					*_hitPos = ret.HitPosition;
+					*_hitPos = hitPos;
 				}
+
+				// 当たったステージオブジェクトを記録
+				hitStageObject = stageObj;
 			}
 		}
 	}
 	return hitStageObject;
 }
 
-bool StageManager::CheckRaycastStageObject(const VECTOR3& _pos1, const VECTOR3& _pos2, const std::set<int>& _kindList, VECTOR3* _hitPos)
+bool StageManager::CheckRaycastStageObject(const VECTOR3& _startPos, const VECTOR3& _endPos, const std::set<int>& _kindList, VECTOR3* _hitPos)
 {
-	if (RaycastStageObject(_pos1, _pos2, _kindList, _hitPos) != nullptr)
-		return true;
-	return false;
+	return RaycastStageObject(_startPos, _endPos, _kindList, _hitPos) != nullptr;
 }
 
-const StageObjectBase* StageManager::RaycastGetCanMaintainTrap(const VECTOR3& _pos1, const VECTOR3& _pos2)
+const StageObjectBase* StageManager::RaycastGetCanMaintainTrap(const VECTOR3& _startPos, const VECTOR3& _endPos)
 {
-	const StageObjectBase* stageObj = RaycastGetTrap(_pos1, _pos2);
+	const StageObjectBase* stageObj = RaycastGetTrap(_startPos, _endPos);
 
 	// コンテナに存在しなかったら
 	if (!HasUnorderedMapContainerKey(interfaceTrapList, stageObj))
 		return nullptr;
 
 	ITrap* iTrap = interfaceTrapList[stageObj];
-
-	if (iTrap == nullptr)
-		assert(false);
+	assert(iTrap != nullptr);
 
 	// メンテナンスできないとき
 	if (!iTrap->CanMaintain())
@@ -1186,9 +1172,7 @@ float StageManager::TrapMaintaining(const StageObjectBase* _stageObj, const floa
 		return -1.0f;
 
 	ITrap* iTrap = interfaceTrapList[_stageObj];
-
-	if (iTrap == nullptr)
-		assert(false);
+	assert(iTrap != nullptr);
 
 	// メンテナンスを進める
 	return iTrap->Maintaining(_add);
@@ -1203,9 +1187,7 @@ const StageObjectBase* StageManager::RaycastGetCanUpgradTrap(const VECTOR3& _pos
 		return nullptr;
 
 	ITrap* iTrap = interfaceTrapList[stageObj];
-
-	if (iTrap == nullptr)
-		assert(false);
+	assert(iTrap != nullptr);
 
 	// アップグレードできないとき
 	if (!iTrap->CanUpgrade())
@@ -1221,9 +1203,7 @@ float StageManager::TrapUpgrade(const StageObjectBase* _stageObj, const float& _
 		return -1.0f;
 
 	ITrap* iTrap = interfaceTrapList[_stageObj];
-
-	if (iTrap == nullptr)
-		assert(false);
+	assert(iTrap != nullptr);
 
 	// アップグレードを進める
 	return iTrap->Upgrading(_add);
@@ -1236,19 +1216,17 @@ int StageManager::GetTrapLevel(const StageObjectBase* _stageObj)
 		return -1;
 
 	ITrap* iTrap = interfaceTrapList[_stageObj];
-
-	if (iTrap == nullptr)
-		assert(false);
+	assert(iTrap != nullptr);
 
 	return iTrap->GetNowLevel();
 }
 
 void StageManager::SendDeletePutPointStageObject(const Transform& _trans)
 {
-	PutPointIndexData* putData = GetNearPutPointDataPtr(_trans.position);
+	PutPointIndexData* putData = GetNearPutPointDataPtr(_trans.position);	// 引数のトランスフォームに対し、近くの設置された、PutPointIndexDataポインタ
 
 	if (putData == nullptr)
-		return;
+		return;	// 引数のトランスフォームに対し、近くの設置された、PutPointIndexDataポインタを取得できなかったら return
 
 	// 罠が削除される範囲の情報を送りナビゲーションの設置をする
 	NavigationClearAreaBox(_trans);
@@ -1278,7 +1256,7 @@ bool StageManager::IsCoreBroken()
 	return BlockController::GetBlockController()->IsCoreBroken();
 }
 
-const Transform& StageManager::GetNearEnemyTransform(const VECTOR3& _pos)
+const Transform& StageManager::GetNearEnemyTransform(const VECTOR3& _pos) const
 {
 	return enemyManager->GetNearEnemyTransform(_pos);
 }
@@ -1288,7 +1266,7 @@ const VECTOR3& StageManager::GetNearEnemyPosition(const VECTOR3& _pos)
 	return enemyManager->GetNearEnemyPosition(_pos);
 }
 
-const VECTOR3& StageManager::GetEnemyPosition(int _eneNumber)
+const VECTOR3& StageManager::GetEnemyPosition(const int& _eneNumber)
 {
 	return enemyManager->GetEnemyPosition(_eneNumber);
 }

@@ -6,6 +6,7 @@
 #include <list>
 
 class StageManager;
+class StageObjectBase;
 class EnemyManager;
 class GameController;
 class Player;
@@ -19,6 +20,7 @@ class WaveController : public GameObject
 	friend WaveDataSerializer;
 
 public:
+
 	WaveController();
 	~WaveController();
 
@@ -32,16 +34,16 @@ public:
 	/// </summary>
 	enum class WAVE_STATE
 	{
-		STAY = 0,	// 待機
-		SUMMON,		// 敵の召喚
-		FINISH,		// 召喚終了
-		END,		// ウェーブの完全終了
+		STAY	= 0,	// 待機
+		SUMMON,			// 敵の召喚
+		FINISH,			// 召喚終了
+		END,			// ウェーブの完全終了
 	};
 
 	/// <summary>
-	/// ウェーブが終了したか返す
+	///				ウェーブが終了したか返す
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>	true:ウェーブが終了している / false:ウェーブが終了していない	</returns>
 	bool IsWaveEnd() { return waveState == WAVE_STATE::STAY; }
 
 	/// <summary>
@@ -120,8 +122,6 @@ private:
 	/// <returns>					const std::unordered_multimap<int,VECTOR3I>&  ウェーブデータコンテナ	</returns>
 	std::unordered_multimap<int, VECTOR3I> GetWaveData(const int& _stageNum, const int& _waveNum);
 
-	/// 
-
 	/// <summary>
 	///								ウェーブを削除する
 	/// </summary>
@@ -135,6 +135,13 @@ private:
 	/// <param name="_stageNum">	ステージナンバー </param>
 	/// <returns>					ウェーブファイルの最大数 </returns>
 	int GetWaveFileMax(const int& _stageNum);
+
+	/// <summary>
+	///									第一引数の数値を第二引数の数値へ丸める
+	/// </summary>
+	/// <param name="_number">			丸める数値				</param>
+	/// <param name="_roundToNearest">	丸めるレベル数値単位	</param>
+	void RoundToNearestNumber(int& _number, const int& _roundToNearest);
 
 	StageManager* stageManager			= nullptr;
 	EnemyManager* enemyManager			= nullptr;
@@ -151,12 +158,11 @@ private:
 
 	WAVE_STATE waveState;	// ウェーブの状態
 	float summonCountdown;	// 敵の生成カウントダウン
-	std::unordered_multimap<int,VECTOR3I> createEnemyContainer;		// ウェーブごとの敵を管理するコンテナ
-	std::unordered_set<VECTOR3I> summonPositionContainer;			// 敵の召喚座標から出現場所の描画を行うための、座標管理コンテナ
-
+	std::unordered_multimap<int,VECTOR3I> createEnemyContainer;							// ウェーブごとの敵を管理するコンテナ
+	
 	int saveWaveNum = 1;																// 書き出しするウェーブナンバー
 	WaveEnemyInfo::WaveEnemyData saveWaveData;											// 書き出しするウェーブデータ
-	std::unordered_map<int,std::list<WaveEnemyInfo::WaveEnemyData>> saveWaveDataList;	// 書き出しするウェーブデータのコンテナ	 key:ウェーブナンバー / value:ウェーブデータのコンテナ
+	std::unordered_map<int, std::list<WaveEnemyInfo::WaveEnemyData>> saveWaveDataList;	// 書き出しするウェーブデータのコンテナ	 key:ウェーブナンバー / value:ウェーブデータのコンテナ
 
 	enum UI_KIND
 	{

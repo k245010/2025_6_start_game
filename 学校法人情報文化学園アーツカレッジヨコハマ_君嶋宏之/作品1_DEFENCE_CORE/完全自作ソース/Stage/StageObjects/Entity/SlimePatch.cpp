@@ -14,7 +14,7 @@ namespace
 	//constexpr float SMALLER_RADIUS_SIZE	= 50.0f;	// 最大半径
 }
 
-SlimePatch::SlimePatch(const Transform& _trans, const int& _hModel, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _hModel, StageObjectData::STAGE_OBJECT_KIND::SLIME_PATCH, _hp,_putPlaceKind)
+SlimePatch::SlimePatch(const Transform& _trans, const ModelData& _modelData, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _modelData, StageObjectData::STAGE_OBJECT_KIND::SLIME_PATCH, _hp,_putPlaceKind)
 {
 	//_ スライムモデル用初期化 _//
 	

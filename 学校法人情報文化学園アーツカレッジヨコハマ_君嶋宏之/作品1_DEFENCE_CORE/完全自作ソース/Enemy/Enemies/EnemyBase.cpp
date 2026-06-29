@@ -4,6 +4,7 @@
 #include "../../Enemy/EnemyDataSerializer/EnemyDataSerializer.h"
 #include "../../Navigation/NavigationManager/NavigationManager.h"
 #include "../../Collision/Collisions/SphereCollision.h"
+#include "../../Collision/Collisions/RayCollision.h"
 #include "../../Player/Player.h"
 #include "../../Physics/Physics.h"
 #include "../../Game/GameController.h"
@@ -34,15 +35,15 @@ EnemyBase::EnemyBase(EnemyManager* _enemyManager, const ENEMY_KIND& _kind) : Cha
 	enemyManager		= _enemyManager;
 	enemyKind			= _kind;
 
-	stackBreakTransform.size	= VOne * STACK_BREAK_COLLISION_SIZE;
+	//stackBreakTransform.size	= VOne * STACK_BREAK_COLLISION_SIZE;
 	attackTransform.size		= VOne * ATTACK_COLLISION_SIZE;
 
 	sphereColl					= new SphereCollision(&bodyTransform, COLLISION_OBJECT_KIND::ENEMY, "ENEMY_SPHERE", [this](const CollisionHitInfoData& tr) {return HitChara(tr);});
-	stackBreakSphereColl		= new SphereCollision(&stackBreakTransform, COLLISION_OBJECT_KIND::ERASER, "ENEMY_BREAK_BLOCK", nullptr);
-	stackBreakSphereColl->SetTargetTag(COLLISION_OBJECT_KIND::WALL_BLOCK);
-	attackSphereColl			= new SphereCollision(&attackTransform, COLLISION_OBJECT_KIND::ENEMY_ATTACK, "ENEMY_ATTACK_SPHERE", nullptr, true);
+	//stackBreakSphereColl		= new SphereCollision(&stackBreakTransform, COLLISION_OBJECT_KIND::ERASER, "ENEMY_BREAK_BLOCK", nullptr);
+	//stackBreakSphereColl->SetTargetTag(COLLISION_OBJECT_KIND::WALL_BLOCK);
+	attackRayCollision			= new RayCollision(&attackTransform, COLLISION_OBJECT_KIND::ENEMY_ATTACK, "ENEMY_ATTACK_RAY", nullptr, true);
 	// 初期は攻撃状態でないので、非アクティブにする
-	attackSphereColl->SetActive(false);
+	attackRayCollision->SetActive(false);
 
 	// 再生サウンド設定
 	damageSoundID		= Sound_ID::ENEMY_DAMAGE_SE;
@@ -88,11 +89,17 @@ EnemyBase::~EnemyBase()
 		animation = nullptr;
 	}
 
-	if (stackBreakSphereColl != nullptr)
+	if (attackRayCollision != nullptr)
+	{
+		delete attackRayCollision;
+		attackRayCollision = nullptr;
+	}
+
+	/*if (stackBreakSphereColl != nullptr)
 	{
 		delete stackBreakSphereColl;
 		stackBreakSphereColl = nullptr;
-	}
+	}*/
 
 	if (enemyHPGauge != nullptr)
 	{
@@ -135,7 +142,10 @@ void EnemyBase::SetEnemyData(const EnemyInfo::EnemyData& _enemyData)
 	for (const auto& attackTarget : enemyData.collisionData.attackCollTargetKindList)
 	{
 		//						当たり判定をする相手	与えるダメージ量
-		attackSphereColl->SetTargetTag(attackTarget.first, attackTarget.second);
+		//attackSphereColl->SetTargetTag(attackTarget.first, attackTarget.second);
+		
+		//						        当たり判定をする相手  与えるダメージ量
+		attackRayCollision->SetTargetTag(attackTarget.first, attackTarget.second);
 	}
 
 	if (physics != nullptr)
@@ -189,9 +199,9 @@ void EnemyBase::Update()
 
 	//_ スタックを解消する判定のトランスフォームを設定 _//
 
-	stackBreakTransform.position	= transform.position;
+	//stackBreakTransform.position	= transform.position;
 	// 中心座標がモデルの足元なので、体のY軸のサイズの半分、座標を上に上げる
-	stackBreakTransform.position.y	+= transform.GetLenY() / 2;
+	//stackBreakTransform.position.y	+= transform.GetLenY() / 2;
 
 	// 現在のフレーム処理前の状態を記録
 	ENEMY_STATE currentState = state;
@@ -212,13 +222,13 @@ void EnemyBase::Update()
 	{
 	case ENEMY_STATE::STAY:
 		
-		moveState		= ENEMY_MOVE_STATE::SET;
-		targetPos		= GetGoalPositionPtr();
+		moveState = ENEMY_MOVE_STATE::SET;
+		targetPos = GetGoalPositionPtr();
 
 		if (targetPos == nullptr)
 			break;	// 目的座標が存在しなかったら
 
-		goalPosition	= *targetPos;
+		goalPosition = *targetPos;
 
 		animation->Play((int)state);
 
@@ -322,26 +332,8 @@ void EnemyBase::Update()
 
 void EnemyBase::Move()
 {
-	//_ 進行方向に遮断物があった時の処理 _//
-
-	if (moveState == ENEMY_MOVE_STATE::SET)
-	{
-		if (navPointNumbers.size() > navPointIndex + 1 || navPointNumbers.size() > 0)
-		{
-			const VECTOR3* nextPosition = enemyManager->GetNavPointPosition(navPointNumbers[navPointIndex]);	// 次のナビポイント座標
-			VECTOR3 addPosition			= VECTOR3(0.0f, transform.GetLenY() / 2, 0.0f);							// 攻撃を出す高さを上げるための追加座標
-
-			if (nextPosition != nullptr)
-			{
-				// 進む先に防御壁があったら
-				if (enemyManager->CheckRaycastStageObject(transform.position + addPosition, *nextPosition + addPosition, std::set<int>{(int)StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK}))
-				{
-					state = ENEMY_STATE::ATTACK;
-					return;	// 攻撃ステートになったので、return
-				}
-			}
-		}
-	}
+	// 攻撃ステートの移行をリクエスト
+	RequestChangeStateAttack();
 
 	const VECTOR3* navPointPosPtr	= nullptr;								// ナビポイントの座標ポインタ
 	VECTOR3 targetVec				= targetPosition - transform.position;	// 次のナビポイントまでのベクトル
@@ -467,22 +459,36 @@ void EnemyBase::Attack()
 	attackVec				= attackVec * transform.GetRotMatrix();					
 
 	// 座標を設定
-	attackTransform.position	= attackVec + transform.position;
+	attackTransform.position	= transform.position;
 	// 攻撃座標を足元座標から、少し上げて当たるようにする
-	attackTransform.position.y	+= attackTransform.GetLenY() / 3;
+	attackTransform.position.y	+= transform.GetLenY() / 3;
 
-	if (attackSphereColl != nullptr)
+	/*if (attackSphereColl != nullptr)
 	{
 		delete attackSphereColl;
 		attackSphereColl = nullptr;
+	}*/
+
+	if (attackRayCollision != nullptr)
+	{
+		delete attackRayCollision;
+		attackRayCollision = nullptr;
 	}
 	
-	attackSphereColl = new SphereCollision(&attackTransform, COLLISION_OBJECT_KIND::ENEMY_ATTACK, "ENEMY_ATTACK_SPHERE", nullptr, true);
+	//attackSphereColl = new SphereCollision(&attackTransform, COLLISION_OBJECT_KIND::ENEMY_ATTACK, "ENEMY_ATTACK_SPHERE", nullptr, true);
+	attackRayCollision = new RayCollision(&attackTransform, COLLISION_OBJECT_KIND::ENEMY_ATTACK, "ENEMY_ATTACK_RAY", nullptr, true);
+	// 攻撃レイの設定
+	attackRayCollision->SetRayDirection(VZero, attackVec);
+	// 一番近くで当たったオブジェクトのみ、登録したHitCara関数をコールバックする
+	//attackRayCollision->SetUseNearestCollisionFlag(true);
 
 	for (const auto& attackTr : enemyData.collisionData.attackCollTargetKindList)
 	{
 		// 当たり判定する相手の設定	   当たり判定をする相手	与えるダメージ量
-		attackSphereColl->SetTargetTag(attackTr.first, attackTr.second);
+		//attackSphereColl->SetTargetTag(attackTr.first, attackTr.second);
+
+		// 当たり判定する相手の設定	   当たり判定をする相手	与えるダメージ量
+		attackRayCollision->SetTargetTag(attackTr.first, attackTr.second);
 	}
 
 	const NODE_BLOCK_STATE* blockedState = enemyManager->GetNavPointBlockState(navPointNumbers[navPointIndex]);	// 現在のナビポイントの潰されているかの状態を取得
@@ -499,6 +505,37 @@ void EnemyBase::Attack()
 #if GAME_FIRST_PERSON
 	attackSphereColl->SetTargetTag(COLLISION_OBJECT_KIND::CORE_BLOCK, 1.0f);
 #endif
+}
+
+void EnemyBase::RequestChangeStateAttack()
+{
+	//_ 進行方向に遮断物があった時の処理 _//
+
+	//if (moveState != ENEMY_MOVE_STATE::SET)
+	//	return;	// 敵の移動の状態が次に進む座標をセットしている時だったら return
+
+	if (navPointNumbers.size() <= navPointIndex + 1 && navPointNumbers.empty())
+		return;	// 次のナビポイントがないとき
+	
+	const VECTOR3* nextPosition = enemyManager->GetNavPointPosition(navPointNumbers[navPointIndex]);	// 次のナビポイント座標
+	VECTOR3 addPosition			= VECTOR3(0.0f, transform.GetLenY() / 2, 0.0f);							// 攻撃を出す高さを上げるための追加座標
+
+	if (nextPosition == nullptr)
+		return;	// 次のナビポイント座標ポインタがnullptrの時
+
+	float nextSquareDistance	= VSquareSize(transform.position - *nextPosition);						// 次のナビポイントまでの距離の二乗
+	float squaredAttackReach	= enemyData.attackData.attackReach * enemyData.attackData.attackReach;	// 攻撃リーチの距離の二乗
+
+	// 攻撃リーチよりも次のナビポイントまでの距離が遠かったら
+	if (nextSquareDistance > squaredAttackReach)
+		return;
+
+	// 進む先に防御壁があったら
+	if (enemyManager->CheckRaycastStageObject(transform.position + addPosition, *nextPosition + addPosition, std::set<int>{(int)StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK}))
+	{
+		state = ENEMY_STATE::ATTACK;
+		return;	// 攻撃ステートになったので、return
+	}
 }
 
 const VECTOR3* EnemyBase::GetGoalPositionPtr()
@@ -533,7 +570,10 @@ bool EnemyBase::HitChara(const CollisionHitInfoData& _targetData)
 
 	// 当たった場所の情報があったら
 	if (_targetData.hitPointData)
-		hitPosCon = _targetData.hitPointData.value().hitPosition;	// 当たった座標コンテナの代入
+	{
+		// 当たった座標コンテナの代入
+		hitPosCon = _targetData.hitPointData.value().hitPosition;
+	}
 
 	switch (_targetData.tag)
 	{
@@ -605,13 +645,21 @@ void EnemyBase::Draw()
 {
 	CharaBase::Draw();
 
+#ifdef _DEBUG
+
+#else
+	//assert(false && "敵ルートの描画が常にオンです");
+
+#endif // _DEBUG
+
+
 	if (!isDrawRoot)
 		return;	// ルートの描画をしないので return
 
 	for (size_t i = navPointIndex;!navPointNumbers.empty() && i < navPointNumbers.size() - 1;i++)
 	{
-		const VECTOR3* posNow = enemyManager->GetNavPointPosition(navPointNumbers[i]);		// 現在座標
-		const VECTOR3* posNext = enemyManager->GetNavPointPosition(navPointNumbers[i + 1]);	// 次の座標
+		const VECTOR3* posNow	= enemyManager->GetNavPointPosition(navPointNumbers[i]);		// 現在座標
+		const VECTOR3* posNext	= enemyManager->GetNavPointPosition(navPointNumbers[i + 1]);	// 次の座標
 
 		if (posNow == nullptr || posNext == nullptr)
 			break;	// nullptrなので break
@@ -663,8 +711,7 @@ void EnemyBase::UIDraw()
 #if 1
 	// HPゲージの色を再設定
 	enemyHPGauge->SetDefaultFillColor(hpGaugeColor);
-	enemyHPGauge->Draw(drawPos,hp);
-	return;
+	enemyHPGauge->Draw(drawPos, hp);
 #else
 	// HPの下敷きの描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);

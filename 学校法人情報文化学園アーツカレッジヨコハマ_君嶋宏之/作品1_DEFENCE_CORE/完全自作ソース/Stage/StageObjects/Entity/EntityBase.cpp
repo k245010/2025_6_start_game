@@ -3,8 +3,9 @@
 #include "../../EntityController/EntityController.h"
 #include "../../../../Library/DebugNew.h"
 
-EntityBase::EntityBase(const Transform& _trans, const int& _hModel, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : StageObjectBase(_trans, _hModel, _kind, _hp, _putPlaceKind)
+EntityBase::EntityBase(const Transform& _trans, const ModelData& _modelData, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : StageObjectBase(_trans, _modelData, _kind, _hp, _putPlaceKind)
 {
+	//  ƒnƒ“ƒhƒ‹‚ğdelete‚µ‚È‚¢ EntityController‚ªíœ‚·‚é
 	Object3D::SetDontDeleteHmodel();
 
 	//sphereColl = new SphereCollision(&transform, [this](const CollisionHitInfoData& tr) {return HitBlock(tr);});

@@ -5,7 +5,8 @@
 #include "../../Common/Function/Function.h"
 #include <vector>
 
-class SphereCollision;
+
+class RayCollision;
 class Animator;
 class Physics;
 class EnemyManager;
@@ -192,6 +193,11 @@ protected:
 	void Attack();
 
 	/// <summary>
+	/// 攻撃ステートの移行をリクエストする
+	/// </summary>
+	void RequestChangeStateAttack();
+
+	/// <summary>
 	/// ゴール目標の座標ポインタを返す ToDo 敵制御のコントローラーが担うか検討
 	/// </summary>
 	/// <returns> ゴール目標の座標ポインタ </returns>
@@ -201,12 +207,13 @@ protected:
 	Animator* animation						= nullptr;	// アニメーションクラスのクラスポインタ
 	Physics* physics						= nullptr;	// 物理クラスのクラスポインタ
 	Gauge* enemyHPGauge						= nullptr;	// 敵のHPゲージ
-	SphereCollision* stackBreakSphereColl	= nullptr;	// 自身がブロックに埋もれないように、ブロックを壊しスタックを解消する球の当たり判定クラスポインタ　攻撃の球の当たり判定とは別
+	//SphereCollision* stackBreakSphereColl	= nullptr;	// 自身がブロックに埋もれないように、ブロックを壊しスタックを解消する球の当たり判定クラスポインタ　攻撃の球の当たり判定とは別
+	RayCollision* attackRayCollision		= nullptr;	// 
 
 	EnemyInfo::EnemyData enemyData;			// 敵のデータ
 
 	Transform bodyTransform;				// 体の当たり判定のトランスフォーム
-	Transform stackBreakTransform;			// スタックを解消する当たり判定のトランスフォーム
+	//Transform stackBreakTransform;			// スタックを解消する当たり判定のトランスフォーム
 	Transform attackTransform;				// 攻撃当たり判定のトランスフォーム
 	float attackIntervalCount	= 0.0f;		// 攻撃のインターバルカウント 
 

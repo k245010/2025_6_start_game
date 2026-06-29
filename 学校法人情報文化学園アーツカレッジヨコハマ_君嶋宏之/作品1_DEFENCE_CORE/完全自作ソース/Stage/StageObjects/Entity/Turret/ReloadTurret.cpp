@@ -10,7 +10,7 @@ namespace
 }
 */
 
-ReloadTurret::ReloadTurret(const Transform& _trans, const int& _hModel, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : TurretBase(_trans, _hModel, _kind, _hp, _putPlaceKind)
+ReloadTurret::ReloadTurret(const Transform& _trans, const ModelData& _modelData, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : TurretBase(_trans, _modelData, _kind, _hp, _putPlaceKind)
 {
 	std::string filePath;
 	std::string recordName;

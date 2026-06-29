@@ -4,7 +4,7 @@
 #include "../../../Collision/Collisions/ModelCollision.h"
 #include "../../../../ImGui/imgui.h"
 
-GroundBlock::GroundBlock(const Transform& _trans, const int& _hModel, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : BlockBase(_trans, _hModel, StageObjectData::STAGE_OBJECT_KIND::GROUND_BLOCK,_hp, _putPlaceKind)
+GroundBlock::GroundBlock(const Transform& _trans, const ModelData& _modelData, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : BlockBase(_trans, _modelData, StageObjectData::STAGE_OBJECT_KIND::GROUND_BLOCK,_hp, _putPlaceKind)
 {
 	obbColl->SetTagMe(COLLISION_OBJECT_KIND::GROUND_BLOCK);
 	//obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ERASER);
@@ -12,7 +12,7 @@ GroundBlock::GroundBlock(const Transform& _trans, const int& _hModel, const int&
 	// トンネルモデル(ステージ5)に合わせたサイズ
 	transform.size = VECTOR3(400, 114, 300);
 
-	modelCollision = new ModelCollision(&transform, COLLISION_OBJECT_KIND::GROUND_BLOCK, hModel, "GROUND_BLOCK_OBB", [this](const CollisionHitInfoData& tr) {return HitBlock(tr);});
+	modelCollision = new ModelCollision(&transform, COLLISION_OBJECT_KIND::GROUND_BLOCK, hModel, "GROUND_BLOCK_MODEL", [this](const CollisionHitInfoData& tr) {return HitBlock(tr);});
 	modelCollision->SetTargetTag(COLLISION_OBJECT_KIND::BULLET);
 	modelCollision->SetTargetTag(COLLISION_OBJECT_KIND::PLAYER);
 

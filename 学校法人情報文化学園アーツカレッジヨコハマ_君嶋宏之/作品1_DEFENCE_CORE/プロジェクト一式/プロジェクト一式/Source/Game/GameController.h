@@ -238,7 +238,7 @@ private:
 	bool pushChangeCameraKey		= false;	// カメラ変更のキーを押したかどうか
 
 	VECTOR2I screenPosition;					// マウスポインタ座標
-	Transform putTransform;						// ブロック設置トランスフォーム
+	//Transform putTransform;						// ブロック設置トランスフォーム
 	SETTING_STATE settingState			= SETTING_STATE::STAGE_OBJ_SET;	// 配置モード
 	SETTING_WAY_STATE settingWayState	= SETTING_WAY_STATE::GRID;		// 配置方法
 	MATRIX camMoveRotYMatrix			= MGetIdent();					// カメラの移動用のY回転行列

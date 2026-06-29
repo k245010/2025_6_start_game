@@ -130,6 +130,12 @@ public:
 	/// </summary>
 	void SetInsufficientCoin();
 
+	/// <summary>
+	///						デバックモードかを設定
+	/// </summary>
+	/// <param name="_set">	true:デバックモード / false:デバックモードでない	</param>
+	void SetDebugFlag(bool _set) { isDebug = _set; }
+
 private:
 
 	/// <summary>
@@ -219,6 +225,8 @@ private:
 	// このクラスでnew
 	HoldCoin* holdCoin						= nullptr;
 
+	bool isDebug				= false;// デバッグフラグ
+
 	bool isSceneChange			= false;// シーン変更フラグ
 
 	int coinUIFunctionIDNumber	= -1;	// HoldCoinクラスのCoinDraw関数に対するIDナンバー
@@ -230,7 +238,7 @@ private:
 	bool pushChangeCameraKey		= false;	// カメラ変更のキーを押したかどうか
 
 	VECTOR2I screenPosition;					// マウスポインタ座標
-	Transform putTransform;						// ブロック設置トランスフォーム
+	//Transform putTransform;						// ブロック設置トランスフォーム
 	SETTING_STATE settingState			= SETTING_STATE::STAGE_OBJ_SET;	// 配置モード
 	SETTING_WAY_STATE settingWayState	= SETTING_WAY_STATE::GRID;		// 配置方法
 	MATRIX camMoveRotYMatrix			= MGetIdent();					// カメラの移動用のY回転行列
@@ -267,7 +275,8 @@ private:
 		GAM_PUT_TRAP_LETTER,		// PUT TRAPの文字
 		GAM_WALL_LETTER,			// WALLの文字
 		GAM_SPIKE_LETTER,			// SPIKEの文字
-		GAM_TURRET_LETTER,			// TURRETの文字
+		GAM_ASSAULT_TURRET_LETTER,	// ASSAULT TURRETの文字
+		GAM_SHOTGUN_TURRET_LETTER,	// SHOTGUN TURRETの文字
 		GAM_JUMP_PAD_LETTER,		// JUMP_PADの文字
 		GAM_WAVE_START_LETTER,		// WAVE_STARTの文字
 		GAM_CHANGE_CAMERA_LETTER,	// CHANGE CAMERAの文字

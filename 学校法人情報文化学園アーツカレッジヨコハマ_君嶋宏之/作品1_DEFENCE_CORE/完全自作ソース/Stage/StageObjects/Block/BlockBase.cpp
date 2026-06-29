@@ -6,8 +6,9 @@
 #include "../../../Collision/CollisionFunction.h"
 #include "../../../../Library/DebugNew.h"
 
-BlockBase::BlockBase(const Transform& _trans, const int& _hModel, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : StageObjectBase(_trans, _hModel, _kind, _hp,_putPlaceKind)
+BlockBase::BlockBase(const Transform& _trans, const ModelData& _modelData, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : StageObjectBase(_trans, _modelData, _kind, _hp,_putPlaceKind)
 {
+	//  ƒnƒ“ƒhƒ‹‚ğdelete‚µ‚È‚¢ BlockController‚ªíœ‚·‚é
 	Object3D::SetDontDeleteHmodel();
 	transform.size	= VOne * (StageInfo::PUT_GRID_SIZE / transform.scale.x);
 

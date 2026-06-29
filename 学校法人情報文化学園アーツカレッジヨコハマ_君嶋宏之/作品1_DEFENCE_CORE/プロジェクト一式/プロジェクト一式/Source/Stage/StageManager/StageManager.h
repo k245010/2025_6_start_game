@@ -417,7 +417,7 @@ public:
 	/// </summary>
 	/// <param name="_stageObje">	StageObjectBaseポインタ															</param>
 	/// <returns>					true:ITrapを持ったかつコンテナに追加できた / false:コンテナに追加できなかった	</returns>
-	bool PushInterfaceTrapList(StageObjectBase* _stageObj);
+	bool PushRequestInterfaceTrapList(StageObjectBase* _stageObj);
 
 	/// <summary>
 	///								引数のStageObjectBaseポインタをITrap(罠のインターフェイス)クラスを管理しているコンテナから削除する
@@ -500,6 +500,14 @@ private:
 	/// <param name="_kind">	ステージオブジェクトの種類							</param>
 	/// <returns>				true:設置できた / false:設置できていない			</returns>
 	bool CreatePutPointStageObject(const VECTOR3& _putPos, const StageObjectData::STAGE_OBJECT_KIND& _kind);
+
+	/// <summary>
+	///									対象と設置ポイントの座標から、設置できる（重ならない）距離にいるか返す
+	/// </summary>
+	/// <param name="_targetTransform">	対象トランスフォーム					</param>
+	/// <param name="_putPointIndexPos">設置ポイントの座標						</param>
+	/// <returns>						true:設置可能 / false:設置不可			</returns>
+	bool CanPutStageObject(const Transform& _targetTransform, const VECTOR3& _putPointIndexPos);
 
 	/// <summary>
 	///							レイとステージオブジェクト種類ごとの当たり判定
@@ -594,8 +602,8 @@ private:
 	std::unordered_map<int, std::vector<StageManager::PutPointIndexData>> stageObjectPutPointIndexPosList;	// ステージオブジェクトを設置するポイントの個々の配置インデックスのデータコンテナ
 	std::unordered_map<int, VECTOR3> stageObjectPutPointCenterPositionList;									// ステージオブジェクトを設置するポイントの中心座標のコンテナ 
 	
-	std::unordered_map<const Transform*, int> navigationAreaBoxNumberList;									// ナビゲーションへ送ったステージオブジェクトのトランスフォーム範囲の識別ナンバーを保存する
-	std::unordered_map<const StageObjectBase*, ITrap*> interfaceTrapList;									// ITrap(罠のインターフェース)を管理するコンテナ
+	std::unordered_map<const Transform*, int> navigationAreaBoxNumberList;	// ナビゲーションへ送ったステージオブジェクトのトランスフォーム範囲の識別ナンバーを保存する
+	std::unordered_map<const StageObjectBase*, ITrap*> interfaceTrapList;	// ITrap(罠のインターフェース)を管理するコンテナ
 
 	/// <summary>
 	/// 選択されている設置ポイントのデータ 今後データが少なかったら削除

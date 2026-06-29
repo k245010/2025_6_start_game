@@ -3,7 +3,7 @@
 #include "../../../../Common/Effekseer/EffekseerObjectManager.h"
 #include "../../../../Collision/Collisions/OBBCollision.h"
 		  
-BombBase::BombBase(const Transform& _trans, const int& _hModel, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _hModel, _kind, _hp, _putPlaceKind)
+BombBase::BombBase(const Transform& _trans, const ModelData& _modelData, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _modelData, _kind, _hp, _putPlaceKind)
 {
 	// 自身の当たり判定のTagを設定
 	obbColl->SetTagMe(COLLISION_OBJECT_KIND::BOMB);
@@ -18,8 +18,8 @@ void BombBase::Update()
 {
 	EntityBase::Update();
 
-	// 爆発フラグがオンだったら
-	if (isExplosion)
+	// 爆発できるときだったら
+	if (canExplosion)
 	{
 		// 爆発処理
 		Explosion();
@@ -31,8 +31,8 @@ void BombBase::Draw()
 {
 	EntityBase::Draw();
 
-	// 爆発フラグがオンだったら
-	if (isExplosion)
+	// 爆発できるときだったら
+	if (canExplosion)
 	{
 		// 爆発範囲の描画
 		DrawSphere3D(explosionCollisionTransform.position, explosionCollisionTransform.GetLenX() / 2, 8, 0xff0000, 0xffffff,false);

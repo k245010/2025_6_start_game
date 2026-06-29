@@ -271,7 +271,7 @@ private:
 
 	int hImage[MAX_UI];				// UIハンドル配列　
 
-	std::unordered_map<std::string, int> collOwnerNameList;						// 個々の当たり判定オブジェクトの名前を保存するコンテナ
+	std::unordered_map<std::string, int> collOwnerNameList;				// 個々の当たり判定オブジェクトの名前を保存するコンテナ
 	std::unordered_map<int, std::list<VECTOR3>> hitPositionInfoList;	// 当たり判定で当たった座標の情報を保存するコンテナ
 
 	Transform collTrans;			// 応急処置球の当たり判定用トランスフォーム

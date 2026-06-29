@@ -92,10 +92,10 @@ void Camera::Control()
 
 void Camera::FirstPersonCamera(VECTOR3 _playerPos, VECTOR2 _rot)
 {
-	position = _playerPos;
+	position	= _playerPos;
 
-	position.y = position.y + 10;//カメラの高さが低いから
-	target = position;
+	position.y	= position.y + 10;//カメラの高さが低いから
+	target		= position;
 
 	//向いてる左右方向（ベクトル）に注視点をずらす
 	target.x += sinf(_rot.y);

@@ -240,7 +240,7 @@ void NavMeshController::Init(Player* _player, StageManager* _stageManager, bool 
 	player			= _player;
 	stageManager	= _stageManager;
 
-	const std::unordered_map<int, int> handls = stageManager->GetRawModelHandle();
+	const std::unordered_map<int, int> handls = stageManager->GetRawModelHandles();
 	hModel.resize(handls.size());
 
 	for (const auto& handl : handls)

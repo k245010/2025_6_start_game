@@ -28,8 +28,7 @@ namespace
 WaveController::WaveController()
 {
 	createEnemyContainer.clear();
-	summonPositionContainer.clear();
-
+	
 	waveState		= WAVE_STATE::STAY;
 
 	stageNumber		= 1;
@@ -52,7 +51,6 @@ WaveController::WaveController()
 WaveController::~WaveController()
 {
 	createEnemyContainer.clear();
-	summonPositionContainer.clear();
 	saveWaveDataList.clear();
 
 	for (int i = 0;i < W_MAX;i++)
@@ -517,12 +515,12 @@ bool WaveController::LoadWave(const int& _stageNum, const int& _waveNum)
 {
 	// コンテナのウェーブ情報をリセット //
 	createEnemyContainer.clear();
-	summonPositionContainer.clear();
 
 	// 全てのスポナーの削除
 	stageManager->DeleteAllSpawner();
 
-	std::unordered_multimap<int, VECTOR3I> loadWaveCon = std::move(GetWaveData(_stageNum, _waveNum));
+	std::unordered_set<VECTOR3I> spawnerPutPositionList;															// スポナー設置座標コンテナ
+	std::unordered_multimap<int, VECTOR3I> loadWaveCon = std::move(GetWaveData(_stageNum, _waveNum));	// ロードしたウェーブ情報コンテナ
 
 	if (loadWaveCon.empty())
 		return false;	// ウェーブのデータが存在しなかったら
@@ -531,14 +529,22 @@ bool WaveController::LoadWave(const int& _stageNum, const int& _waveNum)
 	{
 		VECTOR3 summonPosition = VECTOR3(wave.second);	// 召喚座標
 
-		// 地面との当たり判定をして埋もれないようにする
-		stageManager->CheckRaycastStageObject(wave.second + VECTOR3(0, 200, 0), wave.second + VECTOR3(0, -1000, 0), std::set<int>{(int)StageObjectData::STAGE_OBJECT_KIND::GROUND_BLOCK}, &summonPosition);
-
 		// 召喚する敵の情報をpush
-		createEnemyContainer.emplace(wave.first, VECTOR3I(summonPosition));
-		// スポナーの設置と座標のpush
-		summonPositionContainer.emplace(stageManager->PutSpawner(summonPosition), VECTOR3I(summonPosition));
+		createEnemyContainer.emplace(wave.first, wave.second);
+		// スポナーを設置する座標をpush
+		spawnerPutPositionList.insert(summonPosition);
 	}
+
+	for (const auto& putPos : spawnerPutPositionList)
+	{
+		VECTOR3 summonPosition = VECTOR3(putPos);	// 設置座標
+
+		// 地面との当たり判定をして埋もれないようにする
+		stageManager->CheckRaycastStageObject(summonPosition + VECTOR3(0, 200, 0), summonPosition + VECTOR3(0, -1000, 0), std::set<int>{(int)StageObjectData::STAGE_OBJECT_KIND::GROUND_BLOCK}, &summonPosition);
+		// スポナーの設置
+		stageManager->PutSpawner(summonPosition);
+	}
+
 	return true;
 }
 

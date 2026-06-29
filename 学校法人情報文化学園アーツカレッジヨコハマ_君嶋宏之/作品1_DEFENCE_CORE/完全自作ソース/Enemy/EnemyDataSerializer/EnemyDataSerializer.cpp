@@ -27,7 +27,7 @@ std::string EnemyDataSerializer::GetLoadJsonName(const ENEMY_KIND& _kind)
 {
 	char jsonName[CHAR_MAX];
 	// “G‚Ìí—Ş‚É‚æ‚Á‚ÄJson‚Ì–¼‘O‚ğİ’è
-	sprintfDx(jsonName, "enemy_%2d.json", (int)_kind);
+	sprintfDx(jsonName, "enemy_%.2d.json", (int)_kind);
 
 	return jsonName;
 }

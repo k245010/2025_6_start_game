@@ -21,7 +21,7 @@ namespace
 	};
 }
 
-WallBlock::WallBlock(const Transform& _trans, const int& _hModel, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : BlockBase(_trans, _hModel, StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK,_hp,_putPlaceKind)
+WallBlock::WallBlock(const Transform& _trans, const ModelData& _modelData, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : BlockBase(_trans, _modelData, StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK,_hp,_putPlaceKind)
 {
 	transform.size = VOne;
 
@@ -30,20 +30,21 @@ WallBlock::WallBlock(const Transform& _trans, const int& _hModel, const int& _hp
 	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ERASER);
 	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::TURRET_RAY);
 	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::BULLET);
-	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ENEMY_ATTACK);
+	//obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ENEMY_ATTACK);
 
-	modelColl	= new ModelCollision(&transform, COLLISION_OBJECT_KIND::WALL_BLOCK, hModel, "WALL_MODEL_COLLISION");
+	modelColl	= new ModelCollision(&transform, COLLISION_OBJECT_KIND::WALL_BLOCK, hModel, "WALL_MODEL_COLLISION", [this](const CollisionHitInfoData& tr) {return HitBlock(tr);});
 	modelColl->SetTargetTag(COLLISION_OBJECT_KIND::PLAYER);
+	modelColl->SetTargetTag(COLLISION_OBJECT_KIND::ENEMY_ATTACK);
 
 	hpMax		= hp;
 	lastHp		= hp;
 
-	VECTOR screenPos = ConvWorldPosToScreenPos(VECTOR3(transform.position.x, transform.position.y + 210, transform.position.z));
-	gauge		= new Gauge(VECTOR2(screenPos.x - HP_UI_SIZE.x / 2, screenPos.y), HP_UI_SIZE.x, HP_UI_SIZE.y, 0.0f, hpMax);
+	VECTOR3 screenPos	= ConvWorldPosToScreenPos(VECTOR3(transform.position.x, transform.position.y + 210, transform.position.z));	// 壁ブロックに対する画面座標
+	gauge				= new Gauge(VECTOR2(screenPos.x - HP_UI_SIZE.x / 2, screenPos.y), HP_UI_SIZE.x, HP_UI_SIZE.y, 0.0f, hpMax);
 	gauge->SetDrawDelay(false);
 
 	// UIDraw関数を登録
-	uiFunctionIDNumber = UIDrawManager::GetUIDrawManagerInstance()->PushUIDrawFunction([this]() { UIDraw(); });
+	uiFunctionIDNumber	= UIDrawManager::GetUIDrawManagerInstance()->PushUIDrawFunction([this]() { UIDraw(); });
 	
 	COLOR_F materialEmissiveColor = GetColorF(0.3f, 0.3f, 0.3f, 0.5f);	// モデルのマテリアルの発光カラー
 

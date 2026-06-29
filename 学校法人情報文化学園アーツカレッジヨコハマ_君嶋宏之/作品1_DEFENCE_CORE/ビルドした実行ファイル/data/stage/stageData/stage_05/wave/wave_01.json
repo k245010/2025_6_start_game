@@ -12,62 +12,6 @@
             "EnemyKind": 0,
             "SummonPosition": {
                 "posX": 2300,
-                "posY": -598,
-                "posZ": -600
-            }
-        },
-        {
-            "EnemyKind": 0,
-            "SummonPosition": {
-                "posX": 2300,
-                "posY": -598,
-                "posZ": -600
-            }
-        },
-        {
-            "EnemyKind": 0,
-            "SummonPosition": {
-                "posX": 2300,
-                "posY": -598,
-                "posZ": -600
-            }
-        },
-        {
-            "EnemyKind": 0,
-            "SummonPosition": {
-                "posX": 2300,
-                "posY": -598,
-                "posZ": -600
-            }
-        },
-        {
-            "EnemyKind": 0,
-            "SummonPosition": {
-                "posX": 2300,
-                "posY": -598,
-                "posZ": -600
-            }
-        },
-        {
-            "EnemyKind": 0,
-            "SummonPosition": {
-                "posX": 2300,
-                "posY": -598,
-                "posZ": -600
-            }
-        },
-        {
-            "EnemyKind": 0,
-            "SummonPosition": {
-                "posX": 2300,
-                "posY": -598,
-                "posZ": -600
-            }
-        },
-        {
-            "EnemyKind": 0,
-            "SummonPosition": {
-                "posX": 2300,
                 "posY": -641,
                 "posZ": 100
             }
@@ -142,6 +86,14 @@
                 "posX": 2300,
                 "posY": -598,
                 "posZ": -600
+            }
+        },
+        {
+            "EnemyKind": 0,
+            "SummonPosition": {
+                "posX": -2400,
+                "posY": 105,
+                "posZ": -2300
             }
         }
     ]

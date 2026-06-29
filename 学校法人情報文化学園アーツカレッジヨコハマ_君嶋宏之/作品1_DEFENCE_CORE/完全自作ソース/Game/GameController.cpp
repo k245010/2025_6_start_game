@@ -54,7 +54,8 @@ GameController::GameController()
 	gameUIImage[GAM_PUT_TRAP_LETTER]		= LoadGraph("data/texture/letter/trap.png");
 	gameUIImage[GAM_WALL_LETTER]			= LoadGraph("data/texture/letter/wall.png");
 	gameUIImage[GAM_SPIKE_LETTER]			= LoadGraph("data/texture/letter/spike.png");
-	gameUIImage[GAM_TURRET_LETTER]			= LoadGraph("data/texture/letter/turret.png");
+	gameUIImage[GAM_ASSAULT_TURRET_LETTER]	= LoadGraph("data/texture/letter/assault_turret.png");
+	gameUIImage[GAM_SHOTGUN_TURRET_LETTER]	= LoadGraph("data/texture/letter/shotgun_turret.png");
 	gameUIImage[GAM_JUMP_PAD_LETTER]		= LoadGraph("data/texture/letter/jump_pad.png");
 	gameUIImage[GAM_CHANGE_CAMERA_LETTER]	= LoadGraph("data/texture/letter/change_camera.png");
 	gameUIImage[GAM_WAVE_START_LETTER]		= LoadGraph("data/texture/letter/wave_start.png");
@@ -159,15 +160,19 @@ void GameController::Update()
 {
 	//_ マウスポインタ描画の切り替え _//
 
-	bool copyUseImGuiMouse	= useImGuiMouse;					// onImGuiWindowのフラグ変更・不変更前の状態を保持
-	useImGuiMouse			= ImGui::GetIO().WantCaptureMouse;	// ImGuiでマウス入力を使っているかのフラグを代入
-	
+//#ifndef _DEBUG
+
+	bool copyUseImGuiMouse = useImGuiMouse;					// onImGuiWindowのフラグ変更・不変更前の状態を保持
+	useImGuiMouse = ImGui::GetIO().WantCaptureMouse;	// ImGuiでマウス入力を使っているかのフラグを代入
+
 	// フラグが変更されていたら
 	if (useImGuiMouse != copyUseImGuiMouse)
 	{
 		// マウスポインタをフラグ通りに、描画するまたは描画しない
 		SetMouseDispFlag(useImGuiMouse);
 	}
+
+//#endif // !_DEBUG
 
 	//__ GameStateの切り替え __//
 
@@ -188,6 +193,9 @@ void GameController::Update()
 		break;
 	case GameController::GAME_STATE::SETUP:
 	case GameController::GAME_STATE::DEFENCE:
+
+		if (isDebug)
+			break;	// デバック状態なら、以下の処理を行わない
 
 		// コアが破壊されたら
 		if (stageManager->IsCoreBroken())
@@ -219,7 +227,6 @@ void GameController::Update()
 		{
 		case PLAY_STATE::OBJECT_PUT:
 
-			
 #if USE_PLAYER
 			if (inputManager->GetKeyConfigPut("MODE_CHANGE"))
 			{
@@ -264,6 +271,11 @@ void GameController::Update()
 		break;
 	case GameController::GAME_STATE::DEFEAT:
 	case GameController::GAME_STATE::VICTORY:
+
+		// 罠の影響範囲を描画しない
+		stageManager->SetDrawTrapImpactRadiusFlag(false);
+		// 罠のトラップ情報の描画をしない
+		stageManager->SetTurretInfoUIDrawFlag(false);
 
 		if (inputManager->GetKeyConfigPut("NEXT"))
 		{
@@ -446,14 +458,14 @@ void GameController::CameraControllUpdate()
 	// 現在選択されているステージの設置ポイントの中心座標を得る
 	//VECTOR3 putPointPos = stageManager->GetStageObjectPutPointSelectPosition();
 
-	VECTOR3 targetPos = VECTOR3(0, 700, 0);
+	VECTOR3 targetPos	= VECTOR3(0, 700, 0);	// 注視点座標
 
 	// カメラ座標を設定
-	VECTOR3 camPos = targetPos + camAddVec * camMoveRotYMatrix;
+	VECTOR3 camPos		= targetPos + camAddVec * camMoveRotYMatrix;
 	camera->SetPosition(camPos);
 
 	// カメラターゲットを設定
-	VECTOR3 cemTarV = targetPos - camPos;
+	VECTOR3 cemTarV		= targetPos - camPos;
 	camera->SetTarget(camPos + cemTarV);
 }
 
@@ -474,6 +486,7 @@ void GameController::WaveUpdate()
 		{
 			// ゲーム状態を準備にする
 			gameState = GAME_STATE::SETUP;
+			// BGMを止める
 			SoundManager::StopBGM(Sound_ID::DEFENCE_BGM);
 			// BGMを再生
 			SoundManager::PlayBGM(Sound_ID::SETUP_BGM, true, true);
@@ -642,9 +655,15 @@ void GameController::SettingUIDraw()
 {
 	//_ 罠のUI表示 _//
 
+	VECTOR2I trapUIBoxSize		= VECTOR2I(700,70);								// 罠のUI下敷きBOXの大きさ
+
+	VECTOR2I trapUIBoxStartPos	= VECTOR2I(0, Screen::HEIGHT - trapUIBoxSize.y);// 罠のUI下敷きBOXの描画開始座標
+	VECTOR2I trapUIBoxEndPos	= VECTOR2I(trapUIBoxSize.x, Screen::HEIGHT);	// 罠のUI下敷きBOXの描画終了座標
+
+#if 0
 	// 下敷き //
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
-	DrawBox(0, Screen::HEIGHT - 70, 500, Screen::HEIGHT, 0x000000, true);
+	DrawBox(0, Screen::HEIGHT - 70, 700, Screen::HEIGHT, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	float letterScale = 0.6f;	// 文字の大きさ
@@ -666,7 +685,52 @@ void GameController::SettingUIDraw()
 	DrawBox(590, Screen::HEIGHT - 40, 610, Screen::HEIGHT - 35, 0xffffff, true);
 	// 4キー
 	DrawRectRotaGraph(650, Screen::HEIGHT - 40, 0, 0, 32, 32, 2.0f, 0.0f, gameUIImage[GAM_4_KEY], true);
+#else
+	// 下敷き //
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+	DrawBox(trapUIBoxStartPos.x, trapUIBoxStartPos.y, trapUIBoxEndPos.x, trapUIBoxEndPos.y, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	float trapUILetterScale = 0.6f;	// 文字の大きさ
+	int trapUILetterPosY	= trapUIBoxStartPos.y + trapUIBoxSize.y / 2;
+
+	// TRAP の文字 
+	DrawRotaGraph(trapUIBoxStartPos.x + 70, trapUILetterPosY, trapUILetterScale, 0.0f, gameUIImage[GAM_PUT_TRAP_LETTER], true);
+
+	// 選択されている罠の文字
+	DrawRotaGraph(trapUIBoxStartPos.x + trapUIBoxSize.x / 2, trapUILetterPosY, trapUILetterScale, 0.0f, GetPutTrapImageHandle(putTrapKind), true);
+
+	// 選択されている罠のコスト数字
+	DrawRotaNum((float)trapUIBoxEndPos.x - 35, (float)trapUILetterPosY, putTrapDataList[putTrapKind].cost, 794 / 20, gameUIImage[GAM_COST_NUM], 794 / 10, 159 / 2, 0, 0.7f, 0.0f, 2);
+
+	//_ 1 - 4のキー描画 _//
+
+	VECTOR2I trapSelectKeyPos	= VECTOR2I(trapUIBoxEndPos.x + 60, Screen::HEIGHT - 40);	// 罠の選択キーの
+	int trapSelectKeysDistance	= 110;	// 罠の選択キーの同士の間隔
+
+
+	// 1キー
+	DrawRectRotaGraph(trapSelectKeyPos.x, trapSelectKeyPos.y, 0, 0, 32, 32, 2.0f, 0.0f, gameUIImage[GAM_1_KEY], true);
+	// ～ の文字
+	int len = 5;
+	for (int i = 0;i < len;i++)
+	{
+		float size	= 5.0f;							// 文字の太さ
+		float x		= (trapSelectKeyPos.x + trapSelectKeysDistance / 2) + i * size;// 文字の描画X座標
+		
+		// ～の半分分ずらす
+		x -= (size * len) / 2;						
+		
+		float y		= (float)trapSelectKeyPos.y;	// 文字の描画Y座標
+		// サイン波で～の表現 ( + DegToRad * 180で波の開始位置を調整 )
+		y += (sinf(DegToRad * (i * 90) + DegToRad * 180) * size);
+
+		// DrawBoxAAでfloat値でも描画可能だが、少しぼやけて見えるので、intにキャストして描画
+		DrawBox((int)x, (int)y, (int)(x + size), (int)(y + size), 0xffffff, true);
+	}
+	// 4キー
+	DrawRectRotaGraph(trapSelectKeyPos.x + trapSelectKeysDistance, trapSelectKeyPos.y, 0, 0, 32, 32, 2.0f, 0.0f, gameUIImage[GAM_4_KEY], true);
+#endif
 	//_ マウスポインタの描画 _//
 
 	// ImGuiがマウス入力を使っていないとき
@@ -744,9 +808,11 @@ int GameController::GetPutTrapImageHandle(const int& _kind)
 		return gameUIImage[GAM_SPIKE_LETTER];
 		break;
 	case StageObjectData::STAGE_OBJECT_KIND::RELOAD_TURRET_SINGLE:
+
+		return gameUIImage[GAM_ASSAULT_TURRET_LETTER];
 	case StageObjectData::STAGE_OBJECT_KIND::RELOAD_TURRET_SPREAD:
 
-		return gameUIImage[GAM_TURRET_LETTER];
+		return gameUIImage[GAM_SHOTGUN_TURRET_LETTER];
 		break;
 	case StageObjectData::STAGE_OBJECT_KIND::JUMP_PAD:
 		
@@ -758,15 +824,6 @@ int GameController::GetPutTrapImageHandle(const int& _kind)
 	}
 	return -1;
 }
-
-//void GameController::NavigationReload()
-//{
-//	// ゲーム開始時はリロードしない
-//	if (gameState == GameController::GAME_STATE::START)
-//		return;
-//	// WayPointの当たり判定をリロード
-//	navigationManager->NavPointCollisionReload();
-//}
 
 VECTOR3 GameController::GetScreenForWorldPosI(const VECTOR2I& _screenPos, const SETTING_WAY_STATE& _mode)
 {
@@ -802,22 +859,22 @@ bool GameController::StageObjectSetting(const SETTING_WAY_STATE& _mode)
 
 #if TEST_STAGE_OBJECT_PUT_POINT
 	
-	putTransform.position	= stageManager->GetStageObjectPutPointSelectPosition();
+	//putTransform.position	= stageManager->GetStageObjectPutPointSelectPosition();
 #else
-	putTransform.position	= GetScreenForWorldPosI(screenPos, _mode);
+	//putTransform.position	= GetScreenForWorldPosI(screenPos, _mode);
 
 	// ブロックモデルの座標に影響される
-	putTransform.position.y = 0.0f;
+	//putTransform.position.y = 0.0f;
 #endif
 	
 	if (inputManager->GetKeyConfigPut("PUT_TRAP"))
 	{
 		// ステージオブジェクトの配置
 #if 0 // Blockモデルが白のモデルの時
-		putTransform.size = VOne * 100.0f;
+		//putTransform.size = VOne * 100.0f;
 #else // Blockモデルが黒のモデルの時
 
-		switch ((StageObjectData::STAGE_OBJECT_KIND)putTrapKind)
+		/*switch ((StageObjectData::STAGE_OBJECT_KIND)putTrapKind)
 		{
 		case StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK:
 
@@ -830,7 +887,7 @@ bool GameController::StageObjectSetting(const SETTING_WAY_STATE& _mode)
 			putTransform.size	= VOne * 100.0f;
 			break;
 		}
-		putTransform.position.y += (putTransform.scale.y * putTransform.size.y) / 2;
+		putTransform.position.y += (putTransform.scale.y * putTransform.size.y) / 2;*/
 #endif
 		PutStageObject();
 		isObjectSettingControll = true;

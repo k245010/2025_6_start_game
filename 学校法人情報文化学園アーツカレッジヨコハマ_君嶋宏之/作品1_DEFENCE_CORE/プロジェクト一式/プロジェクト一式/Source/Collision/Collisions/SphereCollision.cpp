@@ -48,7 +48,7 @@ bool SphereCollision::CollisionToOBB(OBBCollision* col)
 
 bool SphereCollision::CollisionToRay(RayCollision* col)
 {
-	return RayToSphere(col->GetPosition(), col->GetRayVec(), GetPosition(), GetRadius(), VSize(col->GetRayVec()));
+	return RayToSphere(col->GetPosition(), col->GetRayDirection(), GetPosition(), GetRadius(), VSize(col->GetRayDirection()));
 }
 
 bool SphereCollision::CollisionToModel(ModelCollision* col)

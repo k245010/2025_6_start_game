@@ -26,6 +26,8 @@ class StageManager;
 /// </summary>
 class BlockController
 {
+	friend StageManager;
+
 public:
 
 	/// <summary>
@@ -60,26 +62,26 @@ public:
 	void DrawTrapPutPreview(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, const float& _alpha);
 
 	/// <summary>
-	/// ブロックオブジェクトの削除　// 今後はprivateに移行　オブジェクトの破壊でdeleteしたいときは、damage関数的なのどで行う
+	///						ブロックオブジェクトの削除　// 今後はprivateに移行　オブジェクトの破壊でdeleteしたいときは、damage関数的なのどで行う
 	/// </summary>
 	/// <param name="_obj"> ブロックオブジェクト </param>
-	/// <returns> 成功：失敗 </returns>
+	/// <returns>			true:成功 / false:失敗 </returns>
 	bool DeleteBlock(BlockBase* _obj);
-	
-	/// <summary>
-	/// ユーザーが配置をするための関数
-	/// </summary>
-	/// <param name="_trans"> トランスフォーム </param>
-	/// <param name="_kind"> ステージオブジェクトの種類 </param>
-	/// <returns> 成功 生成したオブジェクトのトランスフォームポインタ：失敗 nullptr </returns>
-	const Transform* PutBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
 
 	/// <summary>
-	/// ブロックオブジェクトの生成
+	///						ブロックオブジェクトの削除
 	/// </summary>
-	/// <param name="_trans"> トランスフォーム </param>
-	/// <param name="_kind"> ステージオブジェクトの種類 </param>
-	void CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
+	/// <param name="_kind">削除したいブロックのステージオブジェクトの種類	</param>
+	/// <returns>			true:成功 / false:失敗							</returns>
+	bool DeleteBlock(const StageObjectData::STAGE_OBJECT_KIND& _kind);
+	
+	/// <summary>
+	///							ユーザーが配置をするための関数
+	/// </summary>
+	/// <param name="_trans">	トランスフォーム							</param>
+	/// <param name="_kind">	ステージオブジェクトの種類					</param>
+	/// <returns>				StageObjectBaseポインタ:成功 / nullptr:失敗	</returns>
+	StageObjectBase* PutBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
 
 	/// <summary>
 	/// すべてのブロックオブジェクトを削除する
@@ -117,6 +119,16 @@ public:
 	bool IsCoreBroken();
 
 	/// <summary>
+	///							レイとステージオブジェクト種類ごとの当たり判定
+	/// </summary>
+	/// <param name="_pos1">	レイの始点																						</param>
+	/// <param name="_pos2">	レイの終始																						</param>
+	/// <param name="_type">	どのステージオブジェクト種類で当たり判定するかのコンテナ　コンテナが空の場合はすべて当たり判定	</param>
+	/// <param name="_hitP">	当たった座標																					</param>
+	/// <returns>				当たった：当たってない																			</returns>
+	bool CheckRaycastStageObject(const VECTOR3& _pos1, const VECTOR3& _pos2, const std::set<int>& _kindList, VECTOR3* _hitP = nullptr);
+
+	/// <summary>
 	///							トランスフォーム(BOX)内のナビゲーションを改訂する
 	/// </summary>
 	/// <param name="_trans">	ステージオブジェクトのトランスフォームポインタ			</param>
@@ -132,12 +144,26 @@ public:
 	/// <summary>
 	///				ロードしたハンドルコンテナを返す
 	/// </summary>
-	/// <returns> 
-	///				const std::unordered_map<int, std::vector<int>>型のハンドル	valueのコンテナには罠用のレベル１～のモデルが入っている
+	///				const std::unordered_map<int, std::vector<int>>型のハンドル	valueのコンテナには複数のモデルが入っている
+	/// 
+	///				key:ステージオブジェクトのブロックナンバー / value:ハンドル
+	const std::unordered_map<int, std::vector<int>>& GetModelHandles() const { return hModels; }
+
+	/// <summary>
+	///				モデルをロードし、ロードしたハンドルコンテナを返す
+	/// </summary>
+	/// <returns>
+	///				const std::unordered_map<int, std::vector<int>>型のハンドル	valueのコンテナには複数のモデルが入っている
 	/// 
 	///				key:ステージオブジェクトのブロックナンバー / value:ハンドル
 	/// </returns>
-	const std::unordered_map<int, std::vector<int>> GetRawModelHandle();
+	const std::unordered_map<int, std::vector<int>> GetRawModelHandles();
+
+	/// <summary>
+	///				スポナーのポインタが入ったコンテナを返す
+	/// </summary>
+	/// <returns>	const std::list<const StageObjectBase*>&	</returns>
+	const std::list<const StageObjectBase*>& GetSpawnerList() const { return spawnerList; }
 
 private:
 
@@ -145,26 +171,52 @@ private:
 	~BlockController();
 
 	/// <summary>
-	/// ブロックオブジェクトの生成
+	///									ブロックオブジェクトの生成
 	/// </summary>
-	/// <param name="_trans"> トランスフォーム </param>
-	/// <param name="_kind"> ステージオブジェクトの種類 </param>
-	/// <param name="createWay"> 生成の方法 </param>
-	/// <returns> 生成したオブジェクトのトランスフォームポインタ </returns>
-	const Transform* CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, const STAGE_OBJECT_CREATE_WAY& createWay);
+	/// <param name="_trans">			トランスフォーム							</param>
+	/// <param name="_kind">			ステージオブジェクトの種類					</param>
+	/// <param name="_useModelIndex">	使用するモデルのインデクス番号				</param>
+	/// <returns>						StageObjectBaseポインタ:成功 / nullptr:失敗	</returns>
+	StageObjectBase* CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _useModelIndex);
 
 	/// <summary>
-	/// グリッド配置する時の座標を返す
+	///									ブロックオブジェクトの生成
 	/// </summary>
-	/// <param name="_trans"></param>
-	/// <returns></returns>
-	const VECTOR3 GetPutGridPosition(const Transform& _trans);
+	/// <param name="_trans">			トランスフォーム								</param>
+	/// <param name="_kind">			ステージオブジェクトの種類						</param>
+	/// <param name="_useModelIndex">	使用するモデルのインデクス番号					</param>
+	/// <param name="createWay">		生成の方法										</param>
+	/// <returns>						BlockBaseポインタ:成功 / nullptr:失敗			</returns>
+	BlockBase* CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _useModelIndex, const STAGE_OBJECT_CREATE_WAY& _createWay);
 
-	static BlockController* objectMe;								// BlockControllerクラスのインスタンス
-	static bool isActiveInstance;									// インスタンスがnewされているかのフラグ
-	StageManager* stageManager;										// StageManagerクラスポインタ
+	/// <summary>
+	///							グリッド配置する時の座標を返す
+	/// </summary>
+	/// <param name="_trans">	トランスフォーム		</param>
+	/// <returns>				グリッド変換した座標	</returns>
+	VECTOR3 GetPutGridPosition(const Transform& _trans);
+
+	/// <summary>
+	///									スポナーのポインタをコンテナにpushする
+	/// </summary>
+	/// <param name="_spawnerPointer">	スポナーのStageObjectBaseポインタ	</param>
+	/// <returns>						true:成功 / false:失敗				</returns>
+	bool PushSpawnerToList(const StageObjectBase* _spawner);
+
+	/// <summary>
+	///									スポナーのポインタをPushSpawnerToList関数でpushしたコンテナから削除をリクエストする
+	/// </summary>
+	/// <param name="_spawnerPointer">	スポナーのStageObjectBaseポインタ	</param>
+	/// <returns>						true:成功 / false:失敗				</returns>
+	bool DeleteRequestSpawnerFormList(const StageObjectBase* _spawner);
+
+	static BlockController* objectMe;	// BlockControllerクラスのインスタンス
+	static bool isActiveInstance;		// インスタンスがnewされているかのフラグ
+	StageManager* stageManager;			// StageManagerクラスポインタ
 
 	std::unordered_map<BlockBase*, STAGE_OBJECT_CREATE_WAY> blocks;	// ブロックオブジェクトと生成の方法を保存するコンテナ
-	std::unordered_map<int, std::vector<int>> hModel;				// ブロックオブジェクトの種類とモデルハンドルのコンテナ
+	std::unordered_map<int, std::vector<int>> hModels;				// ブロックオブジェクトの種類とモデルハンドルのコンテナ
 	std::unordered_map<int, int> hPreviewModel;						// ブロックオブジェクトの種類とモデルハンドルの半透明専用コンテナ
+
+	std::list<const StageObjectBase*> spawnerList;					// スポナーを登録するコンテナ  StageManagerがスポナーの位置を把握するため  
 };

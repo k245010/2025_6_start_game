@@ -1,5 +1,6 @@
 #include "Physics.h"
 #include "../Collision/CollisionFunction.h"
+#include "../../ImGui/imgui.h"
 
 namespace
 {
@@ -42,8 +43,6 @@ void Physics::Update()
 		velocity->z = n.z * maxDistanceDeltaTime;
 	}*/
 
-	
-	
 	// 重力
 	if (isGravity)
 	{
@@ -53,9 +52,17 @@ void Physics::Update()
 		*velocity += gravityVelocity * Time::GameDeltaTime();
 	}
 
+	VECTOR3 copyVec = *velocity;
+
 	// 抵抗値からヴェロシティを設定する //
 	SetFrictionToVelocity(*velocity, friction);
 	SetFrictionToVelocity(addVelocity, addVelocityFriction);
+
+	velocity->y = copyVec.y;
+
+	// 微小速度をカット（誤差防止）
+	//if (fabs(velocity->y) < 0.01f)
+	//	velocity->y = 0.0f;
 
 	transform->position += *velocity + addVelocity;
 }
@@ -68,6 +75,14 @@ void Physics::Draw()
 
 	//DrawLine3D(transform->position, transform->position + vec, 0xff00ff);
 	//DrawCone3D(transform->position + vec, transform->position, 10.0f, 16, 0xff00ff, 0xffffff,true);
+
+	/*ImGui::Begin("Velocity");
+
+	ImGui::SliderFloat3("velocity", &velocity->x, -10000.0f, 10000.0f);
+
+	ImGui::End();*/
+
+	//DrawFormatString(100, 500, 0xff0000, "Velocity x %.3lf, y %.3lf, z %.3lf", velocity->x, velocity->y, velocity->z);
 
 #endif
 }

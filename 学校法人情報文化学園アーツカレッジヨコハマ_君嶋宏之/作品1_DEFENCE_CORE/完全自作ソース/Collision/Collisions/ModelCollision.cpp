@@ -103,6 +103,8 @@ bool ModelCollision::CollisionToRay(RayCollision* col)
 	MV1SetMatrix(hModel, collTransform.trans->GetMatrix());
 	MV1RefreshCollInfo(hModel);
 
+	MATRIX mcopy = MV1GetMatrix(hModel);
+
 	// ƒŒƒC‚Ìİ’è
 	VECTOR3 pos1 = col->GetPosition() + col->GetCenter();
 	VECTOR3 pos2 = col->GetPosition() + col->GetTarget();

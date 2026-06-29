@@ -67,14 +67,14 @@ private:
 	/// <param name="_list">		表示する文字列のリスト									</param>
 	/// <param name="_selectStr">	選択された文字列参照									</param>
 	/// <param name="_selectFlag">	選択されたフラグ参照									</param>
-	void DrawImGuiCombo(const std::string& _beginName, const std::unordered_set<std::string>& _list, std::string& _selectStr, bool& _selectFlag);
+	//void DrawImGuiCombo(const std::string& _beginName, const std::unordered_set<std::string>& _list, std::string& _selectStr, bool& _selectFlag);
 
 	/// <summary>
 	///								文字列のリストを表示する
 	/// </summary>
 	/// <param name="_beginName">	Textを表示するウィンドウの名前		</param>
 	/// <param name="_stringList">	文字列のリスト						</param>
-	void DrawImGuiTextList(const std::string& _beginName, const std::unordered_map<std::string, std::string>& _stringList);
+	//void DrawImGuiTextList(const std::string& _beginName, const std::unordered_map<std::string, std::string>& _stringList);
 
 	/// <summary>
 	///	どのGunDataを設定するか、選択するUpdate

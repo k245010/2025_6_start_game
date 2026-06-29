@@ -22,7 +22,7 @@ namespace
     constexpr int MAX_SHAKE_DISTANCE    = 4;                // 最大振幅距離
 }
 
-CoreBlock::CoreBlock(const Transform& _trans, const int& _hModel, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : BlockBase(_trans, _hModel, StageObjectData::STAGE_OBJECT_KIND::CORE_BLOCK,_hp, _putPlaceKind)
+CoreBlock::CoreBlock(const Transform& _trans, const ModelData& _modelData, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : BlockBase(_trans, _modelData, StageObjectData::STAGE_OBJECT_KIND::CORE_BLOCK,_hp, _putPlaceKind)
 {
     coreUIImage = LoadGraph("data/texture/gameVictoryCoreImage.png");
 
@@ -64,14 +64,14 @@ CoreBlock::~CoreBlock()
         delete hpGauge;
         hpGauge = nullptr;
     }
-
+    
     // UIDraw関数を解放
     UIDrawManager::GetUIDrawManagerInstance()->PopUIDrawFunction(uiFunctionIDNumber);
 }
 
 void CoreBlock::Update()
 {
-    //_ コアの回転&上昇 _//
+    //_ コアの回転 & 上昇の設定 _//
 
     angle += Time::GameDeltaTime() * ROTATION_SPEED;
 
@@ -80,12 +80,10 @@ void CoreBlock::Update()
         angle -= DegToRad * 360.0f;
 
     // upCountの値から上昇する長さを設定
-    upLen                   = fabsf(sinf(upCount += (Time::GameDeltaTime() * UP_SPEED))) * MAX_UP_LEN;
-
-    transform.rotation.y    = angle;
-    transform.position.y    = initPosition.y + upLen;
+    upLen = fabsf(sinf(upCount += (Time::GameDeltaTime() * UP_SPEED))) * MAX_UP_LEN;
 
     //_ UIコアの振幅座標設定 _//
+
     if (isDamage)
     {
         // 振動時間を設定
@@ -107,7 +105,14 @@ void CoreBlock::Draw()
     if (isBroken)
         return; // コアが壊れていたら return
 
+    // 描画前にトランスフォームを設定 //
+    transform.rotation.y = angle;
+    transform.position.y = initPosition.y + upLen;
+
     BlockBase::Draw();
+
+    // トランスフォームの座標を初期値に戻す
+    transform.position = initPosition;
     
     hpGauge->SetDefaultFillColor(0, 190, 255);
 }

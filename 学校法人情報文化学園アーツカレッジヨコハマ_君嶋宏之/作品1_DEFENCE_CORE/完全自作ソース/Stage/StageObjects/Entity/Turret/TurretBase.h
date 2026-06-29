@@ -17,11 +17,11 @@ public:
 	///									コンストラクタ
 	/// </summary>
 	/// <param name="trans">			トランスフォーム				</param>
-	/// <param name="_hModel">			モデルハンドル					</param>
+	/// <param name="_modelData">		モデルモデルデータ				</param>
 	/// <param name="_kind">			ステージオブジェクトの種類		</param>
 	/// <param name="_hp">				HP								</param>
 	/// <param name="_putPlaceKind">	置いた場所の種類				</param>
-	TurretBase(const Transform& _trans, const int& _hModel, const StageObjectData::STAGE_OBJECT_KIND& _kind,const int& _hp, const PUT_PLACE_KIND& _putPlaceKind = PUT_PLACE_KIND::PUT_POINT);
+	TurretBase(const Transform& _trans, const ModelData& _modelData, const StageObjectData::STAGE_OBJECT_KIND& _kind,const int& _hp, const PUT_PLACE_KIND& _putPlaceKind = PUT_PLACE_KIND::PUT_POINT);
 	virtual ~TurretBase();
 
 	virtual void Update()	override;
@@ -87,6 +87,12 @@ public:
 	/// </summary>
 	/// <returns>	自身のトランスフォーム			</returns>
 	const Transform& GetTransform() const override { return transform; }
+
+	/// <summary>
+	///						罠情報の描画をするかどうか設定
+	/// </summary>
+	/// <param name="_set">	true:描画する / false:描画しない	</param>
+	//void SetTrapInfoDrawFlag(bool _set) {}
 
 	/// <summary>
 	/// 弾の残弾数のUI描画

@@ -13,11 +13,15 @@ class BlockController;
 class EnemyManager;
 class StageObjectBase;
 class BlockBase;
+class StageEditor;
 /// <summary>
 /// ステージの生成を総括するクラス
 /// </summary>
 class StageManager : public GameObject
 {
+	friend StageEditor;
+	friend BlockController;
+
 public:
 
 	StageManager();
@@ -31,6 +35,12 @@ public:
 
 	void Update()	override;
 	void Draw()		override;
+
+	/// <summary>
+	///						StageEditorでステージの編集をするかのフラグ設定
+	/// </summary>
+	/// <param name="_flag">true:編集する / false：編集しない	</param>
+	void SetStageEditorFlag(bool _flag) { canStageEditor = _flag; }
 
 	/// <summary>
 	///				ステージの最大数を返す
@@ -51,11 +61,18 @@ public:
 	int GetLoadStageNum() const { return loadStageNum; }
 
 	/// <summary>
-	/// ステージデータをcsvが読み込みステージを生成
+	///							ステージデータをcsvが読み込みステージを生成
 	/// </summary>
-	/// <param name="_file"> ステージナンバー 1～</param>
-	/// <returns> 読み込み成功：読み込み失敗 </returns>
-	bool CreateStage(const int& _file);
+	/// <param name="_stageNum">ステージナンバー 1～					</param>
+	/// <returns>				true:読み込み成功 / false:読み込み失敗	</returns>
+	bool CreateStage(const int& _stageNum);
+
+	/// <summary>
+	///							ステージデータをcsvに書き出し
+	/// </summary>
+	/// <param name="_stageNum">ステージナンバー 1～		</param>
+	/// <param name="_override">データを上書きするかどうか	</param>
+	void SaveStage(const int& _stageNum, bool _override = true);
 
 	/// <summary>
 	///				ステージに対するプレイヤーの初期座標をロードして返す
@@ -143,20 +160,39 @@ public:
 	//bool CreateStageObject(const VECTOR3& _pos, const StageObjectData::STAGE_OBJECT_KIND& _kind, const VECTOR3& _velocity = VZero);
 
 	/// <summary>
-	///								ステージオブジェクトを生成する
+	///								ステージオブジェクトを設置する
 	/// </summary>
-	/// <param name="_pos">			生成座標														</param>
-	/// <param name="_kind">		ステージオブジェクトの種類										</param>
-	/// <returns>					true:成功 / false:失敗											</returns>
-	bool CreateStageObject(const VECTOR3& _pos, const StageObjectData::STAGE_OBJECT_KIND& _kind);
+	/// <param name="_pos">			設置座標						</param>
+	/// <param name="_kind">		ステージオブジェクトの種類		</param>
+	/// <returns>					true:成功 / false:失敗			</returns>
+	bool PutStageObject(const VECTOR3& _pos, const StageObjectData::STAGE_OBJECT_KIND& _kind);
 
 	/// <summary>
 	///								ステージオブジェクトを生成する
 	/// </summary>
-	/// <param name="_trans">		トランスフォーム												</param>
-	/// <param name="_kind">		ステージオブジェクトの種類										</param>
-	/// <returns>					true:成功 / false:失敗											</returns>
-	bool CreateStageObject(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
+	/// <param name="_trans">		トランスフォーム						</param>
+	/// <param name="_kind">		ステージオブジェクトの種類				</param>
+	/// <returns>					true:成功 / false:失敗					</returns>
+	bool PutStageObject(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
+	
+	/// <summary>
+	///						敵のスポナーを設置する
+	/// </summary>
+	/// <param name="_pos">	設置座標										</param>
+	/// <returns>			設置したスポナーのステージオブジェクトポインタ	</returns>
+	const StageObjectBase* PutSpawner(const VECTOR3& _pos);
+
+	/// <summary>
+	///							敵のスポナーを削除する
+	/// </summary>
+	/// <param name="_spawner">	StageObjectBaseポインタ		</param>
+	/// <returns>				true:成功 / false:失敗		</returns>
+	bool DeleteSpawner(StageObjectBase* _spawner);
+
+	/// <summary>
+	/// 全てのスポナーを削除する
+	/// </summary>
+	void DeleteAllSpawner();
 
 	/// <summary>
 	/// ステージオブジェクトの設置ポイント関連の移動方向の種類
@@ -229,20 +265,20 @@ public:
 	/// <summary>
 	///							レイとステージオブジェクト種類ごとの当たり判定
 	/// </summary>
-	/// <param name="_pos1">	レイの始点																						</param>
-	/// <param name="_pos2">	レイの終始																						</param>
+	/// <param name="_startPos">レイの始点																						</param>
+	/// <param name="_endPos">	レイの終始																						</param>
 	/// <param name="_type">	どのステージオブジェクト種類で当たり判定するかのコンテナ　コンテナが空の場合はすべて当たり判定	</param>
 	/// <param name="_hitP">	当たった座標																					</param>
 	/// <returns>				true:当たっていた / false:当たっていない														</returns>
-	bool CheckRaycastStageObject(const VECTOR3& _pos1, const VECTOR3& _pos2, const std::set<int>& _kindList, VECTOR3* _hitPos = nullptr);
+	bool CheckRaycastStageObject(const VECTOR3& _startPos, const VECTOR3& _endPos, const std::set<int>& _kindList, VECTOR3* _hitPos = nullptr);
 
 	/// <summary>
 	///								レイの当たり判定をして、メンテナンスをすることができる罠を返す
 	/// </summary>
-	/// <param name="_pos1">		レイの始点																														</param>
-	/// <param name="_pos2">		レイの終始																														</param>
+	/// <param name="_startPos">		レイの始点																														</param>
+	/// <param name="_endPos">		レイの終始																														</param>
 	/// <returns>					レイキャストをしてメンテナンスできる罠に当たっていたら当たったステージオブジェクトを返す / 当たっていなかったらnullptrを返す	</returns>
-	const StageObjectBase* RaycastGetCanMaintainTrap(const VECTOR3& _pos1, const VECTOR3& _pos2);
+	const StageObjectBase* RaycastGetCanMaintainTrap(const VECTOR3& _startPos, const VECTOR3& _endPos);
 
 	/// <summary>
 	///								罠のメンテナンスをする
@@ -253,12 +289,12 @@ public:
 	float TrapMaintaining(const StageObjectBase* _stageObj, const float& _add);
 
 	/// <summary>
-	///								レイの当たり判定をして、アップグレードをすることができる罠を返す
+	///							レイの当たり判定をして、アップグレードをすることができる罠を返す
 	/// </summary>
-	/// <param name="_pos1">		レイの始点																														</param>
-	/// <param name="_pos2">		レイの終始																														</param>
-	/// <returns>					レイキャストをしてアップグレードできる罠に当たっていたら当たったステージオブジェクトを返す / 当たっていなかったらnullptrを返す	</returns>
-	const StageObjectBase* RaycastGetCanUpgradTrap(const VECTOR3& _pos1, const VECTOR3& _pos2);
+	/// <param name="_startPos">レイの始点																							</param>
+	/// <param name="_endPos">	レイの終始																							</param>
+	/// <returns>				StageObjectBaseポインタ:レイキャストをしてアップグレードできる罠のポインタ / nullptr:当たっていない	</returns>
+	const StageObjectBase* RaycastGetCanUpgradTrap(const VECTOR3& _startPos, const VECTOR3& _endPos);
 
 	/// <summary>
 	///								罠のアップグレードをする
@@ -309,7 +345,7 @@ public:
 	/// </summary>
 	/// <param name="_pos"> 自身の座標							</param>
 	/// <returns>			一番近くの敵のトランスフォーム		</returns>
-	const Transform& GetNearEnemyTransform(const VECTOR3& _pos);
+	const Transform& GetNearEnemyTransform(const VECTOR3& _pos) const;
 
 	/// <summary>
 	///						EnemyManagerの関数を使い、一番近くの敵の座標を返す
@@ -323,7 +359,7 @@ public:
 	/// </summary>
 	/// <param name="_num"> 敵のナンバー	</param>
 	/// <returns>			敵の座標		</returns>
-	const VECTOR3& GetEnemyPosition(int _eneNumber);
+	const VECTOR3& GetEnemyPosition(const int& _eneNumber);
 
 	/// <summary>
 	///				EnemyManagerの関数を使い、敵が召喚されているかどうか返す
@@ -374,14 +410,14 @@ public:
 	/// 
 	///				key:ステージオブジェクトのブロックナンバー / value:ハンドル
 	/// </returns>
-	const std::unordered_map<int, int> GetRawModelHandle();
+	const std::unordered_map<int, int> GetRawModelHandles();
 
 	/// <summary>
 	///								引数のStageObjectBaseポインタがITrap(罠のインターフェイス)クラスを持っていたらコンテナにpushする
 	/// </summary>
 	/// <param name="_stageObje">	StageObjectBaseポインタ															</param>
 	/// <returns>					true:ITrapを持ったかつコンテナに追加できた / false:コンテナに追加できなかった	</returns>
-	bool PushInterfaceTrapList(StageObjectBase* _stageObj);
+	bool PushRequestInterfaceTrapList(StageObjectBase* _stageObj);
 
 	/// <summary>
 	///								引数のStageObjectBaseポインタをITrap(罠のインターフェイス)クラスを管理しているコンテナから削除する
@@ -418,6 +454,38 @@ public:
 private:
 
 	/// <summary>
+	///									ステージオブジェクトを生成する
+	/// </summary>
+	/// <param name="_pos">				生成座標															</param>
+	/// <param name="_kind">			ステージオブジェクトの種類											</param>
+	/// <param name="_useModelIndex">	使用するモデル										</param>
+	/// <param name="_isYPosAdjustment">Y座標を調整するかのフラグ											</param>
+	/// <returns>						StageObjectBaseポインタ:生成したオブジェクトポインタ / nullptr:失敗	</returns>
+	StageObjectBase* CreateStageObject(const VECTOR3& _pos, const StageObjectData::STAGE_OBJECT_KIND& _kind, bool _isYPosAdjustment = true);
+
+	/// <summary>
+	///								ステージオブジェクトを生成する
+	/// </summary>
+	/// <param name="_trans">		トランスフォーム														</param>
+	/// <param name="_kind">		ステージオブジェクトの種類												</param>
+	/// <returns>					StageObjectBaseポインタ::生成したオブジェクトポインタ / nullptr:失敗	</returns>
+	StageObjectBase* CreateStageObject(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, bool _isYPosAdjustment = true);
+
+	/// <summary>
+	///										ステージオブジェクトを削除する
+	/// </summary>
+	/// <param name="_deleteStageObject">	削除するStageObjectBaseポインタ	</param>
+	/// <returns>							true:成功 / false:失敗			</returns>
+	bool DeleteStageObject(StageObjectBase* _deleteStageObject);
+
+	/// <summary>
+	///							ステージデータをcsvに書き出し
+	/// </summary>
+	/// <param name="_stageNum">ステージナンバー 1～				</param>
+	/// <param name="_stageNum">true:削除の成功 / false:削除の失敗	</param>
+	bool DeleteStage(const int& _stageNum);
+
+	/// <summary>
 	///											ステージオブジェクトの設置ポイントにステージオブジェクトを生成する
 	/// </summary>
 	/// <param name="_putPointIndexDataPtr">	設置するポイントの個々の配置インデックスのデータのポインタ		</param>
@@ -434,22 +502,30 @@ private:
 	bool CreatePutPointStageObject(const VECTOR3& _putPos, const StageObjectData::STAGE_OBJECT_KIND& _kind);
 
 	/// <summary>
+	///									対象と設置ポイントの座標から、設置できる（重ならない）距離にいるか返す
+	/// </summary>
+	/// <param name="_targetTransform">	対象トランスフォーム					</param>
+	/// <param name="_putPointIndexPos">設置ポイントの座標						</param>
+	/// <returns>						true:設置可能 / false:設置不可			</returns>
+	bool CanPutStageObject(const Transform& _targetTransform, const VECTOR3& _putPointIndexPos);
+
+	/// <summary>
 	///							レイとステージオブジェクト種類ごとの当たり判定
 	/// </summary>
 	/// <param name="_pos1">	レイの始点																						</param>
 	/// <param name="_pos2">	レイの終始																						</param>
 	/// <param name="_type">	どのステージオブジェクト種類で当たり判定するかのコンテナ　コンテナが空の場合はすべて当たり判定	</param>
 	/// <param name="_hitP">	当たった座標																					</param>
-	/// <returns>				当たっていたらステージオブジェクトポインタ / 当たっていないかったらnullptr						</returns>
-	StageObjectBase* RaycastStageObject(const VECTOR3& _pos1, const VECTOR3& _pos2, const std::set<int>& _kindList, VECTOR3* _hitPos = nullptr);
+	/// <returns>				StageObjectBaseポインタ:当たったオブジェクトポインタ / nullptr:当たっていない					</returns>
+	StageObjectBase* RaycastStageObject(const VECTOR3& _startPos, const VECTOR3& _endPos, const std::set<int>& _kindList, VECTOR3* _hitPos = nullptr);
 
 	/// <summary>
-	///								レイの当たり判定をして、罠のステージオブジェクトポインタを返す
+	///							レイの当たり判定をして、罠のステージオブジェクトポインタを返す
 	/// </summary>
-	/// <param name="_pos1">		レイの始点																									</param>
-	/// <param name="_pos2">		レイの終始																									</param>
-	/// <returns>					レイキャストをして罠に当たっていたら当たったステージオブジェクトを返す / 当たっていなかったらnullptrを返す	</returns>
-	const StageObjectBase* RaycastGetTrap(const VECTOR3& _pos1, const VECTOR3& _pos2);
+	/// <param name="_startPos">レイの始点																</param>
+	/// <param name="_endPos">	レイの終始																</param>
+	/// <returns>				StageObjectBaseポインタ:当たった罠のポインタ / nullptr:当たっていない	</returns>
+	const StageObjectBase* RaycastGetTrap(const VECTOR3& _startPos, const VECTOR3& _endPos);
 
 	/// <summary>
 	///				ステージオブジェクトのコンテナを返す
@@ -460,9 +536,9 @@ private:
 	/// <summary>
 	///							ステージオブジェクトを設置するポイントを読み込みコンテナに代入する
 	/// </summary>
-	/// <param name="_file">	ステージナンバー 1～					</param>
+	/// <param name="_stageNum">ステージナンバー 1～					</param>
 	/// <returns>				true:読み込み成功 / false:読み込み失敗	</returns>
-	bool LoadStageObjectPutPointData(const int& _file);
+	bool LoadStageObjectPutPointData(const int& _stageNum);
 
 	/// <summary>
 	///							csvから読み込んだ値を引数Transformに代入
@@ -470,7 +546,7 @@ private:
 	/// <param name="_trans">	Transform	</param>
 	/// <param name="_num">		代入値		</param>
 	/// <param name="col">		列			</param>
-	void SetTransformFromCsvColumn(Transform& _trans, const float& _num, const int& _col);
+	void SetTransformToCsvColumn(Transform& _trans, const float& _num, const int& _col);
 
 	/// <summary>
 	///							csvから読み込んだ値を引数VECTORに座標として代入
@@ -480,15 +556,13 @@ private:
 	/// <param name="col">		列			</param>
 	void SetPositionFromCsvColumn(VECTOR3& _pos, const float& _num, const int& _col);
 
-	//void 
-
 	/// <summary>
 	/// csvから読み込んだ現在選択されているステージオブジェクトを設置するポイントのインデックスの座標を設定する
 	/// </summary>
-	/// <param name="_num"> ポイントのナンバー </param>
-	/// <param name="_line"> csvデータの列 </param>
-	/// <param name="_columns"> csvデータの行 </param>
-	/// <param name="_cenPos"> ポイントの中心座標 </param>
+	/// <param name="_num">		ポイントのナンバー	</param>
+	/// <param name="_line">	csvデータの列		</param>
+	/// <param name="_columns"> csvデータの行		</param>
+	/// <param name="_cenPos">	ポイントの中心座標	</param>
 	//void InitStageObjectPointIndexToIndexPosition(const int& _num,const int& _line,const int& _columns,const VECTOR3& _cenPos);
 
 	/// <summary>
@@ -500,21 +574,11 @@ private:
 	bool GetScreenPosToWorldPosRayColl(const VECTOR2I& _musePos,VECTOR3* _hitPos);
 
 	/// <summary>
-	/// グリッド状にランダムにブロックを配置
-	/// </summary>
-	void RandomPutCreateBlockObject();
-
-	/// <summary>
-	/// グリッド状に交互にブロックを配置
-	/// </summary>
-	void GridPutCreateBlockObject();
-
-	/// <summary>
 	///									引数の座標から近くの、ステージオブジェクトを設置するポイントのインデックスポインタを返す
 	/// </summary>
-	/// <param name="_pos">				座標																									</param>
-	/// <param name="_putedReturnNull"> 設置されていたときにnullptrを返すかどうか																</param>
-	/// <returns>						設置するポイントのインデックスデータ：nullptr(すでに設置されているまたは、明らかにポイントから遠いとき) </returns>
+	/// <param name="_pos">				座標																															</param>
+	/// <param name="_putedReturnNull"> 設置されていたときにnullptrを返すかどうか																						</param>
+	/// <returns>						PutPointIndexDataポインタ:近くのPutPointIndexDataポインタ / nullptr:すでに設置されているまたは、明らかにポイントから遠いとき	</returns>
 	StageManager::PutPointIndexData* GetNearPutPointDataPtr(const VECTOR3& _pos, bool _putedReturnNull = false);
 
 	/// <summary>
@@ -527,17 +591,19 @@ private:
 	static bool isActiveInstance;							// インスタンスがnewされているかのフラグ
 	
 	//GameController* gameController;
+	StageEditor* stageEditor						= nullptr;
 	EnemyManager* enemyManager						= nullptr;
 	NavigationManager* navigationManager			= nullptr;
 	SphereCollision* deleteStageObjectCollision		= nullptr;		// ステージオブジェクトを削除するための当たり判定
 	Transform deleteStageObjectCollisionTransform	= Transform();	// ステージオブジェクトを削除するための当たり判定のトランスフォーム
 	
+	bool canStageEditor = false;
 	
 	std::unordered_map<int, std::vector<StageManager::PutPointIndexData>> stageObjectPutPointIndexPosList;	// ステージオブジェクトを設置するポイントの個々の配置インデックスのデータコンテナ
 	std::unordered_map<int, VECTOR3> stageObjectPutPointCenterPositionList;									// ステージオブジェクトを設置するポイントの中心座標のコンテナ 
 	
-	std::unordered_map<const Transform*, int> navigationAreaBoxNumberList;									// ナビゲーションへ送ったステージオブジェクトのトランスフォーム範囲の識別ナンバーを保存する
-	std::unordered_map<const StageObjectBase*, ITrap*> interfaceTrapList;									// ITrap(罠のインターフェース)を管理するコンテナ
+	std::unordered_map<const Transform*, int> navigationAreaBoxNumberList;	// ナビゲーションへ送ったステージオブジェクトのトランスフォーム範囲の識別ナンバーを保存する
+	std::unordered_map<const StageObjectBase*, ITrap*> interfaceTrapList;	// ITrap(罠のインターフェース)を管理するコンテナ
 
 	/// <summary>
 	/// 選択されている設置ポイントのデータ 今後データが少なかったら削除
@@ -550,15 +616,14 @@ private:
 		int number;	// ポイントのナンバー
 	};
 
-	PutPointSelectData stageObjectPutPointSelectData;		// 現在選択されているステージオブジェクトの配置をするポイントの位置データ
+	PutPointSelectData stageObjectPutPointSelectData;	// 現在選択されているステージオブジェクトの配置をするポイントの位置データ
 
-	int loadStageNum = -1;					// ステージナンバー
+	int loadStageNum			= -1;		// ステージナンバー
 
 	Transform playerTransform;				// プレイヤー座標
 	bool isDrawTrapImpactRadius = false;	// 罠の影響範囲を描画するかのフラグ
 	bool isDrawTurretInfoUI		= false;	// 罠のトラップの情報描画のフラグ
-	int drawTurretInfoUINumber  = -1;		// 
 
-	int circleModel;						// 円形のモデル
+	int circleModel				= -1;		// 円形のモデルハンドル
 };
 

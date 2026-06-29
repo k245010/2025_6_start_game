@@ -10,16 +10,7 @@ struct VECTOR3I
 
 	VECTOR3I() : x(0), y(0), z(0) {};
 
-	VECTOR3I(int _x, int _y, int _z)
-		: x(_x), y(_y), z(_z) {
-	}
-
-	VECTOR3I(const int& _x, const int& _y, const int& _z)
-	{
-		x = _x;
-		y = _y;
-		z = _z;
-	}
+	VECTOR3I(const int& _x, const int& _y, const int& _z) : x(_x), y(_y), z(_z) {}
 
 	VECTOR3I(const VECTOR3I& _v)
 	{
@@ -54,6 +45,8 @@ struct VECTOR3I
 	{
 		return (x == v2.x && y == v2.y && z == v2.z);
 	}
+
+
 };
 
 // VECTOR3Iをmapでハッシュを使うため定義  キー検索できる

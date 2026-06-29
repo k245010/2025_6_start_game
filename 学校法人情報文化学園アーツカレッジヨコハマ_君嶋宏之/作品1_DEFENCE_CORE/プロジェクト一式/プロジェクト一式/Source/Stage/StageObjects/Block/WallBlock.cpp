@@ -30,10 +30,11 @@ WallBlock::WallBlock(const Transform& _trans, const ModelData& _modelData, const
 	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ERASER);
 	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::TURRET_RAY);
 	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::BULLET);
-	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ENEMY_ATTACK);
+	//obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ENEMY_ATTACK);
 
-	modelColl	= new ModelCollision(&transform, COLLISION_OBJECT_KIND::WALL_BLOCK, hModel, "WALL_MODEL_COLLISION");
+	modelColl	= new ModelCollision(&transform, COLLISION_OBJECT_KIND::WALL_BLOCK, hModel, "WALL_MODEL_COLLISION", [this](const CollisionHitInfoData& tr) {return HitBlock(tr);});
 	modelColl->SetTargetTag(COLLISION_OBJECT_KIND::PLAYER);
+	modelColl->SetTargetTag(COLLISION_OBJECT_KIND::ENEMY_ATTACK);
 
 	hpMax		= hp;
 	lastHp		= hp;

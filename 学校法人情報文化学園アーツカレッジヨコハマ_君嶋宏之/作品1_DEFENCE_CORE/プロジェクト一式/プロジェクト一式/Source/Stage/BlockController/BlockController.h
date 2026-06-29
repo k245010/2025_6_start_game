@@ -159,6 +159,12 @@ public:
 	/// </returns>
 	const std::unordered_map<int, std::vector<int>> GetRawModelHandles();
 
+	/// <summary>
+	///				スポナーのポインタが入ったコンテナを返す
+	/// </summary>
+	/// <returns>	const std::list<const StageObjectBase*>&	</returns>
+	const std::list<const StageObjectBase*>& GetSpawnerList() const { return spawnerList; }
+
 private:
 
 	BlockController();
@@ -190,6 +196,20 @@ private:
 	/// <returns>				グリッド変換した座標	</returns>
 	VECTOR3 GetPutGridPosition(const Transform& _trans);
 
+	/// <summary>
+	///									スポナーのポインタをコンテナにpushする
+	/// </summary>
+	/// <param name="_spawnerPointer">	スポナーのStageObjectBaseポインタ	</param>
+	/// <returns>						true:成功 / false:失敗				</returns>
+	bool PushSpawnerToList(const StageObjectBase* _spawner);
+
+	/// <summary>
+	///									スポナーのポインタをPushSpawnerToList関数でpushしたコンテナから削除をリクエストする
+	/// </summary>
+	/// <param name="_spawnerPointer">	スポナーのStageObjectBaseポインタ	</param>
+	/// <returns>						true:成功 / false:失敗				</returns>
+	bool DeleteRequestSpawnerFormList(const StageObjectBase* _spawner);
+
 	static BlockController* objectMe;	// BlockControllerクラスのインスタンス
 	static bool isActiveInstance;		// インスタンスがnewされているかのフラグ
 	StageManager* stageManager;			// StageManagerクラスポインタ
@@ -197,4 +217,6 @@ private:
 	std::unordered_map<BlockBase*, STAGE_OBJECT_CREATE_WAY> blocks;	// ブロックオブジェクトと生成の方法を保存するコンテナ
 	std::unordered_map<int, std::vector<int>> hModels;				// ブロックオブジェクトの種類とモデルハンドルのコンテナ
 	std::unordered_map<int, int> hPreviewModel;						// ブロックオブジェクトの種類とモデルハンドルの半透明専用コンテナ
+
+	std::list<const StageObjectBase*> spawnerList;					// スポナーを登録するコンテナ  StageManagerがスポナーの位置を把握するため  
 };

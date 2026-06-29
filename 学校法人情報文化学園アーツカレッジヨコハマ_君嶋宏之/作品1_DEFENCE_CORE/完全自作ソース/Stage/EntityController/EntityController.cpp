@@ -142,6 +142,11 @@ void EntityController::Update()
 {
 }
 
+void EntityController::Draw()
+{
+
+}
+
 void EntityController::TurretInfoUIDraw()
 {
 	if (!isDrawTurretInfoUI)
@@ -163,9 +168,9 @@ void EntityController::TurretInfoUIDraw()
 			entity->GetStageObjectKind() != StageObjectData::STAGE_OBJECT_KIND::AUTO_TURRET)
 			continue;	// 処理を飛ばす
 
-		float squareDistance = VSquareSize(playerPos - *entity->GetPositionPtr());
+		float squareDistance	= VSquareSize(playerPos - *entity->GetPositionPtr());
 
-		TurretBase* turret = static_cast<TurretBase*>(entity);
+		TurretBase* turret		= static_cast<TurretBase*>(entity);
 
 		// 弾を発射できない状態だったら
 		if(!turret->CanShot())
@@ -216,7 +221,7 @@ void EntityController::DrawTrapPutPreview(const Transform& _trans, const StageOb
 	MV1DrawModel(hPreviewModel[(int)_kind]);
 }
 
-const Transform* EntityController::SummonEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
+StageObjectBase* EntityController::SummonEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
 {
 	return CreateEntity(_trans, _kind);
 }
@@ -241,21 +246,6 @@ bool EntityController::IsEnemySummon() const
 	return stageManager->IsEnemySummon();
 }
 
-//void EntityController::SetShotInterval(void* _pointer, const float _interval)
-//{
-//	stageManager->SetShotInterval(_pointer, _interval);
-//}
-
-//void EntityController::DeleteShotOwner(const void* _pointer)
-//{
-//	stageManager->DeleteShotOwner(_pointer);
-//}
-
-//bool EntityController::Shot(const VECTOR3& _pos, const VECTOR3& _vel, const BULLET_KIND& _bulletKind, void* _pointer)
-//{
-//	return stageManager->Shot(_pos, _vel, _bulletKind, _pointer);
-//}
-
 std::list<StageObjectBase*> EntityController::GetAllStageObject()
 {
 	std::list<StageObjectBase*> re;
@@ -268,11 +258,6 @@ std::list<StageObjectBase*> EntityController::GetAllStageObject()
 	}
 	return re;
 }
-
-//bool EntityController::StageObjectTypeRayCollision(const VECTOR3& _pos1, const VECTOR3& _pos2, const StageObjectData::TYPE& _type, VECTOR3* _hitP)
-//{
-//	return stageManager->StageObjectTypeRayCollision(_pos1, _pos2, _type,_hitP);
-//}
 
 bool EntityController::CheckRaycastStageObject(const VECTOR3& _pos1, const VECTOR3& _pos2, const std::set<int>& _kindList, VECTOR3* _hitP)
 {
@@ -290,7 +275,7 @@ void EntityController::NavigationAreaBoxHPChange(const Transform* _trans, const 
 void EntityController::DeleteNavigationAreaBoxTransformPtr(const Transform* _trans)
 {
 	if (!StageManager::IsActiveInstance())
-		return;
+		return;	// StageManagerが非アクティブなら、以下の処理は行わないのでreturn
 
 	stageManager->DeleteNavigationAreaBoxTransformPtr(_trans);
 }
@@ -303,7 +288,7 @@ const std::vector<int>& EntityController::GetModelHandle(const StageObjectData::
 	return hModel[(int)_kind];
 }
 
-const Transform* EntityController::CreateEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
+EntityBase* EntityController::CreateEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
 {
 	EntityBase* obj = nullptr;
 
@@ -355,11 +340,11 @@ const Transform* EntityController::CreateEntity(const Transform& _trans, const S
 	}
 
 	// この関数内で罠に分類された場合はステージマネージャーで、objのITrap(罠のインタフェース)を管理される
-	stageManager->PushInterfaceTrapList(obj);
+	stageManager->PushRequestInterfaceTrapList(obj);
 
 	//stageManager->ChangedStageObject();
 
-	return &obj->GetTransform();
+	return obj;
 }
 
 const Transform& EntityController::GetPlayerTransform() const
@@ -371,14 +356,18 @@ void EntityController::StageManagerForDeleteEntity()
 {
 	for (auto itr = entities.begin();itr != entities.end();)
 	{
-		EntityBase& obj = **itr;
+		EntityBase* obj = *itr;
 
-		if (*itr != nullptr)
-			obj.DestroyMe();
+		if (obj != nullptr)
+		{
+			// インターフェースだった場合、インターフェースを管理するコンテナから削除する
+			stageManager->DeleteInterfaceTrapList(obj);
+			
+			obj->DestroyMe();
+			obj = nullptr;
+		}
 
 		itr = entities.erase(itr);
-
-		stageManager->DeleteInterfaceTrapList(&obj);
 	}
 	entities.clear();
 }
@@ -393,18 +382,23 @@ bool EntityController::DeleteEntity(EntityBase* _obj)
 		assert(false);
 		return false;
 	}
-	EntityBase& obj = **itr;
+	EntityBase* obj = *itr;
 
-	if (*itr != nullptr)
-		obj.DestroyMe();
+	if (obj != nullptr)
+	{
+		// putPointに置かれたオブジェクトだったら
+		if (obj->GetPutPlaceKind() == StageObjectBase::PUT_PLACE_KIND::PUT_POINT)
+		{
+			stageManager->SendDeletePutPointStageObject(obj->GetTransform());
+		}
+		obj->DestroyMe();
+		obj = nullptr;
+	}
 
 	itr = entities.erase(itr);
 
 	stageManager->DeleteInterfaceTrapList(_obj);
 
-	// putPointに置かれたオブジェクトだったら
-	if (obj.GetPutPlaceKind() == StageObjectBase::PUT_PLACE_KIND::PUT_POINT)
-		stageManager->SendDeletePutPointStageObject(obj.GetTransform());
 	return true;
 }
 

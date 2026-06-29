@@ -61,6 +61,32 @@ struct CollisionHitPointData
 	/// <param name="_hitPos"> 当たった座標 </param>
 	/// <param name="_hitNormList"> 当たったポリゴンの法線コンテナ </param>
 	CollisionHitPointData(const std::vector<VECTOR3>& _hitPos, const std::vector<VECTOR3>& _hitNormList = {}) : hitPosition(_hitPos), hitNormList(_hitNormList) {}
+
+	/// <summary>
+	///							一番近くで当たった座標を返す
+	/// </summary>
+	/// <param name="_pos">		比較する座標  自身の当たり判定オブジェクトの座標など	</param>
+	/// <returns>				一番近くで当たった座標									</returns>
+	VECTOR3 GetNearestHitPosition(const VECTOR3& _pos) const
+	{
+		assert(!hitPosition.empty());
+
+		float minSquareDistance = FLT_MAX;	// 最小距離を記録
+		VECTOR3 nearestPos		= VZero;	// 最近値の座標を記録
+
+		for (const auto& hitPos : hitPosition)
+		{
+			float squareDistance = VSquareSize(hitPos - _pos);
+
+			if (squareDistance < minSquareDistance)
+			{
+				// 最近値を記録 //
+				minSquareDistance	= squareDistance;
+				nearestPos			= hitPos;
+			}
+		}
+		return nearestPos;
+	}
 };
 
 /// <summary>
@@ -122,7 +148,7 @@ public:
 	/// <param name="func">				当たったときに呼ぶ関数													</param>
 	/// <param name="_onHitDeleteMe">	当たったときに自身の当たり判定オブジェクトを非アクティブにするかどうか　
 	///									true:非アクティブにする / false:非アクティブにしない					</param>
-	CollisionBase(Transform* _trans, const COLLISION_OBJECT_KIND& _tagMe, const std::string& _ownerName = "", std::function<bool(const CollisionHitInfoData&)> func = nullptr, bool _onHitDeleteMe = false);
+	CollisionBase(Transform* _trans, const COLLISION_OBJECT_KIND& _tagMe, const std::string& _ownerName = "", std::function<bool(const CollisionHitInfoData&)> _func = nullptr, bool _onHitDeleteMe = false);
 	virtual ~CollisionBase();
 
 	virtual void Update();
@@ -314,6 +340,18 @@ public:
 	/// <returns>	true:判定を終えた / false:判定を終えていない </returns>
 	bool IsFirstCollided() const { return isFirstCollided; }
 
+	/// <summary>
+	///						最も近くで当たったオブジェクトを当たった判定とするかどうか設定する
+	/// </summary>
+	/// <param name="_set">	true:最も近くで当たったオブジェクトを当たった判定とする / false:デフォルト判定、当たる距離にいるオブジェクト全てと当たり判定	</param>
+	void SetUseNearestCollisionFlag(bool _set) { useNearestCollision = _set; }
+
+	/// <summary>
+	///				最も近くで当たったオブジェクトを当たった判定とするかどうか返す
+	/// </summary>
+	/// <returns>	true:最も近くで当たったオブジェクトを当たった判定とする / false:デフォルト判定、当たる距離にいるオブジェクト全てと当たり判定	</returns>
+	bool GetUseNearestCollisionFlag() const { return useNearestCollision; }
+
 protected:					
 
 	std::list<COLLISION_OBJECT_KIND> targetTag;						// 当たり判定をする相手の当たり判定オブジェクトの種類
@@ -342,5 +380,7 @@ private:
 	/// 当たり判定を行うコンテナに自身を削除
 	/// </summary>
 	void DoCollisionDeleteMe();
+
+	bool useNearestCollision = false;	// 最も近くで当たったオブジェクトを当たった判定とするかどうか
 };
 

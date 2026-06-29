@@ -159,45 +159,45 @@ void GunManager::Update()
 	ImGui::End();
 }
 
-void GunManager::DrawImGuiCombo(const std::string& _beginName, const std::unordered_set<std::string>& _list, std::string& _selectStr, bool& _selectFlag)
-{
-	if (ImGui::BeginCombo(_beginName.c_str(), _selectStr.c_str()))
-	{
-		for (const auto& list : _list)
-		{
-			if (ImGui::Selectable(list.c_str()))
-			{
-				_selectStr	= list;
-				_selectFlag = true;
-			}
-		}
-		ImGui::EndCombo();
-	}
-}
+//void GunManager::DrawImGuiCombo(const std::string& _beginName, const std::unordered_set<std::string>& _list, std::string& _selectStr, bool& _selectFlag)
+//{
+//	if (ImGui::BeginCombo(_beginName.c_str(), _selectStr.c_str()))
+//	{
+//		for (const auto& list : _list)
+//		{
+//			if (ImGui::Selectable(list.c_str()))
+//			{
+//				_selectStr	= list;
+//				_selectFlag = true;
+//			}
+//		}
+//		ImGui::EndCombo();
+//	}
+//}
 
-void GunManager::DrawImGuiTextList(const std::string& _beginName, const std::unordered_map<std::string, std::string>& _stringList)
-{
-	ImGui::BeginChild(_beginName.c_str(), ImVec2(IMGUI_SLIDER_WIDTH * 1.5f, 100.0f), false, 1);
-
-	for (const auto& string : _stringList)
-	{
-		//_ データの出力 _//
-
-		ImGui::TextUnformatted(string.first.c_str());
-		
-		// valueが空だったら
-		if (string.second.empty())
-			continue;	// 表示する文字列がないので、continue
-
-		ImGui::SameLine();
-		ImGui::TextUnformatted(string.second.c_str());
-	}
-	// データリストの一番下へスクロール　常に最新のデータを見るため
-	if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-		ImGui::SetScrollHereY(1.0f);
-
-	ImGui::EndChild();
-}
+//void GunManager::DrawImGuiTextList(const std::string& _beginName, const std::unordered_map<std::string, std::string>& _stringList)
+//{
+//	ImGui::BeginChild(_beginName.c_str(), ImVec2(IMGUI_SLIDER_WIDTH * 1.5f, 100.0f), false, 1);
+//
+//	for (const auto& string : _stringList)
+//	{
+//		//_ データの出力 _//
+//
+//		ImGui::TextUnformatted(string.first.c_str());
+//		
+//		// valueが空だったら
+//		if (string.second.empty())
+//			continue;	// 表示する文字列がないので、continue
+//
+//		ImGui::SameLine();
+//		ImGui::TextUnformatted(string.second.c_str());
+//	}
+//	// データリストの一番下へスクロール　常に最新のデータを見るため
+//	if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+//		ImGui::SetScrollHereY(1.0f);
+//
+//	ImGui::EndChild();
+//}
 
 void GunManager::SelectSettingGunDataUpdate()
 {
@@ -413,7 +413,7 @@ void GunManager::SettingImGuiGunDataUpdate()
 			if (isSelect[(int)GUN_DATA_SETTING_MEMBER_KIND::BULLET_HIT_SUMMON_OBJ])
 			{
 				// トランスフォームの設定
-				SetTransformInImGui(setSummonStageObjectTransform);
+				SetTransformImGui(setSummonStageObjectTransform);
 
 				SummonStageObjectInfo::SummonStageObjectData selectStageObject = 
 					SummonStageObjectInfo::SummonStageObjectData(StageObjectData::GetFromEnum(selectString[(int)GUN_DATA_SETTING_MEMBER_KIND::BULLET_HIT_SUMMON_OBJ]), setSummonStageObjectTransform);	// 選択された召喚するステージオブジェクトの種類
@@ -642,7 +642,6 @@ void GunManager::SaveGunData()
 {
 	for (auto& gunDataSet : gunDataSetList)
 	{
-		
 		if (gunList[gunDataSet.first].empty())
 			continue;	// コンテナ内が空なので、continue
 		if (!HasUnorderedMapContainerKey(gunList, gunDataSet.first))

@@ -27,9 +27,12 @@
 
 namespace
 {
+	constexpr float BASE_CAMERA_SENSITIVITY = 0.06f;	// カメラ感度倍率  画面のマウス移動座標に対して掛ける
+
 	constexpr float MIN_MOVE_SPEED		= 100.0f;				// 最低移動速度
 	constexpr float MAX_MOVE_SPEED		= 700.0f;				// 最大移動速度
-	constexpr float JUMP_FIRST_SPEED	= 22.3f;				// ジャンプの初速
+	constexpr float JUMP_FIRST_SPEED	= 1338.0f;				// ジャンプの初速
+	//constexpr float JUMP_FIRST_SPEED	= 22.3f;				// ジャンプの初速
 	const VECTOR3 FRICTION				= VECTOR3(80.0f,0.0f, 80.0f);			// 抵抗力
 	constexpr float MAX_VIEW			= 90.0f;				// マウス操作時のカメラの最大回転値の度
 	constexpr float HP_MAX				= 100.0f;				// 最大HP
@@ -138,7 +141,7 @@ Player::Player()
 	rayColl->SetTargetTag(COLLISION_OBJECT_KIND::GROUND_BLOCK);
 	rayColl->SetTargetTag(COLLISION_OBJECT_KIND::WALL_BLOCK);
 	rayColl->SetTargetTag(COLLISION_OBJECT_KIND::BACK_BLOCK);
-	rayColl->SetRayVec(START_RAY_POS, END_RAY_POS);
+	rayColl->SetRayDirection(START_RAY_POS, END_RAY_POS);
 	collOwnerNameList.insert(std::make_pair(collName, (int)COLLISION_KIND::RAY));
 
 	hitPositionInfoList.clear();
@@ -298,10 +301,16 @@ void Player::Update()
 		break;
 	case Player::PLAYER_STATE::DEATH:
 
+		// ゲームプレイ中でなかった場合
+		if (!gameController->InGame())
+			return;	// 以下のプレイヤーの処理を実行しない
 		DeathUpdate();
 		break;
 	case Player::PLAYER_STATE::RESPAWN:
 
+		// ゲームプレイ中でなかった場合
+		if (!gameController->InGame())
+			return;	// 以下のプレイヤーの処理を実行しない
 		Respawn();
 		break;
 	default:
@@ -369,7 +378,8 @@ const VECTOR3& Player::GetMouse()
 	SetMousePoint(Screen::WIDTH_CENTER, Screen::HEIGHT_CENTER);
 
 	// mouseMoveの値を代入する（感度調節のため1000で割る）
-	mouse.rePos		= VGet((float)mouse.movePos.x / 1000, (float)mouse.movePos.y / 1000, 0.0f);
+	mouse.rePos	= VECTOR3((float)mouse.movePos.x, (float)mouse.movePos.y, 0.0f);
+	mouse.rePos *= (BASE_CAMERA_SENSITIVITY * Time::GameDeltaTime());
 	return mouse.rePos;
 }
 
@@ -407,18 +417,23 @@ void Player::ActionUpdate()
 		{
 		case Player::DEBUG_STATE::NORMAL:
 
-			SetDeadViewRot(transform.rotation, mouse);
+			// GameControllerのデバッグモードをオフ
+			gameController->SetDebugFlag(false);
 
+			// カメラのデッドゾーン内に収める
+			SetDeadViewRot(transform.rotation, mouse);
 
 			camPos.y += CAM_ADD_POS_Y;
 
+			// ゲームプレイ中でなかった場合
+			if (!gameController->InGame())
+				break;	// 以下のプレイヤーの処理を実行しない
+
+			// 一人称でカメラ設定
 			camera->FirstPersonCamera(camPos, VECTOR2(transform.rotation.x, transform.rotation.y));
 
 			// ステージ編集をオフ
 			stageManager->SetStageEditorFlag(false);
-			
-			// ゲームコントローラーのデバッグモードをオフ
-			gameController->SetDebugFlag(false);
 
 			// 移動
 			MoveUpdate();
@@ -434,19 +449,26 @@ void Player::ActionUpdate()
 			break;
 		case Player::DEBUG_STATE::DEBUG:
 
+			// GameControllerのデバッグモードをオン
+			gameController->SetDebugFlag(true);
+
+			// カメラのデッドゾーン内に収める
 			SetDeadViewRot(dRotation, mouse);
+			
+			// 一人称でカメラ設定
 			camera->FirstPersonCamera(dPosition, VECTOR2(dRotation.x, dRotation.y));
 			
 			// ステージ編集モードをオン
 			stageManager->SetStageEditorFlag(true);
 
-			// ゲームコントローラーのデバッグモードをオン
-			gameController->SetDebugFlag(true);
-
-			DebugMove();
-
 			isInvincible = true;
 
+			// ゲームプレイ中でなかった場合
+			if (!gameController->InGame())
+				break;	// 以下のプレイヤーの処理を実行しない
+
+			// デバッグ移動
+			DebugMove();
 			break;
 		default:
 			assert(false);
@@ -477,8 +499,12 @@ void Player::MoveUpdate()
 
 	if (onGround)
 	{
+
+		/*velocity.y = 0.0f;*/
 		if (input->GetKeyConfigPut("MOVE_UP"))
-			setVelocity += VECTOR3(0, JUMP_FIRST_SPEED, 0);
+			velocity.y = JUMP_FIRST_SPEED * Time::GameDeltaTime();
+
+		//velocity.y = 0.0f;
 	}
 	// ヴェロシティの追加
 	velocity += setVelocity;
@@ -828,9 +854,13 @@ void Player::PushBackOnCollision(const CollisionHitInfoData& _targetData)
 		hitPos		= hitPosCon[0];	// 当たった座標を代入  レイの当たり判定は当たった場所が一か所
 
 		if (thisPos.y < hitPos.y)
+		{
 			pushVec = (thisPos + END_RAY_POS) - hitPos;
+		}
 		else
+		{
 			pushVec = (thisPos - START_RAY_POS) - hitPos;
+		}
 
 		// 重力をリセット
 		//physics->SetGravityVec(VZero);
@@ -979,9 +1009,13 @@ void Player::HPDraw()
 	{
 		// HPが1/4以下だったら
 		if (hp <= HP_MAX / 4)
+		{
 			hpGaugeColor = GetColor(255, 0, 0);		// HPをオレンジ色にする
+		}
 		else
+		{
 			hpGaugeColor = GetColor(243, 108, 33);	// HPをオレンジ色にする
+		}
 	}
 
 	// デフォルトのゲージの色を設定
@@ -993,7 +1027,7 @@ void Player::HPDraw()
 void Player::BulletChangeKeyDraw()
 {
 	float changeKeyDistance				= 120.0f;	// 弾の変更キー同士の距離
-	VECTOR2 changeKeyCenterDrawPos		= VECTOR2(450.0f, Screen::HEIGHT - 40.0f);								// 弾の変更キーの - を中心とした描画座標
+	VECTOR2 changeKeyCenterDrawPos		= VECTOR2(450.0f, Screen::HEIGHT - 40.0f);								// 弾の変更キーの ～ を中心とした描画座標
 	VECTOR2 leftSideChangeKeyDrawPos	= VECTOR2(changeKeyCenterDrawPos.x - changeKeyDistance / 2, changeKeyCenterDrawPos.y);	// 左側の変更キーの弾の描画座標
 	VECTOR2 rightSideChangeKeyDrawPos	= VECTOR2(changeKeyCenterDrawPos.x + changeKeyDistance / 2, changeKeyCenterDrawPos.y);	// 右側の変更キーの弾の描画座標
 	float keyDrawScale					= 2.0f;		// 弾の変更キーの描画スケール
@@ -1001,9 +1035,22 @@ void Player::BulletChangeKeyDraw()
 	// 1キーの描画
 	DrawRectRotaGraphF(leftSideChangeKeyDrawPos.x, leftSideChangeKeyDrawPos.y, 0, 0, 32, 32, keyDrawScale, 0.0f, hImage[UI_1_KEY], true);
 
-	// - の描画 //
-	VECTOR2 lineSize = VECTOR2(15.0f, 4.0f);	// 線の縦横幅
-	DrawBoxAA(changeKeyCenterDrawPos.x - lineSize.x, changeKeyCenterDrawPos.y - lineSize.y, changeKeyCenterDrawPos.x + lineSize.x, changeKeyCenterDrawPos.y + lineSize.y, 0xffffff, true);
+	// ～ の文字描画
+	int len = 5;
+	for (int i = 0;i < len;i++)
+	{
+		float size	= 5.0f;								// 文字の太さ
+		float x		= (leftSideChangeKeyDrawPos.x + changeKeyDistance / 2) + i * size;	// 文字の描画X座標
+		// ～の半分分ずらす
+		x -= (size * len) / 2;
+		
+		float y		= (float)changeKeyCenterDrawPos.y;	// 文字の描画Y座標
+		// サイン波で～の表現 ( + DegToRad * 180で波の開始位置を調整 )
+		y += (sinf(DegToRad * (i * 90) + DegToRad * 180) * size);
+
+		// DrawBoxAAでfloat値でも描画可能だが、少しぼやけて見えるので、intにキャストして描画
+		DrawBox((int)x, (int)y, (int)(x + size), (int)(y + size), 0xffffff, true);
+	}
 
 	// 2キーの描画
 	DrawRectRotaGraphF(rightSideChangeKeyDrawPos.x, rightSideChangeKeyDrawPos.y, 0, 0, 32, 32, keyDrawScale, 0.0f, hImage[UI_2_KEY], true);

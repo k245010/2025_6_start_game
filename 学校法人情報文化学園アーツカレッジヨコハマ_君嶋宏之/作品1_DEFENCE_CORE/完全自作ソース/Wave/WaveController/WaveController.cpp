@@ -21,13 +21,14 @@ namespace
 	//const int WAVE_MAX_NUM = 5;				// ウェーブの最大数
 	constexpr float ENEMY_SUMMON_COUNT		= 2.0f;	// 敵の召喚間隔
 	constexpr int MAX_PLAYER_SLIME_BULLET	= 10;	// プレイヤーのスライム弾の最大数
+
+	constexpr int SPAWN_POSITION_ROUND_NUMBER = 100;	// 召喚座標の丸めるレベルの数値
 }
 
 WaveController::WaveController()
 {
 	createEnemyContainer.clear();
-	summonPositionContainer.clear();
-
+	
 	waveState		= WAVE_STATE::STAY;
 
 	stageNumber		= 1;
@@ -50,7 +51,6 @@ WaveController::WaveController()
 WaveController::~WaveController()
 {
 	createEnemyContainer.clear();
-	summonPositionContainer.clear();
 	saveWaveDataList.clear();
 
 	for (int i = 0;i < W_MAX;i++)
@@ -70,13 +70,19 @@ void WaveController::Init()
 	player			= FindGameObject<Player>();
 	camera			= FindGameObject<Camera>();
 
-	if (stageManager == nullptr || enemyManager == nullptr || player == nullptr)
-		assert(false);
+	assert
+	(
+		stageManager != nullptr || 
+		enemyManager != nullptr || 
+		player != nullptr || 
+		camera != nullptr
+	);
 	
 	// プレイヤーのスライム弾を最大までリロード
 	player->PushSlimeBulletMax();
 
-	stageNumber		= stageManager->GetLoadStageNum();
+	if (stageManager != nullptr)
+		stageNumber = stageManager->GetLoadStageNum();
 
 	// ウェーブ情報の設定
 	SetWaveInfo();
@@ -137,8 +143,8 @@ void WaveController::Update()
 
 			if (waveNumber >= waveMax)
 			{
-				waveState = WAVE_STATE::END;	// ウェーブの完全終了状態にする
-				break;
+				waveState = WAVE_STATE::END;	
+				break;	// ウェーブの完全終了状態にする
 			}
 
 			//_ 次のウェーブへ _//
@@ -170,6 +176,19 @@ int WaveController::GetWaveFileMax(const int& _stageNum)
 	sprintfDx(setPath, "data/stage/stageData/stage_%.2d/wave", _stageNum);
 	
 	return FileSystemUtils::GetFileCount(setPath);
+}
+
+void WaveController::RoundToNearestNumber(int& _number, const int& _roundToNearest)
+{
+	int addNum = _roundToNearest - 1;	// _numberに対して加算する値
+
+	if (_number < 0)
+	{
+		// 符号を逆にする
+		addNum *= -1;
+	}
+	// 丸めた値を_numberへ設定
+	_number = (int)(((_number + addNum) / _roundToNearest) * _roundToNearest);
 }
 
 void WaveController::SetWaveInfo()
@@ -223,6 +242,11 @@ void WaveController::WaveSettingUpdate()
 
 	ImGui::SliderInt("enemyKind", &saveWaveData.enemyKind, (int)ENEMY_KIND::WALKER, (int)ENEMY_KIND::MAX - 1);
 	ImGui::SliderInt3("summonPos", &saveWaveData.summonPosition.x, -10000, 10000);
+
+	// XZ座標の値を丸める //
+	RoundToNearestNumber(saveWaveData.summonPosition.x, SPAWN_POSITION_ROUND_NUMBER);
+	RoundToNearestNumber(saveWaveData.summonPosition.z, SPAWN_POSITION_ROUND_NUMBER);
+
 	if (ImGui::Button("cameraPosToSummonPos"))
 	{
 		// 出現座標を現在のカメラ座標として設定
@@ -240,10 +264,10 @@ void WaveController::WaveSettingUpdate()
 		//SaveWave(std::unordered_map<int, std::list<WaveEnemyInfo::WaveEnemyData>>{{saveWaveNum, { saveWaveData }}}, stageNumber);
 
 		// 全ての情報を上書きする　ToDo:JsonSerializerの末尾追加が実装できたら、引数をfalseにして末尾追加する
-		SaveWaveToJson(saveWaveDataList,true);
+		SaveWaveToJson(saveWaveDataList, true);
 	}
 
-	// AddとBackDeleteを横に羅列
+	// AddSaveとBackDeleteを横に羅列
 	ImGui::SameLine();
 
 	if (ImGui::Button("BackDelete"))
@@ -255,9 +279,8 @@ void WaveController::WaveSettingUpdate()
 			{
 				// 末尾の敵一体のウェーブ情報を削除
 				saveWaveDataList[saveWaveNum].pop_back();
-				// 全てのデータを上書き保存する	// ToDo:削除するたびに全てのデータの再保存(上書き保存)するのは、効率が悪いので、一行データの削除に変更
-				//SaveWave(saveWaveDataList, stageNumber, true);
 
+				// 全ての情報を上書きする	// ToDo:削除するたびに全てのデータの再保存(上書き保存)するのは、効率が悪いので、一行データの削除に変更
 				SaveWaveToJson(saveWaveDataList, true);
 			}
 		}
@@ -273,9 +296,8 @@ void WaveController::WaveSettingUpdate()
 		{
 			// saveWaveNumと一致する全てのデータの削除
 			saveWaveDataList[saveWaveNum].clear();
-			// 全てのデータを上書き保存する	// ToDo:削除するたびに全てのデータの再保存(上書き保存)するのは、効率が悪いので、一行データの削除に変更
-			//SaveWave(saveWaveDataList, stageNumber, true);
 
+			// 全ての情報を上書きする
 			SaveWaveToJson(saveWaveDataList, true);
 		}
 	}
@@ -493,21 +515,36 @@ bool WaveController::LoadWave(const int& _stageNum, const int& _waveNum)
 {
 	// コンテナのウェーブ情報をリセット //
 	createEnemyContainer.clear();
-	summonPositionContainer.clear();
 
-	std::unordered_multimap<int, VECTOR3I> loadWaveCon = std::move(GetWaveData(_stageNum, _waveNum));
+	// 全てのスポナーの削除
+	stageManager->DeleteAllSpawner();
+
+	std::unordered_set<VECTOR3I> spawnerPutPositionList;															// スポナー設置座標コンテナ
+	std::unordered_multimap<int, VECTOR3I> loadWaveCon = std::move(GetWaveData(_stageNum, _waveNum));	// ロードしたウェーブ情報コンテナ
 
 	if (loadWaveCon.empty())
-		return false;
+		return false;	// ウェーブのデータが存在しなかったら
 
-	for (const auto& wave : loadWaveCon)
+	for (auto& wave : loadWaveCon)
 	{
+		VECTOR3 summonPosition = VECTOR3(wave.second);	// 召喚座標
+
 		// 召喚する敵の情報をpush
 		createEnemyContainer.emplace(wave.first, wave.second);
-
-		// 座標のpush
-		summonPositionContainer.emplace(wave.second);
+		// スポナーを設置する座標をpush
+		spawnerPutPositionList.insert(summonPosition);
 	}
+
+	for (const auto& putPos : spawnerPutPositionList)
+	{
+		VECTOR3 summonPosition = VECTOR3(putPos);	// 設置座標
+
+		// 地面との当たり判定をして埋もれないようにする
+		stageManager->CheckRaycastStageObject(summonPosition + VECTOR3(0, 200, 0), summonPosition + VECTOR3(0, -1000, 0), std::set<int>{(int)StageObjectData::STAGE_OBJECT_KIND::GROUND_BLOCK}, &summonPosition);
+		// スポナーの設置
+		stageManager->PutSpawner(summonPosition);
+	}
+
 	return true;
 }
 
@@ -527,13 +564,13 @@ void WaveController::Draw()
 
 	//_ 敵の出現座標の描画 _//
 
-	for (const auto& spawnPosition : summonPositionContainer)
+	/*for (const auto& spawnPosition : summonPositionContainer)
 	{
 		VECTOR3 radius		= VOne * 50.0f;
 		VECTOR3 position	= VGet((float)spawnPosition.x, (float)spawnPosition.y, (float)spawnPosition.z);
 
 		DrawCube3D(position - radius, position + radius, 0x990000, 0xffffff, true);
-	}
+	}*/
 
 	//_ ウェーブ情報を設定するときの描画 _//
 
@@ -580,8 +617,8 @@ void WaveController::UIDraw()
 			// WAVE 文字の描画
 			DrawRotaGraph(Screen::WIDTH_CENTER - 70, drawWaveInfoY, 1.0f, 0.0f, waveUIImage[W_WAVE], true);
 
-			float waveNumScale = 1.0f;							// ウェーブナンバーのスケール
-			VECTOR2I waveNumSize = VECTOR2I(794 / 10, 159 / 2);	// ウェーブナンバー一桁のサイズ
+			float waveNumScale		= 1.0f;							// ウェーブナンバーのスケール
+			VECTOR2I waveNumSize	= VECTOR2I(794 / 10, 159 / 2);	// ウェーブナンバー一桁のサイズ
 
 			// ウェーブナンバーの描画
 			DrawRotaNum((float)(Screen::WIDTH_CENTER + 70), (float)drawWaveInfoY, waveNumber, waveNumSize.x, waveUIImage[W_NUMBER], waveNumSize.x, waveNumSize.y, 0, waveNumScale, 0.0f, 1);

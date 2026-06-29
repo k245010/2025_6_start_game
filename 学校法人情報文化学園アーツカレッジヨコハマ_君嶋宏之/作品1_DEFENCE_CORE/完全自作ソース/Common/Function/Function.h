@@ -1,6 +1,108 @@
 #pragma once
 #include "../../../Library/myDxLib.h"
+#include "../../../ImGui/imgui.h"
 #include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <string>
+
+/// <summary>
+///								ImGui::Comboを使ってリスト内の文字列の選択を行う
+/// </summary>
+/// <param name="_beginName">	ImGui::Comboの名前										</param>
+/// <param name="_list">		表示する文字列のリスト									</param>
+/// <param name="_selectStr">	選択された文字列参照									</param>
+/// <param name="_selectFlag">	選択されたフラグ参照									</param>
+inline void DrawImGuiCombo(const std::string& _beginName, const std::unordered_set<std::string>& _list, std::string& _selectStr, bool& _selectFlag)
+{
+	if (ImGui::BeginCombo(_beginName.c_str(), _selectStr.c_str()))
+	{
+		for (const auto& list : _list)
+		{
+			if (ImGui::Selectable(list.c_str()))
+			{
+				_selectStr	= list;
+				_selectFlag = true;
+			}
+		}
+		ImGui::EndCombo();
+	}
+}
+
+/// <summary>
+///								ImGui::Comboを使ってリスト内の文字列の選択を行う
+/// </summary>
+/// <param name="_beginName">	ImGui::Comboの名前										</param>
+/// <param name="_list">		表示する文字列のリスト									</param>
+/// <param name="_selectStr">	選択された文字列参照									</param>
+/// <param name="_selectFlag">	選択されたフラグ参照									</param>
+inline void DrawImGuiCombo(const std::string& _beginName, const std::set<std::string>& _list, std::string& _selectStr, bool& _selectFlag)
+{
+	if (ImGui::BeginCombo(_beginName.c_str(), _selectStr.c_str()))
+	{
+		for (const auto& list : _list)
+		{
+			if (ImGui::Selectable(list.c_str()))
+			{
+				_selectStr	= list;
+				_selectFlag = true;
+			}
+		}
+		ImGui::EndCombo();
+	}
+}
+
+/// <summary>
+///								ImGui::Comboを使ってリスト内の文字列の選択を行う
+/// </summary>
+/// <param name="_beginName">	ImGui::Comboの名前										</param>
+/// <param name="_list">		表示する文字列のリスト									</param>
+/// <param name="_selectStr">	選択された文字列参照									</param>
+/// <param name="_selectFlag">	選択されたフラグ参照									</param>
+inline void DrawImGuiCombo(const std::string& _beginName, const std::vector<std::string>& _list, std::string& _selectStr, bool& _selectFlag)
+{
+	if (ImGui::BeginCombo(_beginName.c_str(), _selectStr.c_str()))
+	{
+		for (const auto& list : _list)
+		{
+			if (ImGui::Selectable(list.c_str()))
+			{
+				_selectStr	= list;
+				_selectFlag = true;
+			}
+		}
+		ImGui::EndCombo();
+	}
+}
+
+/// <summary>
+///								文字列のリストを表示する
+/// </summary>
+/// <param name="_beginName">	Textを表示するウィンドウの名前		</param>
+/// <param name="_stringList">	文字列のリスト						</param>
+inline void DrawImGuiTextList(const std::string& _beginName, const std::unordered_map<std::string, std::string>& _stringList, const ImVec2& _sliderSize = ImVec2(225.0f, 100.0f))
+{
+	ImGui::BeginChild(_beginName.c_str(), _sliderSize, false, 1);
+
+	for (const auto& string : _stringList)
+	{
+		//_ データの出力 _//
+
+		ImGui::TextUnformatted(string.first.c_str());
+
+		// valueが空だったら
+		if (string.second.empty())
+			continue;	// 表示する文字列がないので、continue
+
+		ImGui::SameLine();
+		ImGui::TextUnformatted(string.second.c_str());
+	}
+	// データリストの一番下へスクロール　常に最新のデータを見るため
+	if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+		ImGui::SetScrollHereY(1.0f);
+
+	ImGui::EndChild();
+}
 
 /// <summary>
 ///								unordered_mapコンテナがキーを持っているか返す
@@ -10,7 +112,7 @@
 /// <param name="_doAssert">	assertを実行するかどうか					</param>
 /// <returns>					true:持っている / false:持っていない		</returns>
 template<typename TKey, typename TValue>
-bool HasUnorderedMapContainerKey(const std::unordered_map<TKey, TValue>& _con, const TKey& _key, bool _doAssert = false)
+inline bool HasUnorderedMapContainerKey(const std::unordered_map<TKey, TValue>& _con, const TKey& _key, bool _doAssert = false)
 {
 	const std::unordered_map<TKey, TValue>::const_iterator itr = _con.find(_key);
 

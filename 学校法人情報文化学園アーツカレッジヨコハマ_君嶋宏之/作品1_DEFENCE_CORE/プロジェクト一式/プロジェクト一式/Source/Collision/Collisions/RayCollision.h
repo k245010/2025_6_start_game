@@ -50,33 +50,33 @@ public:
 	bool CollisionToModel(ModelCollision* col) override;
 
 	/// <summary>
-	/// レイのベクトルを返す
+	/// レイの方向ベクトルを返す
 	/// </summary>
 	/// <returns> レイの方向ベクトル </returns>
-	const VECTOR3& GetRayVec() const { return rayVec; }
+	const VECTOR3& GetRayDirection() const { return rayVec; }
 
 	/// <summary>
-	/// レイの原点座標を返す
+	/// レイの始点を返す
 	/// </summary>
-	/// <returns> レイの原点座標 </returns>
+	/// <returns> レイの原点 </returns>
 	const VECTOR3& GetCenter() const { return centerPos; }
 
 	/// <summary>
-	/// レイの届く座標を返す
+	/// レイの終点を返す
 	/// </summary>
-	/// <returns> レイの届く座標 </returns>
+	/// <returns> レイの終点 </returns>
 	const VECTOR3& GetTarget() const { return targetPos; }
 
 	/// <summary>
-	/// レイのベクトルを設定
+	/// レイの方向ベクトルを設定
 	/// </summary>
-	/// <param name="_pos1"> 原点座標 </param>
-	/// <param name="_pos2"> 届く座標 </param>
-	void SetRayVec(const VECTOR3& _pos1, const VECTOR3& _pos2)
+	/// <param name="_pos1"> 始点 </param>
+	/// <param name="_pos2"> 終点 </param>
+	void SetRayDirection(const VECTOR3& _pos1, const VECTOR3& _pos2)
 	{ 
-		centerPos = _pos1;
-		targetPos = _pos2;
-		rayVec = _pos2 - _pos1; 
+		centerPos	= _pos1;
+		targetPos	= _pos2;
+		rayVec		= _pos2 - _pos1; 
 	}
 
 private:

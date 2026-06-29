@@ -41,7 +41,7 @@ namespace
 	//constexpr float DEFAULT_SHOT_DISTANCE			= StageInfo::BLOCK_SIZE * 5.0f;	// レベル1の射程距離
 }
 
-TurretBase::TurretBase(const Transform& _trans, const int& _hModel, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _hModel, _kind, _hp, _putPlaceKind)
+TurretBase::TurretBase(const Transform& _trans, const ModelData& _modelData, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : EntityBase(_trans, _modelData, _kind, _hp, _putPlaceKind)
 {
 	obbColl->SetTagMe(COLLISION_OBJECT_KIND::TURRET);
 	obbColl->SetTargetTag(COLLISION_OBJECT_KIND::ERASER);
@@ -242,7 +242,6 @@ void TurretBase::MaintainWarnigDraw()
 
 void TurretBase::MaintainKeyDraw()
 {
-	
 	VECTOR3 playerPosition		= EntityController::GetEntityController()->GetPlayerTransform().position;	// プレイヤー座標
 	const float squareDistance	= VSquareSize(playerPosition - transform.position);							// プレイヤーとの距離の二乗
 

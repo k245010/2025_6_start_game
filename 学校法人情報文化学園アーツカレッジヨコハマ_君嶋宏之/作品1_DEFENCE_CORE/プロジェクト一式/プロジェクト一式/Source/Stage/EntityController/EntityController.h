@@ -44,6 +44,7 @@ public:
 	static bool IsActiveInstance() { return isActiveInstance; }
 
 	void Update();
+	void Draw();
 
 	/// <summary>
 	///						ƒ^ƒŒƒbƒgî•ñ‚ÌUI•`‰æ‚ğ‚·‚é‚©‚Ç‚¤‚©İ’è‚·‚é

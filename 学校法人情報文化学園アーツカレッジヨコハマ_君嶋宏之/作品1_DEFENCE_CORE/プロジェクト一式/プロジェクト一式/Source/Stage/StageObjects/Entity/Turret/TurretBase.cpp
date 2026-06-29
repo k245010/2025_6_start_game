@@ -242,7 +242,6 @@ void TurretBase::MaintainWarnigDraw()
 
 void TurretBase::MaintainKeyDraw()
 {
-	
 	VECTOR3 playerPosition		= EntityController::GetEntityController()->GetPlayerTransform().position;	// プレイヤー座標
 	const float squareDistance	= VSquareSize(playerPosition - transform.position);							// プレイヤーとの距離の二乗
 

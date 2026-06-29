@@ -178,7 +178,7 @@ bool EnemyManager::CheckRaycastStageObject(const VECTOR3& _pos1, const VECTOR3& 
 
 void EnemyManager::DropCoin(const VECTOR3& _pos)
 {
-	stageManager->CreateStageObject(_pos, StageObjectData::STAGE_OBJECT_KIND::COIN);
+	stageManager->PutStageObject(_pos, StageObjectData::STAGE_OBJECT_KIND::COIN);
 }
 
 void EnemyManager::Update()

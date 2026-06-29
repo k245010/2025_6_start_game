@@ -44,6 +44,7 @@ public:
 	static bool IsActiveInstance() { return isActiveInstance; }
 
 	void Update();
+	void Draw();
 
 	/// <summary>
 	///						タレット情報のUI描画をするかどうか設定する
@@ -69,10 +70,10 @@ public:
 	/// <summary>
 	///							エンティティを召喚をするための関数
 	/// </summary>
-	/// <param name="_trans">	トランスフォーム </param>
-	/// <param name="_kind">	ステージオブジェクトの種類 </param>
-	/// <returns>				成功：設置したオブジェクトのトランスフォームポインタ / 失敗:nullptr </returns>
-	const Transform* SummonEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
+	/// <param name="_trans">	トランスフォーム							</param>
+	/// <param name="_kind">	ステージオブジェクトの種類					</param>
+	/// <returns>				StageObjectBaseポインタ:成功 / nullptr:失敗 </returns>
+	StageObjectBase* SummonEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
 
 	/// <summary>
 	/// 一番近くの敵のトランスフォームを返す
@@ -219,10 +220,10 @@ private:
 	/// <summary>
 	///							エンティティの召喚
 	/// </summary>
-	/// <param name="_trans">	トランスフォーム </param>
-	/// <param name="_kind">	ステージオブジェクトの種類											</param>
-	/// <returns>				成功:生成したオブジェクトのトランスフォームポインタ	/ 失敗:nullptr	</returns>
-	const Transform* CreateEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
+	/// <param name="_trans">	トランスフォーム						</param>
+	/// <param name="_kind">	ステージオブジェクトの種類				</param>
+	/// <returns>				EntityBaseポインタ:成功 / nullptr:失敗	</returns>
+	EntityBase* CreateEntity(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind);
 
 	/// <summary>
 	/// タレット情報のUI描画処理

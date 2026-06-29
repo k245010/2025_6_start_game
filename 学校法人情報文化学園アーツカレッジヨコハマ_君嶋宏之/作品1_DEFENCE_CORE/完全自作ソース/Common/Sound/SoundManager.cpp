@@ -38,6 +38,7 @@ void SoundManager::Init()
 	SoundIDToLoad(Sound_ID::WALL_BROKEN_SE,				150);
 	SoundIDToLoad(Sound_ID::CORE_DAMAGE_SE,				150);
 	SoundIDToLoad(Sound_ID::CORE_BROKEN_SE,				150);
+	SoundIDToLoad(Sound_ID::SPIKE_BROKEN_SE,			150);
 	SoundIDToLoad(Sound_ID::ENEMY_DAMAGE_SE,			150);
 	SoundIDToLoad(Sound_ID::ENEMY_ATTACK_SE,			255);
 	SoundIDToLoad(Sound_ID::ENEMY_DEATH_SE,				255);

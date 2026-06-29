@@ -63,4 +63,10 @@ public:
 	/// </summary>
 	/// <returns>	自身のトランスフォーム			</returns>
 	virtual const Transform& GetTransform() const = 0;
+
+	/// <summary>
+	///						罠情報の描画をするかどうか設定
+	/// </summary>
+	/// <param name="_set">	true:描画する / false:描画しない	</param>
+	//virtual void SetTrapInfoDrawFlag(bool _set) = 0;
 };

@@ -159,8 +159,7 @@ private:
 	WAVE_STATE waveState;	// ウェーブの状態
 	float summonCountdown;	// 敵の生成カウントダウン
 	std::unordered_multimap<int,VECTOR3I> createEnemyContainer;							// ウェーブごとの敵を管理するコンテナ
-	std::unordered_map<const StageObjectBase*, VECTOR3I> summonPositionContainer;		// 敵の召喚座標から出現場所の描画を行うための、座標管理コンテナ key:スポナーのポインタ,召喚座標
-
+	
 	int saveWaveNum = 1;																// 書き出しするウェーブナンバー
 	WaveEnemyInfo::WaveEnemyData saveWaveData;											// 書き出しするウェーブデータ
 	std::unordered_map<int, std::list<WaveEnemyInfo::WaveEnemyData>> saveWaveDataList;	// 書き出しするウェーブデータのコンテナ	 key:ウェーブナンバー / value:ウェーブデータのコンテナ

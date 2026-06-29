@@ -233,6 +233,7 @@ void StageManager::DrawTrapImpactRadius(const VECTOR3& _pos, const float& _radiu
 	// 補助線
 	//DrawLine3D(_pos, _pos + VECTOR3(0.0f, _radius, 0.0f), 0xff0000);
 
+	// ライトの影響をオフ
 	SetUseLighting(false);
 
 	//_ 罠の影響範囲描画 _//
@@ -245,6 +246,7 @@ void StageManager::DrawTrapImpactRadius(const VECTOR3& _pos, const float& _radiu
 	// 円形モデルの描画
 	MV1DrawModel(circleModel);
 
+	// ライトの影響をオン
 	SetUseLighting(true);
 }
 
@@ -336,6 +338,9 @@ void StageManager::SaveStage(const int& _stageNum, bool _override)
 
 	for (const auto& stageObject : GetAllStageObject())
 	{
+		if (stageObject->GetStageObjectKind() == StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK)
+			continue;	// スポナーは動的にWaveControllerが設置をStageManagerに要請するので、ステージ情報として書き出さない
+
 		// 座標
 		data.emplace_back(std::to_string(stageObject->GetTransform().position.x));
 		data.emplace_back(std::to_string(stageObject->GetTransform().position.y));
@@ -568,16 +573,30 @@ bool StageManager::CreatePutPointStageObject(const VECTOR3& _cm, const StageObje
 		if (putPointIndexPtr == nullptr)
 			return false;	// 当たった座標から一番近い、配置ポイントのデータが見つからなかったので、return
 
-		const Transform& playerTransfrom	= GetPlayerTransform();
-		float minDistance					= playerTransfrom.GetLenX() / 2 + (StageInfo::BLOCK_SIZE / 2);			// プレイヤーとステージオブジェクトが当たらない、最小距離
-		float squareDistance				= VSquareSize(playerTransfrom.position - putPointIndexPtr->position);	// プレイヤー座標と、当たった座標の二乗距離
+		const Transform& playerTransform = GetPlayerTransform();
 
-		if (squareDistance < (minDistance * minDistance))
-			return false;	// プレイヤーの半径よりも、当たった座標近かったら、設置を行わず、return
+		if (!CanPutStageObject(playerTransform, putPointIndexPtr->position))
+			return false;	// プレイヤーと重なり、配置ができないとき　return
+
+		const std::list<const StageObjectBase*>& spawnerList = BlockController::GetBlockController()->GetSpawnerList();	// スポナーリスト
+
+		for (const auto& spawner : spawnerList)
+		{
+			if (!CanPutStageObject(spawner->GetTransform(), putPointIndexPtr->position))
+				return false;	// スポナーと重なり、配置ができないとき  return
+		}
 
 		return CreatePutPointStageObject(putPointIndexPtr, _kind);
 	}
 	return false;
+}
+
+bool StageManager::CanPutStageObject(const Transform& _targetTransform,const VECTOR3& _putPointIndexPos)
+{
+	float minDistance		= _targetTransform.GetLenX() / 2 + (StageInfo::BLOCK_SIZE / 2);	// 対象とステージオブジェクトが当たらない、最小距離
+	float squareDistance	= VSquareSize(_targetTransform.position - _putPointIndexPos);	// 対象座標と、当たった座標の二乗距離
+
+	return squareDistance > (minDistance * minDistance);
 }
 
 bool StageManager::CreatePutPointStageObject(PutPointIndexData* _putPointIndexDataPtr, const StageObjectData::STAGE_OBJECT_KIND& _kind)
@@ -971,7 +990,7 @@ const std::unordered_map<int, int> StageManager::GetRawModelHandles()
 	return re;
 }
 
-bool StageManager::PushInterfaceTrapList(StageObjectBase* _stageObj)
+bool StageManager::PushRequestInterfaceTrapList(StageObjectBase* _stageObj)
 {
 	// 引数のステージオブジェクトが罠に分類されなかったら
 	if (!TrapInfo::IsTrapStageObjectKind(_stageObj->GetStageObjectKind()))

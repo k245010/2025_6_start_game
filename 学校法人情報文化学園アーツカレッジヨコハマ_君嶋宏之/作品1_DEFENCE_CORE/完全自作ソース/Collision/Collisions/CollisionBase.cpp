@@ -6,7 +6,7 @@
 #include "ModelCollision.h"
 #include <assert.h>
 
-CollisionBase::CollisionBase(Transform* _trans, const COLLISION_OBJECT_KIND& _tagMe, const std::string& _ownerName, std::function<bool(const CollisionHitInfoData&)> func, bool _onHitDeleteMe)
+CollisionBase::CollisionBase(Transform* _trans, const COLLISION_OBJECT_KIND& _tagMe, const std::string& _ownerName, std::function<bool(const CollisionHitInfoData&)> _func, bool _onHitDeleteMe)
 {
 	collTransform.trans				= _trans;
 	collTransform.lastPosition		= VZero;
@@ -17,7 +17,7 @@ CollisionBase::CollisionBase(Transform* _trans, const COLLISION_OBJECT_KIND& _ta
 	collisionHitInfoData.onDeleteMe	= _onHitDeleteMe;
 	collisionHitInfoData.hitPointData.reset();
 
-	collFunction					= func;
+	collFunction					= _func;
 	//onDeleteMe = false;
 	isActive						= true;
 
@@ -76,19 +76,16 @@ bool CollisionBase::SetTargetTag(COLLISION_OBJECT_KIND _kind)
 
 bool CollisionBase::SetTargetTag(COLLISION_OBJECT_KIND _kind, float _damage)
 {
-	// “–‚½‚è”»’è‚ğ‚·‚é‘Šè‚ÌCOLLISION_OBJECT_KIND‚ğ“o˜^
-	SetTargetTag(_kind);
-
-	// ƒŠƒXƒg“à‚É“o˜^‚³‚ê‚Ä‚½‚ç
-	if(HasTargetTag(_kind))
+	// “–‚½‚è”»’è‚ğ‚·‚é‘Šè‚ÌCOLLISION_OBJECT_KIND‚ğ“o˜^‚µ‚Ä¬Œ÷‚µ‚½‚ç
+	if(SetTargetTag(_kind))
 	{
-		for (auto& _targetDamageData : collisionHitInfoData.targetDamageData)
+		for (auto& targetDamageData : collisionHitInfoData.targetDamageData)
 		{
 			// ‚·‚Å‚ÉCOLLISION_OBJECT_KIND‚ª“o˜^‚³‚ê‚Ä‚¢‚½‚ç
-			if (_targetDamageData.targetKind == _kind)
+			if (targetDamageData.targetKind == _kind)
 			{
 				// ƒ_ƒ[ƒW‚Ì‘ã“ü
-				_targetDamageData.targetDamage = _damage;
+				targetDamageData.targetDamage = _damage;
 				return true;	// ƒ_ƒ[ƒW‚Ì“o˜^‚¾‚Å‚«‚½‚Ì‚ÅAreturn
 			}
 		}

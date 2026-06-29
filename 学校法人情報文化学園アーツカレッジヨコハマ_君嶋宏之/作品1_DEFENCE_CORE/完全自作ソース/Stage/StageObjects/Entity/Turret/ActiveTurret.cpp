@@ -7,7 +7,7 @@ namespace
     constexpr float MAX_ACTIVE_TIME = 5.0f; // ç≈ëÂìÆçÏéûä‘
 }
 
-ActiveTurret::ActiveTurret(const Transform& _trans, const int& _hModel, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : TurretBase(_trans, _hModel,StageObjectData::STAGE_OBJECT_KIND::ACTIVE_TURRET, _hp, _putPlaceKind)
+ActiveTurret::ActiveTurret(const Transform& _trans, const ModelData& _modelData, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : TurretBase(_trans, _modelData,StageObjectData::STAGE_OBJECT_KIND::ACTIVE_TURRET, _hp, _putPlaceKind)
 {
     canShot = false;
 

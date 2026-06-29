@@ -2,7 +2,7 @@
 #include "../../../../Gun/Gun/Gun.h"
 #include "../../../../Gun/GunDataSerializer/GunDataSerializer.h"
 
-AutoTurret::AutoTurret(const Transform& _trans, const int& _hModel, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : TurretBase(_trans, _hModel,StageObjectData::STAGE_OBJECT_KIND::AUTO_TURRET, _hp, _putPlaceKind)
+AutoTurret::AutoTurret(const Transform& _trans, const ModelData& _modelData, const int& _hp, const PUT_PLACE_KIND& _putPlaceKind) : TurretBase(_trans, _modelData,StageObjectData::STAGE_OBJECT_KIND::AUTO_TURRET, _hp, _putPlaceKind)
 {
 	std::string filePath = GunDataSerializer::GetGunDataDirectoryPath() + "turret/gun_0.json";
 	
@@ -53,8 +53,8 @@ AutoTurret::AutoTurret(const Transform& _trans, const int& _hModel, const int& _
 			bulletHitPosEffectKind
 		);
 	
-	gun = new Gun(transform, 0, filePath, this);
 	*/
+	gun = new Gun(transform, 0, filePath, this);
 
 	// Gun‚ÌInit‚ðŒÄ‚Ô
 	TurretBase::GunInit();

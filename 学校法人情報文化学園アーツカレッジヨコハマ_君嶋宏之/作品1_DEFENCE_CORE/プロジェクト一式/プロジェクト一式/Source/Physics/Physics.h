@@ -20,8 +20,8 @@ public:
 	Physics(Transform& _trans,VECTOR3& _vel, const VECTOR3& _fric,const float& _dis,bool _gravity = false);
 	~Physics();
 
-	void Update() override;
-	void Draw() override;
+	void Update()	override;
+	void Draw()		override;
 
 	/// <summary>
 	///						–€C—Í‚ğİ’è

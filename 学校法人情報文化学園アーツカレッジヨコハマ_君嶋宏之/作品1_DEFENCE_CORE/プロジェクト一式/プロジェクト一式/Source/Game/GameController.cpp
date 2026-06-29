@@ -160,7 +160,7 @@ void GameController::Update()
 {
 	//_ マウスポインタ描画の切り替え _//
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
 
 	bool copyUseImGuiMouse = useImGuiMouse;					// onImGuiWindowのフラグ変更・不変更前の状態を保持
 	useImGuiMouse = ImGui::GetIO().WantCaptureMouse;	// ImGuiでマウス入力を使っているかのフラグを代入
@@ -172,7 +172,7 @@ void GameController::Update()
 		SetMouseDispFlag(useImGuiMouse);
 	}
 
-#endif // !_DEBUG
+//#endif // !_DEBUG
 
 	//__ GameStateの切り替え __//
 
@@ -271,6 +271,11 @@ void GameController::Update()
 		break;
 	case GameController::GAME_STATE::DEFEAT:
 	case GameController::GAME_STATE::VICTORY:
+
+		// 罠の影響範囲を描画しない
+		stageManager->SetDrawTrapImpactRadiusFlag(false);
+		// 罠のトラップ情報の描画をしない
+		stageManager->SetTurretInfoUIDrawFlag(false);
 
 		if (inputManager->GetKeyConfigPut("NEXT"))
 		{
@@ -712,10 +717,11 @@ void GameController::SettingUIDraw()
 	{
 		float size	= 5.0f;							// 文字の太さ
 		float x		= (trapSelectKeyPos.x + trapSelectKeysDistance / 2) + i * size;// 文字の描画X座標
+		
 		// ～の半分分ずらす
 		x -= (size * len) / 2;						
+		
 		float y		= (float)trapSelectKeyPos.y;	// 文字の描画Y座標
-
 		// サイン波で～の表現 ( + DegToRad * 180で波の開始位置を調整 )
 		y += (sinf(DegToRad * (i * 90) + DegToRad * 180) * size);
 
@@ -853,22 +859,22 @@ bool GameController::StageObjectSetting(const SETTING_WAY_STATE& _mode)
 
 #if TEST_STAGE_OBJECT_PUT_POINT
 	
-	putTransform.position	= stageManager->GetStageObjectPutPointSelectPosition();
+	//putTransform.position	= stageManager->GetStageObjectPutPointSelectPosition();
 #else
-	putTransform.position	= GetScreenForWorldPosI(screenPos, _mode);
+	//putTransform.position	= GetScreenForWorldPosI(screenPos, _mode);
 
 	// ブロックモデルの座標に影響される
-	putTransform.position.y = 0.0f;
+	//putTransform.position.y = 0.0f;
 #endif
 	
 	if (inputManager->GetKeyConfigPut("PUT_TRAP"))
 	{
 		// ステージオブジェクトの配置
 #if 0 // Blockモデルが白のモデルの時
-		putTransform.size = VOne * 100.0f;
+		//putTransform.size = VOne * 100.0f;
 #else // Blockモデルが黒のモデルの時
 
-		switch ((StageObjectData::STAGE_OBJECT_KIND)putTrapKind)
+		/*switch ((StageObjectData::STAGE_OBJECT_KIND)putTrapKind)
 		{
 		case StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK:
 
@@ -881,7 +887,7 @@ bool GameController::StageObjectSetting(const SETTING_WAY_STATE& _mode)
 			putTransform.size	= VOne * 100.0f;
 			break;
 		}
-		putTransform.position.y += (putTransform.scale.y * putTransform.size.y) / 2;
+		putTransform.position.y += (putTransform.scale.y * putTransform.size.y) / 2;*/
 #endif
 		PutStageObject();
 		isObjectSettingControll = true;

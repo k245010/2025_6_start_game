@@ -7,6 +7,8 @@
 #include "../StageObjects/Block/SpikeBlock.h"
 #include "../StageObjects/Block/SwampBlock.h"
 #include "../StageObjects/Block/CoreBlock.h"
+#include "../StageObjects/Block/SpawnerBlock.h"
+#include "../StageObjects/Block/BackBlockBase.h"
 
 // 各エンティティクラス
 //#include "TurretBase.h"
@@ -18,7 +20,7 @@
 #include "../../../Library/DebugNew.h"
 
 BlockController* BlockController::objectMe	= nullptr;
-bool BlockController::isActiveInstance		= true;					// インスタンスがnewされているかのフラグ
+bool BlockController::isActiveInstance		= true;		// インスタンスがnewされているかのフラグ
 
 BlockController::BlockController()
 {
@@ -32,11 +34,11 @@ void BlockController::Init(StageManager* _stageManager)
 	stageManager = _stageManager;
 	assert(stageManager != nullptr);
 
-	const std::unordered_map<int, std::vector<int>>& handls = GetRawModelHandle();	// モデルハンドルコンテナを取得
+	const std::unordered_map<int, std::vector<int>>& handls = GetRawModelHandles();	// モデルハンドルコンテナを取得
 
 	for (auto& handl : handls)
 	{
-		hModel[handl.first] = handl.second;
+		hModels[handl.first] = handl.second;
 	}
 
 	for (auto& handl : handls)
@@ -47,12 +49,14 @@ void BlockController::Init(StageManager* _stageManager)
 
 BlockController::~BlockController()
 {
-	for (auto& model : hModel)
+	for (auto& model : hModels)
 	{
 		for (auto& levelModel : model.second)
+		{
 			MV1DeleteModel(levelModel);
+		}
 	}
-	hModel.clear();
+	hModels.clear();
 	
 	for (auto& preModel : hPreviewModel)
 	{
@@ -62,7 +66,11 @@ BlockController::~BlockController()
 
 	StageManagerForDeleteBlock();
 
-	BlockController::isActiveInstance	= false;
+	assert(spawnerList.empty());
+
+	spawnerList.clear();
+
+	BlockController::isActiveInstance = false;
 }
 
 BlockController* BlockController::GetBlockController()
@@ -97,81 +105,101 @@ void BlockController::DrawTrapPutPreview(const Transform& _trans, const StageObj
 	MV1DrawModel(hPreviewModel[(int)_kind]);
 }
 
-// 今後kindに応じた生成に変更
-const Transform* BlockController::PutBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
+StageObjectBase* BlockController::PutBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
 {
-	//stageManager->ChangedStageObject();
-
-	return CreateBlock(_trans, _kind, STAGE_OBJECT_CREATE_WAY::DYNAMIC);
+	return CreateBlock(_trans, _kind, 0, STAGE_OBJECT_CREATE_WAY::DYNAMIC);
 }
 
-const Transform* BlockController::CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, const STAGE_OBJECT_CREATE_WAY& createWay)
+StageObjectBase* BlockController::CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _useModelIndex)
 {
-	BlockBase* obj = nullptr;
+	return CreateBlock(_trans, _kind, _useModelIndex, STAGE_OBJECT_CREATE_WAY::STATIC);
+}
+
+BlockBase* BlockController::CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind, const int& _useModelIndex, const STAGE_OBJECT_CREATE_WAY& _createWay)
+{
+	BlockBase* blockObject = nullptr;
 	
 	// ハンドルコンテナのキーが見つからなかったら
-	if (hModel.find((int)_kind) == hModel.end())
+	if (hModels.find((int)_kind) == hModels.end())
 		assert(false);
+
+	assert(hModels[(int)_kind].size() > _useModelIndex);
+
+	const StageObjectBase::ModelData& modelData = StageObjectBase::ModelData(hModels[(int)_kind][_useModelIndex], _useModelIndex);	// 使用するモデルハンドルデータ
 
 	switch (_kind)
 	{
 	case StageObjectData::STAGE_OBJECT_KIND::GROUND_BLOCK:
 
-		if (createWay == STAGE_OBJECT_CREATE_WAY::DYNAMIC)
-			return nullptr;	// 地面ブロックはユーザーは生成できないようにする
-		obj = new GroundBlock(_trans, *hModel[(int)_kind].begin(), StageObjectData::GetStageObjectHPConfig(_kind));
+		if (_createWay == STAGE_OBJECT_CREATE_WAY::DYNAMIC)
+			return nullptr;	// 地面ブロックはプレイヤーが生成できないようにする
+		blockObject = new GroundBlock(_trans, modelData, StageObjectData::GetStageObjectHPConfig(_kind));
 		break;
 	case StageObjectData::STAGE_OBJECT_KIND::WALL_BLOCK:
 
-		obj = new WallBlock(_trans, *hModel[(int)_kind].begin(), StageObjectData::GetStageObjectHPConfig(_kind));
+		blockObject = new WallBlock(_trans, modelData, StageObjectData::GetStageObjectHPConfig(_kind));
 		break;
 	case StageObjectData::STAGE_OBJECT_KIND::SWAMP_BLOCK:
 
-		if (createWay == STAGE_OBJECT_CREATE_WAY::DYNAMIC)
+		if (_createWay == STAGE_OBJECT_CREATE_WAY::DYNAMIC)
 			return nullptr;	// 泥ブロックは今後削除
-		obj = new SwampBlock(_trans, *hModel[(int)_kind].begin(), StageObjectData::GetStageObjectHPConfig(_kind));
+		blockObject = new SwampBlock(_trans, modelData, StageObjectData::GetStageObjectHPConfig(_kind));
 		break;
 	case StageObjectData::STAGE_OBJECT_KIND::SPIKE_BLOCK:
 
-		obj = new SpikeBlock(_trans, *hModel[(int)_kind].begin(), StageObjectData::GetStageObjectHPConfig(_kind));
+		blockObject = new SpikeBlock(_trans, modelData, StageObjectData::GetStageObjectHPConfig(_kind));
 		break;
 	case StageObjectData::STAGE_OBJECT_KIND::CORE_BLOCK:
 
-		if (createWay == STAGE_OBJECT_CREATE_WAY::DYNAMIC)
+		if (_createWay == STAGE_OBJECT_CREATE_WAY::DYNAMIC)
 			return nullptr;	// 地面ブロックはユーザーは生成できないようにする
-		obj = new CoreBlock(_trans, *hModel[(int)_kind].begin(), StageObjectData::GetStageObjectHPConfig(_kind));
+		blockObject = new CoreBlock(_trans, modelData, StageObjectData::GetStageObjectHPConfig(_kind));
+		break;
+	case StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK:
+
+		blockObject = new SpawnerBlock(_trans, modelData, StageObjectData::GetStageObjectHPConfig(_kind));
+		// スポナーをspawnerListにpsuh
+		PushSpawnerToList(blockObject);
+		break;
+	case StageObjectData::STAGE_OBJECT_KIND::BACK_MOUNTAIN:
+	case StageObjectData::STAGE_OBJECT_KIND::BACK_ROCK:
+
+		blockObject = new BackBlockBase(_trans, modelData, _kind, StageObjectData::GetStageObjectHPConfig(_kind), true);
+		break;
+	case StageObjectData::STAGE_OBJECT_KIND::BACK_TREE:
+
+		blockObject = new BackBlockBase(_trans, modelData, _kind, StageObjectData::GetStageObjectHPConfig(_kind), false);
 		break;
 	default:
 		assert(false);
 		break;
 	}
-	std::pair<std::unordered_map<BlockBase* ,STAGE_OBJECT_CREATE_WAY>::iterator, bool> pair = blocks.insert(std::make_pair(obj, createWay));
+	std::pair<std::unordered_map<BlockBase* ,STAGE_OBJECT_CREATE_WAY>::iterator, bool> pair = blocks.insert(std::make_pair(blockObject, _createWay));
 	
 	if (!pair.second)
 	{
 		// すでに同じキーが登録されています
 		assert(false);
 	}
-	return &obj->GetTransform();
-}
-
-void BlockController::CreateBlock(const Transform& _trans, const StageObjectData::STAGE_OBJECT_KIND& _kind)
-{
-	CreateBlock(_trans, _kind, STAGE_OBJECT_CREATE_WAY::STATIC);
+	return blockObject;
 }
 
 void BlockController::StageManagerForDeleteBlock()
 {
 	for (auto itr = blocks.begin();itr != blocks.end();)
 	{
-		BlockBase& obj = *itr->first;
+		BlockBase* obj = itr->first;
 
-		if (itr->first != nullptr)
-			obj.DestroyMe();
+		if (obj != nullptr)
+		{
+			// スポナーオブジェクトだったらspawnerListから削除
+			DeleteRequestSpawnerFormList(obj);
 
+			obj->DestroyMe();
+			obj = nullptr;
+		}
 		itr = blocks.erase(itr);
 	}
-	blocks.clear();
 }
 
 void BlockController::StageManagerForDeleteBlock(const STAGE_OBJECT_CREATE_WAY& createWay)
@@ -180,11 +208,17 @@ void BlockController::StageManagerForDeleteBlock(const STAGE_OBJECT_CREATE_WAY& 
 	{
 		if (itr->second == createWay)
 		{		
-			BlockBase& obj = *itr->first;
+			BlockBase* obj = itr->first;
 
-			if (itr->first != nullptr)
-				obj.DestroyMe();
+			if (obj != nullptr)
+			{
+				// スポナーオブジェクトだったらspawnerListから削除
+				DeleteRequestSpawnerFormList(obj);
 
+				obj->DestroyMe();
+				obj = nullptr;
+			}
+			
 			itr = blocks.erase(itr);
 		}
 		else
@@ -200,9 +234,9 @@ const std::list<BlockBase*> BlockController::GetAllBlockObject()
 
 	for (auto itr = blocks.begin();itr != blocks.end();itr++)
 	{
-		BlockBase* b = itr->first;
+		BlockBase* block = itr->first;
 
-		re.emplace_back(b);
+		re.emplace_back(block);
 	}
 	return re;
 }
@@ -213,9 +247,9 @@ std::list<StageObjectBase*> BlockController::GetAllStageObject()
 
 	for (auto itr = blocks.begin();itr != blocks.end();itr++)
 	{
-		StageObjectBase* b = itr->first;
+		StageObjectBase* stageObj = itr->first;
 
-		re.emplace_back(b);
+		re.emplace_back(stageObj);
 	}
 	return re;
 }
@@ -231,24 +265,95 @@ bool BlockController::DeleteBlock(BlockBase* _obj)
 		return false;
 	}
 
-	BlockBase& obj = *itr->first;
+	BlockBase* block = itr->first;
 
 	if (itr->first != nullptr)
-		obj.DestroyMe();
+	{
+		// スポナーオブジェクトだったらspawnerListから削除
+		DeleteRequestSpawnerFormList(itr->first);
+
+		// putPointに置かれたオブジェクトだったら
+		if (block->GetPutPlaceKind() == StageObjectBase::PUT_PLACE_KIND::PUT_POINT)
+		{
+			stageManager->SendDeletePutPointStageObject(block->GetTransform());
+		}
+
+		block->DestroyMe();
+		block = nullptr;
+	}
 
 	itr = blocks.erase(itr);
 
 	//stageManager->ChangedStageObject();
 
-	// putPointに置かれたオブジェクトだったら
-	if (obj.GetPutPlaceKind() == StageObjectBase::PUT_PLACE_KIND::PUT_POINT)
-		stageManager->SendDeletePutPointStageObject(obj.GetTransform());
 	return true;
 }
 
-const VECTOR3 BlockController::GetPutGridPosition(const Transform& _trans)
+bool BlockController::DeleteBlock(const StageObjectData::STAGE_OBJECT_KIND& _kind)
+{
+	assert(StageObjectData::IsBlockStageObjectKind(_kind));
+
+	for (auto blockItr = blocks.begin();blockItr != blocks.end();)
+	{
+		BlockBase* blockObj = blockItr->first;
+
+		if (blockObj != nullptr)
+		{
+			// 削除したいステージオブジェクトの種類と一致したら
+			if (blockObj->GetStageObjectKind() == _kind)
+			{
+				// スポナーオブジェクトだったらspawnerListから削除
+				DeleteRequestSpawnerFormList(blockObj);
+
+				// オブジェクトの削除
+				blockObj->DestroyMe();
+				blockObj = nullptr;
+
+				// blocksから削除
+				blockItr = blocks.erase(blockItr);
+				continue;	// コンテナから要素を削除したので continue
+			}
+		}
+		blockItr++;
+	}
+	return false;
+}
+
+VECTOR3 BlockController::GetPutGridPosition(const Transform& _trans)
 {
 	return _trans.position / StageInfo::PUT_GRID_SIZE;
+}
+
+bool BlockController::PushSpawnerToList(const StageObjectBase* _spawner)
+{
+	if (_spawner->GetStageObjectKind() != StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK)
+		return false;	// スポナーでなかったら return
+
+	// スポナーのポインタをpush
+	spawnerList.emplace_back(_spawner);
+
+	return true;
+}
+
+bool BlockController::DeleteRequestSpawnerFormList(const StageObjectBase* _spawner)
+{
+	assert(_spawner != nullptr);
+
+	if (_spawner->GetStageObjectKind() != StageObjectData::STAGE_OBJECT_KIND::SPAWNER_BLOCK)
+		return false;	// スポナーでなかったら return
+
+	for (auto spawnerItr = spawnerList.begin();spawnerItr != spawnerList.end();)
+	{
+		if (*spawnerItr == _spawner)
+		{
+			// コンテナからスポナーのポインタを削除
+			spawnerItr = spawnerList.erase(spawnerItr);
+
+			return true;	// 削除できたので return true
+		}
+		spawnerItr++;
+	}
+	return false;
 }
 
 const VECTOR3* BlockController::GetCorePosition() const
@@ -256,7 +361,9 @@ const VECTOR3* BlockController::GetCorePosition() const
 	for (auto itr = blocks.begin();itr != blocks.end();itr++)
 	{
 		if (itr->first->GetStageObjectKind() == StageObjectData::STAGE_OBJECT_KIND::CORE_BLOCK)
+		{
 			return &itr->first->GetTransform().position;
+		}
 	}
 	return nullptr;
 }
@@ -266,9 +373,16 @@ bool BlockController::IsCoreBroken()
 	for (auto itr = blocks.begin();itr != blocks.end();itr++)
 	{
 		if (itr->first->GetStageObjectKind() == StageObjectData::STAGE_OBJECT_KIND::CORE_BLOCK)
-			return dynamic_cast<CoreBlock*>(itr->first)->IsCoreBroken();
+		{
+			return static_cast<CoreBlock*>(itr->first)->IsCoreBroken();
+		}
 	}
 	return false;
+}
+
+bool BlockController::CheckRaycastStageObject(const VECTOR3& _pos1, const VECTOR3& _pos2, const std::set<int>& _kindList, VECTOR3* _hitP)
+{
+	return stageManager->CheckRaycastStageObject(_pos1, _pos2, _kindList, _hitP);
 }
 
 void BlockController::NavigationAreaBoxHPChange(const Transform* _trans, const int& _hp)
@@ -279,21 +393,21 @@ void BlockController::NavigationAreaBoxHPChange(const Transform* _trans, const i
 void BlockController::DeleteNavigationAreaBoxTransformPtr(const Transform* _trans)
 {
 	if (!StageManager::IsActiveInstance())
-		return;
+		return;	// ステージマネージャーが削除されていたら return
 
 	stageManager->DeleteNavigationAreaBoxTransformPtr(_trans);
 }
 
-const std::unordered_map<int, std::vector<int>> BlockController::GetRawModelHandle()
+const std::unordered_map<int, std::vector<int>> BlockController::GetRawModelHandles()
 {
 	std::unordered_map<int, std::vector<int>> rawModelHandleCon;	// 元のモデルハンドルのコンテナ
 
-	int stageNum						= stageManager->GetLoadStageNum();
-	std::set<int> con					= std::move(StageObjectData::GetStageObjectKindContainer(StageObjectData::TYPE::BLOCK));
-	int count							= 0;		// イテレータのカウント
-	int handleId						= 0;		// ハンドルの名前のナンバー
+	int stageNum		= stageManager->GetLoadStageNum();
+	std::set<int> con	= std::move(StageObjectData::GetStageObjectKindContainer(StageObjectData::TYPE::BLOCK));
+	int count			= 0;		// イテレータのカウント
+	int handleId		= 0;		// ハンドルの名前のナンバー
 
-	std::vector<int> rawHModel;						// ハンドルコンテナ
+	std::vector<int> rawHModel;		// ハンドルコンテナ
 	rawHModel.resize(con.size());
 
 	for (auto itr = con.begin();itr != con.end();itr++, count++)
@@ -319,9 +433,15 @@ const std::unordered_map<int, std::vector<int>> BlockController::GetRawModelHand
 
 		int len = 1;			// for分を回す回数
 
+		// 罠のステージオブジェクトの種類だったら
 		if (TrapInfo::IsTrapStageObjectKind((StageObjectData::STAGE_OBJECT_KIND)count))
 		{
 			len = 2;	// レベル2まで読み込む
+		}
+		// 背景のステージオブジェクトの種類だったら
+		else if(StageObjectData::IsBackBlockStageObjectKind((StageObjectData::STAGE_OBJECT_KIND)count))
+		{
+			len = 9;	// 10未満の数値全てを読み込む
 		}
 
 		for (int i = 0;i < len;i++)
@@ -330,7 +450,16 @@ const std::unordered_map<int, std::vector<int>> BlockController::GetRawModelHand
 			char set[CHAR_MAX];
 			sprintfDx(set, "data/models/stageObject/blocks/block_%.3d.mv1", handleId + i);
 			rawHModel[i] = MV1LoadModel(set);
-			assert(rawHModel[i] >= 0);
+
+			if (len <= 1)
+			{
+				assert(rawHModel[i] >= 0);
+			}
+			else if(rawHModel[i] < 0)
+			{
+				break;	// モデルの読み込みに失敗した場合は、モデルハンドルがないと判断して、break
+			}
+
 			// 当たり判定を行うための初期化
 			//MV1SetupCollInfo(rawHModel[i]);
 			

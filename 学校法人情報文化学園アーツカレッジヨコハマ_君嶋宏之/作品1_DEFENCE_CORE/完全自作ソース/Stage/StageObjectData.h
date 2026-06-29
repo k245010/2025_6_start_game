@@ -1,7 +1,7 @@
 #pragma once
 #include "../Transform/Transform.h"
-#include "StageInfo.h"
 #include "../Common/Function/Function.h"
+#include "StageInfo.h"
 #include <set>
 #include <unordered_map>
 
@@ -15,42 +15,53 @@ namespace StageObjectData
 	/// </summary>
 	enum class STAGE_OBJECT_KIND
 	{
-		NONE		 = -1,
+		NONE					= -1,
 
-		GROUND_BLOCK,			// 地面（地形）
-		WALL_BLOCK,				// 壁
-		SPIKE_BLOCK,			// とげ
-		SWAMP_BLOCK,			// 泥
-		CORE_BLOCK,				// コア
+		GROUND_BLOCK			= 0,	// 地面（地形）
+		WALL_BLOCK,						// 壁
+		SPIKE_BLOCK,					// とげ
+		SWAMP_BLOCK,					// 泥
+		CORE_BLOCK,						// コア
+		SPAWNER_BLOCK,					// スポナー
 
-		AUTO_TURRET,			// 自動で動く銃座
-		ACTIVE_TURRET,			// 一定時間ごとにメンテナンスする必要のある銃座
-		RELOAD_TURRET_SINGLE,	// 弾をリロードする必要のある銃座 (単発)
-		RELOAD_TURRET_SPREAD,	// 弾をリロードする必要のある銃座 (拡散)
-		JUMP_PAD,				// ジャンプパッド
-		SLIME_PATCH,			// ベトベトスライム
-		COIN,					// コイン
-		REMOTE_BOMB,			// 遠隔起爆爆弾
+		BACK_MOUNTAIN,					// 背景の山
+		BACK_ROCK,						// 背景の岩
+		BACK_TREE,						// 背景の木
+
+		AUTO_TURRET				= 200,	// 自動で動く銃座
+		ACTIVE_TURRET,					// 一定時間ごとにメンテナンスする必要のある銃座
+		RELOAD_TURRET_SINGLE,			// 弾をリロードする必要のある銃座 (単発)
+		RELOAD_TURRET_SPREAD,			// 弾をリロードする必要のある銃座 (拡散)
+		JUMP_PAD,						// ジャンプパッド
+		SLIME_PATCH,					// ベトベトスライム
+		COIN,							// コイン
+		REMOTE_BOMB,					// 遠隔起爆爆弾
 
 		MAX,
 	};
 
 	inline const std::unordered_map<STAGE_OBJECT_KIND, std::string> STAGE_OBJECT_KIND_STRING_LIST =	// enumのSTAGE_OBJECT_KINDを文字列として持つコンテナ
 	{
-		{STAGE_OBJECT_KIND::NONE,					"NONE"					},
-		{STAGE_OBJECT_KIND::GROUND_BLOCK,			"GROUND_BLOCK"			},
-		{STAGE_OBJECT_KIND::WALL_BLOCK,				"WALL_BLOCK"			},
-		{STAGE_OBJECT_KIND::SPIKE_BLOCK,			"SPIKE_BLOCK"			},
-		{STAGE_OBJECT_KIND::SWAMP_BLOCK,			"SWAMP_BLOCK"			},
-		{STAGE_OBJECT_KIND::CORE_BLOCK,				"CORE_BLOCK"			},
-		{STAGE_OBJECT_KIND::AUTO_TURRET,			"AUTO_TURRET"			},
-		{STAGE_OBJECT_KIND::ACTIVE_TURRET,			"ACTIVE_TURRET"			},
-		{STAGE_OBJECT_KIND::RELOAD_TURRET_SINGLE,	"RELOAD_TURRET_SINGLE"	},
-		{STAGE_OBJECT_KIND::RELOAD_TURRET_SPREAD,	"RELOAD_TURRET_SPREAD"	},
-		{STAGE_OBJECT_KIND::JUMP_PAD,				"JUMP_PAD"				},
-		{STAGE_OBJECT_KIND::SLIME_PATCH,			"SLIME_PATCH"			},
-		{STAGE_OBJECT_KIND::COIN,					"COIN"					},
-		{STAGE_OBJECT_KIND::REMOTE_BOMB,			"REMOTE_BOMB"			},
+		{	STAGE_OBJECT_KIND::NONE,					"NONE"					},
+		{	STAGE_OBJECT_KIND::GROUND_BLOCK,			"GROUND_BLOCK"			},
+		{	STAGE_OBJECT_KIND::WALL_BLOCK,				"WALL_BLOCK"			},
+		{	STAGE_OBJECT_KIND::SPIKE_BLOCK,				"SPIKE_BLOCK"			},
+		{	STAGE_OBJECT_KIND::SWAMP_BLOCK,				"SWAMP_BLOCK"			},
+		{	STAGE_OBJECT_KIND::CORE_BLOCK,				"CORE_BLOCK"			},
+		{	STAGE_OBJECT_KIND::SPAWNER_BLOCK,			"SPAWNER_BLOCK"			},
+
+		{	STAGE_OBJECT_KIND::BACK_MOUNTAIN,			"BACK_MOUNTAIN"			},
+		{	STAGE_OBJECT_KIND::BACK_ROCK,				"BACK_ROCK"				},
+		{	STAGE_OBJECT_KIND::BACK_TREE,				"BACK_TREE"				},
+
+		{	STAGE_OBJECT_KIND::AUTO_TURRET,				"AUTO_TURRET"			},
+		{	STAGE_OBJECT_KIND::ACTIVE_TURRET,			"ACTIVE_TURRET"			},
+		{	STAGE_OBJECT_KIND::RELOAD_TURRET_SINGLE,	"RELOAD_TURRET_SINGLE"	},
+		{	STAGE_OBJECT_KIND::RELOAD_TURRET_SPREAD,	"RELOAD_TURRET_SPREAD"	},
+		{	STAGE_OBJECT_KIND::JUMP_PAD,				"JUMP_PAD"				},
+		{	STAGE_OBJECT_KIND::SLIME_PATCH,				"SLIME_PATCH"			},
+		{	STAGE_OBJECT_KIND::COIN,					"COIN"					},
+		{	STAGE_OBJECT_KIND::REMOTE_BOMB,				"REMOTE_BOMB"			},
 	};
 
 	/// <summary>
@@ -74,12 +85,12 @@ namespace StageObjectData
 	inline STAGE_OBJECT_KIND GetFromEnum(std::string_view _kindStr)
 	{
 		
-		for (const auto& stageObjeKindStr : STAGE_OBJECT_KIND_STRING_LIST)
+		for (const auto& stageObjectKindStr : STAGE_OBJECT_KIND_STRING_LIST)
 		{
 			// 文字列を見つけられたら
-			if (stageObjeKindStr.second == _kindStr)
+			if (stageObjectKindStr.second == _kindStr)
 			{
-				return stageObjeKindStr.first;	//ステージオブジェクトの種類の文字列に対応するSTAGE_OBJECT_KINDを返す
+				return stageObjectKindStr.first;	//ステージオブジェクトの種類の文字列に対応するSTAGE_OBJECT_KINDを返す
 			}
 		}
 		assert(false && "不正なのSTAGE_OBJECT_KIND文字列です");
@@ -111,6 +122,10 @@ namespace StageObjectData
 		case STAGE_OBJECT_KIND::SPIKE_BLOCK:
 		case STAGE_OBJECT_KIND::SWAMP_BLOCK:
 		case STAGE_OBJECT_KIND::CORE_BLOCK:
+		case STAGE_OBJECT_KIND::SPAWNER_BLOCK:
+		case STAGE_OBJECT_KIND::BACK_MOUNTAIN:
+		case STAGE_OBJECT_KIND::BACK_ROCK:
+		case STAGE_OBJECT_KIND::BACK_TREE:
 
 			return TYPE::BLOCK;
 			break;
@@ -127,7 +142,7 @@ namespace StageObjectData
 			break;
 		default:
 
-			assert(false && "STAGE_OBJECT_KINDの列挙体を見つけることができませんでした");
+			return TYPE::NONE;
 			break;
 		}
 		return TYPE::NONE;
@@ -141,6 +156,27 @@ namespace StageObjectData
 	inline bool IsBlockStageObjectKind(const STAGE_OBJECT_KIND& _kind)
 	{
 		return GetStageObjectType(_kind) == TYPE::BLOCK;
+	}
+
+	/// <summary>
+	///						引数で渡されたSTAGE_OBJECT_KINDが背景のブロック系かどうかを返す
+	/// </summary>
+	/// <param name="_kind">STAGE_OBJECT_KIND											</param>
+	/// <returns>			true:背景のブロック系である / false:背景のブロック系でない	</returns>
+	inline bool IsBackBlockStageObjectKind(const STAGE_OBJECT_KIND& _kind)
+	{
+		switch (_kind)
+		{
+		case STAGE_OBJECT_KIND::BACK_MOUNTAIN:
+		case STAGE_OBJECT_KIND::BACK_ROCK:
+		case STAGE_OBJECT_KIND::BACK_TREE:
+
+			return true;
+			break;
+		default:
+			break;
+		}
+		return false;
 	}
 
 	/// <summary>
@@ -227,11 +263,41 @@ namespace StageObjectData
 	{
 		switch (_kind)
 		{
+		case STAGE_OBJECT_KIND::GROUND_BLOCK:
+
+			_trans.scale	= VOne * 1.1f;
+			_trans.size		= VOne * 1.0f;
+			break;
 		case STAGE_OBJECT_KIND::WALL_BLOCK:
 		case STAGE_OBJECT_KIND::SLIME_PATCH:
 
 			_trans.scale	= VOne * StageInfo::BLOCK_SIZE;
 			_trans.size		= VOne * 1.0f;
+			break;
+		case STAGE_OBJECT_KIND::SPAWNER_BLOCK:
+
+			_trans.scale	= VOne * StageInfo::BLOCK_SIZE / 66.0f;
+			_trans.size		= VOne * 66.0f;
+			break;
+		case STAGE_OBJECT_KIND::CORE_BLOCK:
+
+			_trans.scale	= VOne * StageInfo::BLOCK_SIZE / 5.0f;
+			_trans.size		= VOne * 10.0f;
+			break;
+		case STAGE_OBJECT_KIND::BACK_MOUNTAIN:
+
+			_trans.scale	= VOne * 0.5f;
+			_trans.size		= VOne * 4400.0f;
+			break;
+		case STAGE_OBJECT_KIND::BACK_ROCK:
+
+			_trans.scale	= VOne * 2.0f;
+			_trans.size		= VOne * 110.0f;
+			break;
+		case STAGE_OBJECT_KIND::BACK_TREE:
+
+			_trans.scale	= VOne * 100.0f;
+			_trans.size		= VOne * 2.6f;
 			break;
 		case STAGE_OBJECT_KIND::AUTO_TURRET:
 		case STAGE_OBJECT_KIND::ACTIVE_TURRET:
@@ -241,11 +307,6 @@ namespace StageObjectData
 
 			_trans.scale	= VOne * StageInfo::BLOCK_SIZE / 200.0f;
 			_trans.size		= VOne * 200.0f;
-			break;
-		case STAGE_OBJECT_KIND::CORE_BLOCK:
-
-			_trans.scale	= VOne * StageInfo::BLOCK_SIZE / 5.0f;
-			_trans.size		= VOne * 10.0f;
 			break;
 		case STAGE_OBJECT_KIND::COIN:
 
@@ -301,6 +362,7 @@ namespace StageObjectData
 		case STAGE_OBJECT_KIND::COIN:
 		case STAGE_OBJECT_KIND::JUMP_PAD:
 		case STAGE_OBJECT_KIND::REMOTE_BOMB:
+		case STAGE_OBJECT_KIND::SPAWNER_BLOCK:
 
 			return false;
 			break;
@@ -317,6 +379,12 @@ namespace StageObjectData
 		{ (int)STAGE_OBJECT_KIND::SPIKE_BLOCK,			10	},
 		{ (int)STAGE_OBJECT_KIND::SWAMP_BLOCK,			0	},
 		{ (int)STAGE_OBJECT_KIND::CORE_BLOCK,			15	},
+		{ (int)STAGE_OBJECT_KIND::SPAWNER_BLOCK,		0	},
+
+		{ (int)STAGE_OBJECT_KIND::BACK_MOUNTAIN,		0	},
+		{ (int)STAGE_OBJECT_KIND::BACK_ROCK,			0	},
+		{ (int)STAGE_OBJECT_KIND::BACK_TREE,			0	},
+
 		{ (int)STAGE_OBJECT_KIND::COIN,					0	},
 		{ (int)STAGE_OBJECT_KIND::AUTO_TURRET,			10	},
 		{ (int)STAGE_OBJECT_KIND::ACTIVE_TURRET,		10	},

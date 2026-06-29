@@ -12,7 +12,7 @@ GroundBlock::GroundBlock(const Transform& _trans, const ModelData& _modelData, c
 	// トンネルモデル(ステージ5)に合わせたサイズ
 	transform.size = VECTOR3(400, 114, 300);
 
-	modelCollision = new ModelCollision(&transform, COLLISION_OBJECT_KIND::GROUND_BLOCK, hModel, "GROUND_BLOCK_OBB", [this](const CollisionHitInfoData& tr) {return HitBlock(tr);});
+	modelCollision = new ModelCollision(&transform, COLLISION_OBJECT_KIND::GROUND_BLOCK, hModel, "GROUND_BLOCK_MODEL", [this](const CollisionHitInfoData& tr) {return HitBlock(tr);});
 	modelCollision->SetTargetTag(COLLISION_OBJECT_KIND::BULLET);
 	modelCollision->SetTargetTag(COLLISION_OBJECT_KIND::PLAYER);
 

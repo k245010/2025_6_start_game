@@ -123,7 +123,7 @@ void Bullet::Update()
 	if (rayColl != nullptr)
 	{
 		// 弾の後ろ側にヴェクトルを設定　弾が対象をフレーム間で当たらない現象を解消するため
-		rayColl->SetRayVec(VZero, rayVec);
+		rayColl->SetRayDirection(VZero, rayVec);
 	}
 	////_ 弾が対象をフレーム間で当たらない現象を解消 _//
 

@@ -89,6 +89,12 @@ public:
 	const Transform& GetTransform() const override { return transform; }
 
 	/// <summary>
+	///						ã©î•ñ‚Ì•`‰æ‚ğ‚·‚é‚©‚Ç‚¤‚©İ’è
+	/// </summary>
+	/// <param name="_set">	true:•`‰æ‚·‚é / false:•`‰æ‚µ‚È‚¢	</param>
+	//void SetTrapInfoDrawFlag(bool _set) {}
+
+	/// <summary>
 	/// ’e‚Ìc’e”‚ÌUI•`‰æ
 	/// </summary>
 	void BulletInfoDraw();
